@@ -20,7 +20,7 @@
 <meta property="og:image" content="https://img.colabug.com/2018/03/69741661011524bb1bdc01936160d02d.png">
 <meta property="og:image" content="https://img.colabug.com/2018/03/4f6712189c91d620efaf00e0a52aa605.png">
 <meta property="og:image" content="https://img.colabug.com/2018/03/40c3ccdd69d8de53a55e245156c69d25.png">
-<meta property="og:updated_time" content="2018-07-14T10:52:45.109Z">
+<meta property="og:updated_time" content="2018-07-14T10:58:54.197Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Scrapyd爬虫部署（win版)">
 <meta name="twitter:description" content="用Shell配合Python做了一个离线的作业控制系统，功能是有了，但是拓展性着实有点差，对小脚本小工具来说效果还可以，但是对于大型的爬虫类以及需要灵活控制的项目，可能就不太适合了。所以要用到Scrapyd。 首先呢，这玩意是应该在linux用的，抱着玩一玩的心态，我们来搞一搞。 环境我的编码环境如下：  OS： windows10 Python：Python3.6 Scrapy: Scrapy">
@@ -207,11 +207,11 @@
 <p>经过一段时间的等待，我们环境所依赖的应该就安装好了。</p>
 <h2 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h2><p>创建完项目会有scrapy.cfg文件（创建项目就不写了，创建都不会的话，先学学框架吧）</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[settings]</span><br><span class="line">default = 项目名.settings</span><br><span class="line"></span><br><span class="line">[deploy]</span><br><span class="line">#url = http://localhost:6800/  # 部署爬虫项目的时候这个注释记得打开</span><br><span class="line">project = 项目名</span><br></pre></td></tr></table></figure>
-<h2 id="crapyd爬虫部署服务"><a href="#crapyd爬虫部署服务" class="headerlink" title="crapyd爬虫部署服务"></a>crapyd爬虫部署服务</h2><h3 id="开启scrapyd服务"><a href="#开启scrapyd服务" class="headerlink" title="开启scrapyd服务"></a>开启scrapyd服务</h3><p>在任意目录下的打开终端，输入｀scrapyd｀,观察是否运行成功，运行成功的话，就可以打开｀<a href="http://localhost:6800｀看是否正常显示．" target="_blank" rel="noopener">http://localhost:6800｀看是否正常显示．</a></p>
-<h2 id="部署爬虫"><a href="#部署爬虫" class="headerlink" title="部署爬虫"></a>部署爬虫</h2><p>服务已经开启，这个时候要记得打开scrapy.cfg中的deploy的url参数。否则scrapy爬虫部署可能就失败了。</p>
+<h2 id="crapyd爬虫部署服务"><a href="#crapyd爬虫部署服务" class="headerlink" title="crapyd爬虫部署服务"></a>crapyd爬虫部署服务</h2><h3 id="开启scrapyd服务"><a href="#开启scrapyd服务" class="headerlink" title="开启scrapyd服务"></a>开启scrapyd服务</h3><p>在任意目录下的打开终端，输入<code>scrapyd</code>,观察是否运行成功，运行成功的话，就可以打开<code>http://localhost:6800</code>看是否正常显示．</p>
+<h2 id="部署爬虫"><a href="#部署爬虫" class="headerlink" title="部署爬虫"></a>部署爬虫</h2><p>服务已经开启，这个时候要记得打开<code>scrapy.cfg</code>中的deploy的url参数。否则scrapy爬虫部署可能就失败了。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[deploy:target]</span><br><span class="line">url = http://localhost:6800/</span><br><span class="line">project = 项目名</span><br></pre></td></tr></table></figure>
 <hr>
-<p>写好爬虫、安装好了scrapyd和scrapd-client后，我们可能会遇到scrapyd-deploy不是windows下的命令的问题。这是由于环境变量找不到导致的。下面有两种方法：</p>
+<p>写好爬虫、安装好了<code>scrapyd</code>和<code>scrapd-client</code>后，我们可能会遇到scrapyd-deploy不是windows下的命令的问题。这是由于环境变量找不到导致的。下面有两种方法：</p>
 <h3 id="方法1（我没成功，网上的办法）："><a href="#方法1（我没成功，网上的办法）：" class="headerlink" title="方法1（我没成功，网上的办法）："></a>方法1（我没成功，网上的办法）：</h3><p><img src="https://img.colabug.com/2018/03/69741661011524bb1bdc01936160d02d.png" alt="image"></p>
 <h4 id="编辑两个文件："><a href="#编辑两个文件：" class="headerlink" title="编辑两个文件："></a>编辑两个文件：</h4><ul>
 <li>scrapy.bat文件中输入以下内容 ：</li>
@@ -235,20 +235,20 @@
 <p>按照输出信息的提示，我们只需要访问 <a href="https://note.youdao.com/" target="_blank" rel="noopener">http://localhost:6800/addversion.json</a> 资源就可以看到具体的部署信息了。</p>
 <hr>
 <p>方法2结束</p>
-<h2 id="安装curl"><a href="#安装curl" class="headerlink" title="安装curl"></a>安装curl</h2><p>本来是要作业控制了，但是windows没有curl，所以还要安装它！</p>
+<h2 id="安装curl"><a href="#安装curl" class="headerlink" title="安装curl"></a>安装curl</h2><p>本来是要作业控制了，但是windows没有<code>curl</code>，所以还要安装它！</p>
 <p>下载连接：<a href="https://note.youdao.com/" target="_blank" rel="noopener">https://curl.haxx.se/download.html</a><br>记得找windows版本啊，要是Linux系统直接一句命令就行了，我下载的时候架梯子下载的。下载完解压就好了，exe文件不是给你运行的，是把他的文件路径放到环境变量PATH里。</p>
-<h2 id="作业控制"><a href="#作业控制" class="headerlink" title="作业控制"></a>作业控制</h2><p>scrapyd的官方文档也是很详细，我们可以通过对schedule.json，cancle.json等资源来实现以HTTP服务的方式控制爬虫。具体的文档为 <a href="https://note.youdao.com/" target="_blank" rel="noopener">http://scrapyd.readthedocs.io/en/latest/api.html</a></p>
+<h2 id="作业控制"><a href="#作业控制" class="headerlink" title="作业控制"></a>作业控制</h2><p>scrapyd的官方文档也是很详细，我们可以通过对<code>schedule.json</code>，<code>cancle.json</code>等资源来实现以HTTP服务的方式控制爬虫。具体的文档为 <a href="https://note.youdao.com/" target="_blank" rel="noopener">http://scrapyd.readthedocs.io/en/latest/api.html</a></p>
 <p>比如下面的开启爬虫：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/schedule.json -d project=项目名 -d spider=爬虫名</span><br></pre></td></tr></table></figure>
 <p>然后的下面的结果就说明已经成功开启了一个爬虫。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#这里的jobid比较重要，下面会用到这个取消爬虫</span><br><span class="line">&#123;&quot;status&quot;: &quot;ok&quot;, &quot;jobid&quot;: &quot;3013f9d1283611e79a63acb57dec5d04&quot;, &quot;node_name&quot;: &quot;DESKTOP-L78TJQ7&quot;&#125;</span><br></pre></td></tr></table></figure>
-<p>==这里的jobid比较重要，下面会用到这个取消爬虫==</p>
-<p>查看具体的爬虫运行信息了： <a href="https://note.youdao.com/" target="_blank" rel="noopener">http://localhost:6800/jobs</a><br><img src="https://img.colabug.com/2018/03/4f6712189c91d620efaf00e0a52aa605.png" alt="image"><br>点击“ Log ”超链接，就可以看到爬虫的具体的输出信息了。<br><img src="https://img.colabug.com/2018/03/40c3ccdd69d8de53a55e245156c69d25.png" alt="image"></p>
+<p>这里的jobid比较重要，下面会用到这个取消爬虫</p>
+<p>查看具体的爬虫运行信息了： <a href="https://note.youdao.com/" target="_blank" rel="noopener">http://localhost:6800/jobs</a><br><img src="https://img.colabug.com/2018/03/4f6712189c91d620efaf00e0a52aa605.png" alt="image"><br>点击“ <code>Log</code>”超链接，就可以看到爬虫的具体的输出信息了。<br><img src="https://img.colabug.com/2018/03/40c3ccdd69d8de53a55e245156c69d25.png" alt="image"></p>
 <ul>
 <li>取消爬虫：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/cancel.json -d project=myproject -d job=jobid</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<p>jobid就是上面的提到过的，如果取消我的这个实例代码如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/cancel.json -d project=项目名 -d job=3013f9d1283611e79a63acb57dec5d04</span><br></pre></td></tr></table></figure></p>
+<p><code>jobid</code>就是上面的提到过的，如果取消我的这个实例代码如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/cancel.json -d project=项目名 -d job=3013f9d1283611e79a63acb57dec5d04</span><br></pre></td></tr></table></figure></p>
 <p>那么它的状态就会变成如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;status&quot;: &quot;ok&quot;, &quot;prevstate&quot;: &quot;running&quot;, &quot;node_name&quot;: &quot;DESKTOP-L78TJQ7&quot;&#125;</span><br></pre></td></tr></table></figure>
 <ul>
@@ -264,23 +264,23 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/listversions.json?project=myproject</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<p>,这里的project是项目的名字，是在scrapy.cfg设置的</p>
+<p>,这里的<code>project</code>是项目的名字，是在<code>scrapy.cfg</code>设置的</p>
 <ul>
 <li>列出爬虫：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/listspiders.json?project=myproject</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<p>这里的project是项目的名字，是在scrapy.cfg设置的</p>
+<p>这里的<code>project</code>是项目的名字，是在<code>scrapy.cfg</code>设置的</p>
 <ul>
 <li>列出job:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/listjobs.json?project=myproject</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<p>这里的project是项目的名字，是在scrapy.cfg设置的</p>
+<p>这里的<code>project</code>是项目的名字，是在<code>scrapy.cfg</code>设置的</p>
 <ul>
 <li>删除版本：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/delversion.json -d project=myproject -d version=r99</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<p>，这里的version是自己的项目版本号，在删除之前需要查看版本号</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>scrapyd就是一个底层使用了twisted的集成了的IPC服务套件（注意即使是同一个spider，两次run也要放到不同的JOBDIR，具体可以参考文档），很方便。然而自己去实现的话，对这块的内容也会理解的更深刻。</p>
+<p>，这里的<code>version</code>是自己的项目版本号，在删除之前需要查看版本号</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>scrapyd就是一个底层使用了<code>twisted</code>的集成了的IPC服务套件（注意即使是同一个spider，两次run也要放到不同的JOBDIR，具体可以参考文档），很方便。然而自己去实现的话，对这块的内容也会理解的更深刻。</p>
 
       
 
