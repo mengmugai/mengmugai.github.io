@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2018/7 | 萌木盖的博客</title>
+  <title>Redis缓存过期通知 | 萌木盖的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="萌木盖的博客">
-<meta property="og:url" content="http://yoursite.com/archives/2018/07/index.html">
+  <meta name="description" content="需求：redis中的缓存数据时间到了，消失的时候，需要发出通知解析： https://redis.io/topics/notifications    利用redis的 Keyspace notifications订阅和发布即可实现。 实现步骤： a)    修改redis的配置文件：  123vi /etc/redis.conf    # 不同系统可能路径不一样# 找到notify-keyspa">
+<meta name="keywords" content="redis,数据库,python操作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis缓存过期通知">
+<meta property="og:url" content="http://yoursite.com/2018/07/14/Redis缓存过期通知/index.html">
 <meta property="og:site_name" content="萌木盖的博客">
+<meta property="og:description" content="需求：redis中的缓存数据时间到了，消失的时候，需要发出通知解析： https://redis.io/topics/notifications    利用redis的 Keyspace notifications订阅和发布即可实现。 实现步骤： a)    修改redis的配置文件：  123vi /etc/redis.conf    # 不同系统可能路径不一样# 找到notify-keyspa">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-07-14T04:14:01.466Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="萌木盖的博客">
+<meta name="twitter:title" content="Redis缓存过期通知">
+<meta name="twitter:description" content="需求：redis中的缓存数据时间到了，消失的时候，需要发出通知解析： https://redis.io/topics/notifications    利用redis的 Keyspace notifications订阅和发布即可实现。 实现步骤： a)    修改redis的配置文件：  123vi /etc/redis.conf    # 不同系统可能路径不一样# 找到notify-keyspa">
   
     <link rel="alternative" href="/atom.xml" title="萌木盖的博客" type="application/atom+xml">
   
@@ -162,36 +167,76 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-Redis缓存过期通知" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      Redis缓存过期通知
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/07/14/Redis缓存过期通知/" class="archive-article-date">
+
+        
+        <a href="/2018/07/14/Redis缓存过期通知/" class="archive-article-date">
   	<time datetime="2018-07-14T04:13:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-14</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/07/14/Redis缓存过期通知/">Redis缓存过期通知</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="需求：redis中的缓存数据时间到了，消失的时候，需要发出通知"><a href="#需求：redis中的缓存数据时间到了，消失的时候，需要发出通知" class="headerlink" title="需求：redis中的缓存数据时间到了，消失的时候，需要发出通知"></a>需求：redis中的缓存数据时间到了，消失的时候，需要发出通知</h2><p>解析：</p>
+<p><a href="https://redis.io/topics/notifications" target="_blank" rel="noopener">https://redis.io/topics/notifications</a><br>    利用redis的 Keyspace notifications订阅和发布即可实现。</p>
+<h3 id="实现步骤："><a href="#实现步骤：" class="headerlink" title="实现步骤："></a>实现步骤：</h3><ul>
+<li>a)    修改redis的配置文件：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/redis.conf    # 不同系统可能路径不一样</span><br><span class="line"># 找到notify-keyspace-events 改为&quot;Ex&quot;</span><br><span class="line">notify-keyspace-events &quot;Ex&quot;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>b)    重启redis：    </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># linux下</span><br><span class="line">service redis restart</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># mac下</span><br><span class="line">brew services restart redis</span><br></pre></td></tr></table></figure>
+<ul>
+<li>c)    redis-cli测试：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># redis-cli</span><br><span class="line"># 语法：@0 代表监听0号数据库</span><br><span class="line">127.0.0.1:6379&gt; psubscribe __keyevent@0__:expired</span><br><span class="line"># 执行后会发生阻塞</span><br><span class="line"></span><br><span class="line">新开一个redis-cli</span><br><span class="line"># 新开一个redis-cli</span><br><span class="line">127.0.0.1:6379&gt; setex test 5 &quot;test_value&quot;</span><br></pre></td></tr></table></figure>
+<p>5秒过后，前一个redis-cli会显示出test这个key名称</p>
+<ul>
+<li>d)    python代码实现：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import redis</span><br><span class="line"></span><br><span class="line"># 创建redis客户端链接对象：默认localhost，和0号数据库</span><br><span class="line">client = redis.StrictRedis()</span><br><span class="line"></span><br><span class="line"># 创建发布订阅对象</span><br><span class="line">psub = client.pubsub()</span><br><span class="line"></span><br><span class="line"># 发布监听key失效的订阅</span><br><span class="line">psub.psubscribe(&quot;__keyevent@0__:expired&quot;)</span><br><span class="line"></span><br><span class="line"># 开始监听：</span><br><span class="line"># psub.listen返回一个迭代器</span><br><span class="line">for data in psub.listen():</span><br><span class="line">    print(data)</span><br></pre></td></tr></table></figure>
+<p>启动刚刚py文件，同样会发生阻塞，另外新开一个redis-cli<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 新开一个redis-cli</span><br><span class="line">127.0.0.1:6379&gt; setex test 5 &quot;test_value&quot;</span><br></pre></td></tr></table></figure></p>
+<p>5秒过后， 也会打印出对应的数据</p>
 
-        <div class="article-info info-on-right">
-          
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -211,184 +256,106 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/07/14/Redis缓存过期通知/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/07/14/redis-python版/" class="archive-article-date">
-  	<time datetime="2018-07-14T04:04:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-14</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2018/07/14/redis-python版/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">redis(python版)</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/07/14/redis-python版/">redis(python版)</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">python操作</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/07/13/BeautifulSoup4（BS4）/" class="archive-article-date">
-  	<time datetime="2018-07-13T14:49:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-13</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/07/13/BeautifulSoup4（BS4）/">BeautifulSoup4（BS4）</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">爬虫</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">BS4</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据提取</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/07/13/xpath的使用/" class="archive-article-date">
-  	<time datetime="2018-07-13T12:30:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-13</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/07/13/xpath的使用/">xpath的使用</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">爬虫</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据提取</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">xpath</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/07/13/hello-world/" class="archive-article-date">
-  	<time datetime="2018-07-13T09:13:40.733Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-13</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/07/13/hello-world/">Hello World</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -411,8 +378,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
