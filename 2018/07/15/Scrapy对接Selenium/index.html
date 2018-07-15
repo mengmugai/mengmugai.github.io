@@ -6,20 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>redis(python版) | 萌木盖的博客</title>
+  <title>Scrapy对接Selenium | 萌木盖的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Redis简介 Redis是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库 非关系型数据库的一种，经常用作缓存 官网：redis.io，中文网：redis.cn 丰富的数据类型：字符串、哈希、列表、集合、有序集合等 端口：6379 安装：sudo apt-get install redis-server  连接测试 检查服务是否启动：ps -e">
-<meta name="keywords" content="redis,数据库,python操作">
+  <meta name="description" content="Scrapy抓取页面的方式和requests库类似，都是直接模拟HTTP请求，而Scrapy也不能抓取JavaScript动态渲染的页面。在前文中抓取JavaScript渲染的页面有两种方式。一种是分析Ajax请求，找到其对应的接口抓取，Scrapy同样可以用此种方式抓取。另一种是直接用Selenium或Splash模拟浏览器进行抓取，我们不需要关心页面后台发生的请求，也不需要分析渲染过程，只需要">
+<meta name="keywords" content="爬虫,Scrapy,Selenium">
 <meta property="og:type" content="article">
-<meta property="og:title" content="redis(python版)">
-<meta property="og:url" content="http://yoursite.com/2018/07/14/redis-python版/index.html">
+<meta property="og:title" content="Scrapy对接Selenium">
+<meta property="og:url" content="http://yoursite.com/2018/07/15/Scrapy对接Selenium/index.html">
 <meta property="og:site_name" content="萌木盖的博客">
-<meta property="og:description" content="Redis简介 Redis是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库 非关系型数据库的一种，经常用作缓存 官网：redis.io，中文网：redis.cn 丰富的数据类型：字符串、哈希、列表、集合、有序集合等 端口：6379 安装：sudo apt-get install redis-server  连接测试 检查服务是否启动：ps -e">
+<meta property="og:description" content="Scrapy抓取页面的方式和requests库类似，都是直接模拟HTTP请求，而Scrapy也不能抓取JavaScript动态渲染的页面。在前文中抓取JavaScript渲染的页面有两种方式。一种是分析Ajax请求，找到其对应的接口抓取，Scrapy同样可以用此种方式抓取。另一种是直接用Selenium或Splash模拟浏览器进行抓取，我们不需要关心页面后台发生的请求，也不需要分析渲染过程，只需要">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-07-14T04:05:26.831Z">
+<meta property="og:image" content="https://img.colabug.com/2018/07/ny2Uvar-1.png">
+<meta property="og:image" content="https://img.colabug.com/2018/07/VrUrYb2-1.png">
+<meta property="og:updated_time" content="2018-07-15T15:08:01.916Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="redis(python版)">
-<meta name="twitter:description" content="Redis简介 Redis是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库 非关系型数据库的一种，经常用作缓存 官网：redis.io，中文网：redis.cn 丰富的数据类型：字符串、哈希、列表、集合、有序集合等 端口：6379 安装：sudo apt-get install redis-server  连接测试 检查服务是否启动：ps -e">
+<meta name="twitter:title" content="Scrapy对接Selenium">
+<meta name="twitter:description" content="Scrapy抓取页面的方式和requests库类似，都是直接模拟HTTP请求，而Scrapy也不能抓取JavaScript动态渲染的页面。在前文中抓取JavaScript渲染的页面有两种方式。一种是分析Ajax请求，找到其对应的接口抓取，Scrapy同样可以用此种方式抓取。另一种是直接用Selenium或Splash模拟浏览器进行抓取，我们不需要关心页面后台发生的请求，也不需要分析渲染过程，只需要">
+<meta name="twitter:image" content="https://img.colabug.com/2018/07/ny2Uvar-1.png">
   
     <link rel="alternative" href="/atom.xml" title="萌木盖的博客" type="application/atom+xml">
   
@@ -167,120 +170,74 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-redis-python版" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-Scrapy对接Selenium" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      redis(python版)
+      Scrapy对接Selenium
     </h1>
   
 
         
-        <a href="/2018/07/14/redis-python版/" class="archive-article-date">
-  	<time datetime="2018-07-14T04:04:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-14</time>
+        <a href="/2018/07/15/Scrapy对接Selenium/" class="archive-article-date">
+  	<time datetime="2018-07-15T14:22:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-15</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><ul>
-<li>Redis是一个开源的使用ANSI <a href="https://baike.baidu.com/item/C%E8%AF%AD%E8%A8%80" target="_blank" rel="noopener">C语言</a>编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库</li>
-<li>非关系型数据库的一种，经常用作缓存</li>
-<li>官网：redis.io，中文网：redis.cn</li>
-<li>丰富的数据类型：字符串、哈希、列表、集合、有序集合等</li>
-<li>端口：6379</li>
-<li>安装：<code>sudo apt-get install redis-server</code></li>
-</ul>
-<h3 id="连接测试"><a href="#连接测试" class="headerlink" title="连接测试"></a>连接测试</h3><ul>
-<li>检查服务是否启动：<code>ps -ef | grep redis</code></li>
-<li>连接：<code>redis-cli -h 主机 -p 端口 -a 密码</code><ul>
-<li>-h：指定主机</li>
-<li>-p：指定端口</li>
-<li>-a：指定密码</li>
-<li>–help：查看帮助</li>
-<li>示例：<code>redis-cli -h localhost -p 6379</code></li>
-</ul>
-</li>
-<li>测试：<ul>
-<li>127.0.0.1:6379&gt;ping</li>
-<li>127.0.0.1:6379&gt;PONG</li>
-</ul>
-</li>
-<li>退出：quit</li>
-<li>密码管理：默认没有密码，若设置了密码，没有密码也可以登录成功，但是什么都不能做<ul>
-<li>单次有效，通过以下命令<ul>
-<li>获取密码：config get requirepass</li>
-<li>设置密码：config set requirepass 123456</li>
-<li>密码认证：auth 123456</li>
-</ul>
-</li>
-<li>永久有效，修改配置文件<code>/etc/redis/redis.conf</code><ul>
-<li>将<code>requirepass xxxxx</code>行取消注释</li>
-<li>后面跟上你需要的密码</li>
-<li>重启服务后即可生效</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="redis命令"><a href="#redis命令" class="headerlink" title="redis命令"></a>redis命令</h3><ul>
-<li><p>常用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">ping：测试连接情况，回复PONG表示OK</span><br><span class="line">quit：退出连接</span><br><span class="line">auth：密码认证</span><br><span class="line">select：选择库，总共有16个，序号0~15，默认是第0个</span><br><span class="line">info：查看服务器信息</span><br><span class="line">command：查看支持的命令</span><br><span class="line">flushdb：清空当前库</span><br><span class="line">flushall：清空所有库</span><br><span class="line">save：前台进行持久化存储</span><br><span class="line">bgsave：后台进行持久化存储</span><br><span class="line">exists：判断指定键是否存在</span><br><span class="line">del：删除键</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>字符串(string)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">set：设置</span><br><span class="line">get：获取</span><br><span class="line">getset：获取之后再设置</span><br><span class="line">mset：设置多个</span><br><span class="line">mget：获取多个</span><br><span class="line">incr：加1</span><br><span class="line">decr：减1</span><br><span class="line">incrby：加指定的值</span><br><span class="line">decrby：减指定的值</span><br><span class="line">append：追加内容</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>哈希(hash)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">hset：设置单个属性</span><br><span class="line">hget：获取单个属性</span><br><span class="line">hmset：设置多个属性</span><br><span class="line">hmget：获取多个属性</span><br><span class="line">hgetall：获取所有属性</span><br><span class="line">hdel：删除键值对</span><br><span class="line">hexists：判断指定键的指定字段是否存在</span><br><span class="line">hkeys：获取指定键的所有属性名</span><br><span class="line">hvals：获取指定键的所有属性值</span><br><span class="line">hlen：获取指定键的属性个数</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>列表(list)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">lpush：从左边(头部)插入数据</span><br><span class="line">lpop：从左边(头部)删除数据</span><br><span class="line">lrange：获取指定区间范围内的数据，0 -1表示所有</span><br><span class="line">lindex：根据索引获取元素</span><br><span class="line">llen：获取列表长度(元素个数)</span><br><span class="line">rpush：从右边(尾部)插入数据</span><br><span class="line">rpop：从右边(尾部)删除数据</span><br><span class="line">lrem：移除指定个数的指定元素</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>集合(set)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sadd：添加元素</span><br><span class="line">scard：统计元素个数</span><br><span class="line">sdiff：求差集</span><br><span class="line">sinter：求交集</span><br><span class="line">smembers：获取指定集合的所有成员</span><br><span class="line">sismember：判断是否在集合中</span><br><span class="line">smove：移动元素</span><br><span class="line">spop：随机的删除一个元素</span><br><span class="line">srandmember：随机获取指定个数的元素</span><br><span class="line">srem：移除元素</span><br><span class="line">sunion：求并集</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>有序集合(sorted set)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">zadd：添加元素</span><br><span class="line">zcard：统计个数</span><br><span class="line">zcount：指定分数区间内的元素数量</span><br><span class="line">zrange：返回指定索引范围内的元素</span><br><span class="line">zrangebyscore：返回指定分数区间的元素</span><br><span class="line">zrank：返回指定成员的索引值</span><br><span class="line">zrem：移除元素</span><br><span class="line">zscore：获取指定元素的排序指标(分数)</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="使用工具远程连接redis"><a href="#使用工具远程连接redis" class="headerlink" title="使用工具远程连接redis"></a>使用工具远程连接redis</h3><ul>
-<li>修改配置文件：/etc/redis/redis.conf，bind改为0.0.0.0</li>
-<li><p>修改之后重启服务即可。</p>
-<h3 id="python操作redis"><a href="#python操作redis" class="headerlink" title="python操作redis"></a>python操作redis</h3></li>
-<li><p>安装扩展库：<code>pip3 install redis</code></p>
-</li>
-<li><p>简介：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis扩展库中有两个类，Redis和StrictRedis，StrictRedis实现了官方的命令，Redis是它的子类，兼容老版本。扩展库没有实现select方法，可以通过连接时指定使用的库。</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>操作：</p>
-<ul>
-<li><p>简单连接</p>
-<ul>
-<li>导入redis，创建Redis对象，所有命令行下的命令在代码中都是Redis对象的方法<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">import redis</span><br><span class="line"></span><br><span class="line"># 创建Redis对象进行连接</span><br><span class="line"># 参数：decode_responses是否解码返回值</span><br><span class="line">r = redis.Redis(host=&apos;localhost&apos;, port=6379, password=&apos;123456&apos;, decode_responses=True)</span><br><span class="line"></span><br><span class="line"># 终端下的命令在代码中都是函数</span><br><span class="line">r.set(&apos;name&apos;, &apos;xiaoming&apos;)</span><br><span class="line"></span><br><span class="line">print(r.get(&apos;name&apos;))</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>连接池</p>
-<ul>
-<li>多个redis对象使用同一个连接池进行连接，避免了多次连接、断开等操作的系统开销</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import redis</span><br><span class="line"></span><br><span class="line"># 创建连接池，减少了多次的连接、断开的开销</span><br><span class="line">pool = redis.ConnectionPool(password=&apos;123456&apos;, decode_responses=True)</span><br><span class="line"></span><br><span class="line"># 创建Redis对象</span><br><span class="line">r = redis.Redis(connection_pool=pool)</span><br><span class="line"></span><br><span class="line">print(r.get(&apos;name&apos;))</span><br></pre></td></tr></table></figure>
-<ul>
-<li>使用管道(pipeline)<ul>
-<li>可以记录多个操作，然后一次将操作发送至数据库，避免了多次向服务器发送少量的数据</li>
-<li>多个操作可以依次进行保存，然后发送，也可以进行连贯操作</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import redis</span><br><span class="line"></span><br><span class="line"># 创建连接池，减少了多次的连接、断开的开销</span><br><span class="line">pool = redis.ConnectionPool(password=&apos;123456&apos;, decode_responses=True)</span><br><span class="line"></span><br><span class="line"># 创建Redis对象</span><br><span class="line">r = redis.Redis(connection_pool=pool)</span><br><span class="line"></span><br><span class="line"># 创建管道</span><br><span class="line">pipe = r.pipeline()</span><br><span class="line"></span><br><span class="line"># 保存记录操作</span><br><span class="line">#pipe.set(&apos;name&apos;, &apos;dahua&apos;)</span><br><span class="line">#pipe.set(&apos;age&apos;, 20)</span><br><span class="line"># 执行操作(发送到服务器)，一次可以执行多个操作，可以避免多次的想服武器发送数据</span><br><span class="line">#pipe.execute()</span><br><span class="line"></span><br><span class="line"># 也可以进行连贯操作</span><br><span class="line">pipe.set(&apos;name&apos;, &apos;haha&apos;).set(&apos;age&apos;, 10).execute()</span><br><span class="line"></span><br><span class="line">print(r.get(&apos;name&apos;))</span><br></pre></td></tr></table></figure>
+        <p>Scrapy抓取页面的方式和requests库类似，都是直接模拟HTTP请求，而Scrapy也不能抓取JavaScript动态渲染的页面。在前文中抓取JavaScript渲染的页面有两种方式。一种是分析Ajax请求，找到其对应的接口抓取，Scrapy同样可以用此种方式抓取。另一种是直接用Selenium或Splash模拟浏览器进行抓取，我们不需要关心页面后台发生的请求，也不需要分析渲染过程，只需要关心页面最终结果即可，可见即可爬。那么，如果Scrapy可以对接Selenium，那Scrapy就可以处理任何网站的抓取了。</p>
+<h2 id="一、本节目标"><a href="#一、本节目标" class="headerlink" title="一、本节目标"></a>一、本节目标</h2><p>本节我们来看看Scrapy框架如何对接Selenium，以PhantomJS进行演示。我们依然抓取淘宝商品信息，抓取逻辑和前文中用Selenium抓取淘宝商品完全相同。</p>
+<h2 id="二、准备工作"><a href="#二、准备工作" class="headerlink" title="二、准备工作"></a>二、准备工作</h2><p>请确保PhantomJS和MongoDB已经安装好并可以正常运行，安装好Scrapy、Selenium、PyMongo库。</p>
+<h2 id="三、新建项目"><a href="#三、新建项目" class="headerlink" title="三、新建项目"></a>三、新建项目</h2><p>首先新建项目，名为<code>scrapyseleniumtest</code>，命令如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy startproject scrapyseleniumtest</span><br></pre></td></tr></table></figure>
+<p>新建一个Spider，命令如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy genspider taobao www.taobao.com</span><br></pre></td></tr></table></figure>
+<p>修改ROBOTSTXT_OBEY为False，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ROBOTSTXT_OBEY = False</span><br></pre></td></tr></table></figure>
+<h2 id="四、定义-Item"><a href="#四、定义-Item" class="headerlink" title="四、定义 Item"></a>四、定义 Item</h2><p>首先定义Item对象，名为ProductItem，代码如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from scrapy import Item, Field</span><br><span class="line"></span><br><span class="line">class ProductItem(Item):</span><br><span class="line"></span><br><span class="line">    collection = &apos;products&apos;</span><br><span class="line">    image = Field()</span><br><span class="line">    price = Field()</span><br><span class="line">    deal = Field()</span><br><span class="line">    title = Field()</span><br><span class="line">    shop = Field()</span><br><span class="line">    location = Field()</span><br></pre></td></tr></table></figure>
+<p>这里我们定义了6个Field，也就是6个字段，跟之前的案例完全相同。然后定义了一个collection属性，即此Item保存的MongoDB的Collection名称。</p>
+<p>初步实现Spider的start_requests()方法，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">from scrapy import Request, Spider</span><br><span class="line">from urllib.parse import quote</span><br><span class="line">from scrapyseleniumtest.items import ProductItem</span><br><span class="line"></span><br><span class="line">class TaobaoSpider(Spider):</span><br><span class="line">    name = &apos;taobao&apos;</span><br><span class="line">    allowed_domains = [&apos;www.taobao.com&apos;]</span><br><span class="line">    base_url = &apos;https://s.taobao.com/search?q=&apos;</span><br><span class="line"></span><br><span class="line">    def start_requests(self):</span><br><span class="line">        for keyword in self.settings.get(&apos;KEYWORDS&apos;):</span><br><span class="line">            for page in range(1, self.settings.get(&apos;MAX_PAGE&apos;) + 1):</span><br><span class="line">                url = self.base_url + quote(keyword)</span><br><span class="line">                yield Request(url=url, callback=self.parse, meta=&#123;&apos;page&apos;: page&#125;, dont_filter=True)</span><br></pre></td></tr></table></figure>
+<p>首先定义了一个base_url，即商品列表的URL，其后拼接一个搜索关键字就是该关键字在淘宝的搜索结果商品列表页面。</p>
+<p>关键字用KEYWORDS标识，定义为一个列表。最大翻页页码用MAX_PAGE表示。它们统一定义在setttings.py里面，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">KEYWORDS = [&apos;iPad&apos;]</span><br><span class="line">MAX_PAGE = 100</span><br></pre></td></tr></table></figure>
+<p>在start_requests()方法里，我们首先遍历了关键字，遍历了分页页码，构造并生成Request。由于每次搜索的URL是相同的，所以分页页码用meta参数来传递，同时设置dont_filter不去重。这样爬虫启动的时候，就会生成每个关键字对应的商品列表的每一页的请求了。</p>
+<h2 id="五、对接-Selenium"><a href="#五、对接-Selenium" class="headerlink" title="五、对接 Selenium"></a>五、对接 Selenium</h2><p>接下来我们需要处理这些请求的抓取。这次我们对接Selenium进行抓取，采用Downloader Middleware来实现。在Middleware里面的process_request()方法里对每个抓取请求进行处理，启动浏览器并进行页面渲染，再将渲染后的结果构造一个HtmlResponse对象返回。代码实现如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line">from selenium.common.exceptions import TimeoutException</span><br><span class="line">from selenium.webdriver.common.by import By</span><br><span class="line">from selenium.webdriver.support.ui import WebDriverWait</span><br><span class="line">from selenium.webdriver.support import expected_conditions as EC</span><br><span class="line">from scrapy.http import HtmlResponse</span><br><span class="line">from logging import getLogger</span><br><span class="line"></span><br><span class="line">class SeleniumMiddleware():</span><br><span class="line">    def __init__(self, timeout=None, service_args=[]):</span><br><span class="line">        self.logger = getLogger(__name__)</span><br><span class="line">        self.timeout = timeout</span><br><span class="line">        self.browser = webdriver.PhantomJS(service_args=service_args)</span><br><span class="line">        self.browser.set_window_size(1400, 700)</span><br><span class="line">        self.browser.set_page_load_timeout(self.timeout)</span><br><span class="line">        self.wait = WebDriverWait(self.browser, self.timeout)</span><br><span class="line"></span><br><span class="line">    def __del__(self):</span><br><span class="line">        self.browser.close()</span><br><span class="line"></span><br><span class="line">    def process_request(self, request, spider):</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        用PhantomJS抓取页面</span><br><span class="line">        :param request: Request对象</span><br><span class="line">        :param spider: Spider对象</span><br><span class="line">        :return: HtmlResponse</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        self.logger.debug(&apos;PhantomJS is Starting&apos;)</span><br><span class="line">        page = request.meta.get(&apos;page&apos;, 1)</span><br><span class="line">        try:</span><br><span class="line">            self.browser.get(request.url)</span><br><span class="line">            if page &gt; 1:</span><br><span class="line">                input = self.wait.until(</span><br><span class="line">                    EC.presence_of_element_located((By.CSS_SELECTOR, &apos;#mainsrp-pager div.form &gt; input&apos;)))</span><br><span class="line">                submit = self.wait.until(</span><br><span class="line">                    EC.element_to_be_clickable((By.CSS_SELECTOR, &apos;#mainsrp-pager div.form &gt; span.btn.J_Submit&apos;)))</span><br><span class="line">                input.clear()</span><br><span class="line">                input.send_keys(page)</span><br><span class="line">                submit.click()</span><br><span class="line">            self.wait.until(EC.text_to_be_present_in_element((By.CSS_SELECTOR, &apos;#mainsrp-pager li.item.active &gt; span&apos;), str(page)))</span><br><span class="line">            self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, &apos;.m-itemlist .items .item&apos;)))</span><br><span class="line">            return HtmlResponse(url=request.url, body=self.browser.page_source, request=request, encoding=&apos;utf-8&apos;, status=200)</span><br><span class="line">        except TimeoutException:</span><br><span class="line">            return HtmlResponse(url=request.url, status=500, request=request)</span><br><span class="line"></span><br><span class="line">    @classmethod</span><br><span class="line">    def from_crawler(cls, crawler):</span><br><span class="line">        return cls(timeout=crawler.settings.get(&apos;SELENIUM_TIMEOUT&apos;),</span><br><span class="line">                   service_args=crawler.settings.get(&apos;PHANTOMJS_SERVICE_ARGS&apos;))</span><br></pre></td></tr></table></figure>
+<p>首先我们在<strong>init</strong>()里对一些对象进行初始化，包括PhantomJS、WebDriverWait等对象，同时设置页面大小和页面加载超时时间。在process_request()方法中，我们通过Request的meta属性获取当前需要爬取的页码，调用PhantomJS对象的get()方法访问Request的对应的URL。这就相当于从Request对象里获取请求链接，然后再用PhantomJS加载，而不再使用Scrapy里的Downloader。</p>
+<p>随后的处理等待和翻页的方法在此不再赘述，和前文的原理完全相同。最后，页面加载完成之后，我们调用PhantomJS的page_source属性即可获取当前页面的源代码，然后用它来直接构造并返回一个HtmlResponse对象。构造这个对象的时候需要传入多个参数，如url、body等，这些参数实际上就是它的基础属性。可以在官方文档查看HtmlResponse对象的结构： <a href="https://doc.scrapy.org/en/latest/topics/request-response.html" target="_blank" rel="noopener">https://doc.scrapy.org/en/latest/topics/request-response.html</a> 。</p>
+<p>这样我们就成功利用PhantomJS来代替Scrapy完成了页面的加载，最后将Response返回即可。</p>
+<p>有人可能会纳闷：为什么实现这么一个Downloader Middleware就可以了？之前的Request对象怎么办？Scrapy不再处理了吗？Response返回后又传递给了谁？</p>
+<p>是的，Request对象到这里就不会再处理了，也不会再像以前一样交给Downloader下载。Response会直接传给Spider进行解析。</p>
+<p>我们需要回顾一下Downloader Middleware的process_request()方法的处理逻辑，内容如下所示：</p>
+<p>当process_request()方法返回Response对象的时候，更低优先级的Downloader Middleware的process_request()和process_exception()方法就不会被继续调用了，转而开始执行每个Downloader Middleware的process_response()方法，调用完毕之后直接将Response对象发送给Spider来处理。</p>
+<p>这里直接返回了一个HtmlResponse对象，它是Response的子类，返回之后便顺次调用每个Downloader Middleware的process_response()方法。而在process_response()中我们没有对其做特殊处理，它会被发送给Spider，传给Request的回调函数进行解析。</p>
+<p>到现在，我们应该能了解Downloader Middleware实现Selenium对接的原理了。</p>
+<p>在settings.py里，我们设置调用刚才定义的SeleniumMiddleware，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DOWNLOADER_MIDDLEWARES = &#123;</span><br><span class="line">    &apos;scrapyseleniumtest.middlewares.SeleniumMiddleware&apos;: 543,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="六、解析页面"><a href="#六、解析页面" class="headerlink" title="六、解析页面"></a>六、解析页面</h2><p>Response对象就会回传给Spider内的回调函数进行解析。所以下一步我们就实现其回调函数，对网页来进行解析，代码如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">def parse(self, response):</span><br><span class="line">    products = response.xpath(</span><br><span class="line">        &apos;//div[@id=&quot;mainsrp-itemlist&quot;]//div[@class=&quot;items&quot;][1]//div[contains(@class, &quot;item&quot;)]&apos;)</span><br><span class="line">    for product in products:</span><br><span class="line">        item = ProductItem()</span><br><span class="line">        item[&apos;price&apos;] = &apos;&apos;.join(product.xpath(&apos;.//div[contains(@class, &quot;price&quot;)]//text()&apos;).extract()).strip()</span><br><span class="line">        item[&apos;title&apos;] = &apos;&apos;.join(product.xpath(&apos;.//div[contains(@class, &quot;title&quot;)]//text()&apos;).extract()).strip()</span><br><span class="line">        item[&apos;shop&apos;] = &apos;&apos;.join(product.xpath(&apos;.//div[contains(@class, &quot;shop&quot;)]//text()&apos;).extract()).strip()</span><br><span class="line">        item[&apos;image&apos;] = &apos;&apos;.join(product.xpath(&apos;.//div[@class=&quot;pic&quot;]//img[contains(@class, &quot;img&quot;)]/@data-src&apos;).extract()).strip()</span><br><span class="line">        item[&apos;deal&apos;] = product.xpath(&apos;.//div[contains(@class, &quot;deal-cnt&quot;)]//text()&apos;).extract_first()</span><br><span class="line">        item[&apos;location&apos;] = product.xpath(&apos;.//div[contains(@class, &quot;location&quot;)]//text()&apos;).extract_first()</span><br><span class="line">        yield item</span><br></pre></td></tr></table></figure>
+<p>在这里我们使用XPath进行解析，调用response变量的xpath()方法即可。首先我们传递选取所有商品对应的XPath，可以匹配所有商品，随后对结果进行遍历，依次选取每个商品的名称、价格、图片等内容，构造并返回一个ProductItem对象。</p>
+<h2 id="七、存储结果"><a href="#七、存储结果" class="headerlink" title="七、存储结果"></a>七、存储结果</h2><p>最后我们实现一个Item Pipeline，将结果保存到MongoDB，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import pymongo</span><br><span class="line"></span><br><span class="line">class MongoPipeline(object):</span><br><span class="line">    def __init__(self, mongo_uri, mongo_db):</span><br><span class="line">        self.mongo_uri = mongo_uri</span><br><span class="line">        self.mongo_db = mongo_db</span><br><span class="line"></span><br><span class="line">    @classmethod</span><br><span class="line">    def from_crawler(cls, crawler):</span><br><span class="line">        return cls(mongo_uri=crawler.settings.get(&apos;MONGO_URI&apos;), mongo_db=crawler.settings.get(&apos;MONGO_DB&apos;))</span><br><span class="line"></span><br><span class="line">    def open_spider(self, spider):</span><br><span class="line">        self.client = pymongo.MongoClient(self.mongo_uri)</span><br><span class="line">        self.db = self.client[self.mongo_db]</span><br><span class="line"></span><br><span class="line">    def process_item(self, item, spider):</span><br><span class="line">        self.db[item.collection].insert(dict(item))</span><br><span class="line">        return item</span><br><span class="line"></span><br><span class="line">    def close_spider(self, spider):</span><br><span class="line">        self.client.close()</span><br></pre></td></tr></table></figure>
+<p>此实现和前文中存储到MongoDB的方法完全一致，原理不再赘述。记得在settings.py中开启它的调用，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ITEM_PIPELINES = &#123;</span><br><span class="line">    &apos;scrapyseleniumtest.pipelines.MongoPipeline&apos;: 300,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中，MONGO_URI和MONGO_DB的定义如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MONGO_URI = &apos;localhost&apos;</span><br><span class="line">MONGO_DB = &apos;taobao&apos;</span><br></pre></td></tr></table></figure>
+<h2 id="八、运行"><a href="#八、运行" class="headerlink" title="八、运行"></a>八、运行</h2><p>整个项目就完成了，执行如下命令启动抓取即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy crawl taobao</span><br></pre></td></tr></table></figure>
+<p>运行结果如下图所示。</p>
+<p><img src="https://img.colabug.com/2018/07/ny2Uvar-1.png" alt="image"></p>
+<p>查看MongoDB，结果如下图所示。<br><img src="https://img.colabug.com/2018/07/VrUrYb2-1.png" alt="image"></p>
+<p>这样我们便成功在Scrapy中对接Selenium并实现了淘宝商品的抓取。</p>
+<h2 id="九、结语"><a href="#九、结语" class="headerlink" title="九、结语"></a>九、结语</h2><p>我们通过实现Downloader Middleware的方式实现了Selenium的对接。但这种方法其实是阻塞式的，也就是说这样就破坏了Scrapy异步处理的逻辑，速度会受到影响。为了不破坏其异步加载逻辑，我们可以使用Splash实现。下一节我们再来看看Scrapy对接<code>Splash</code>的方式。</p>
+<p>转自：<a href="https://www.colabug.com/3514734.html" target="_blank" rel="noopener">https://www.colabug.com/3514734.html</a></p>
 
       
 
@@ -315,15 +272,15 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">爬虫</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Scrapy</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">python操作</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Selenium</a>
         		</li>
       		
 		</ul>
@@ -379,7 +336,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/07/14/redis-python版/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/07/15/Scrapy对接Selenium/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -393,18 +350,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/07/14/Redis缓存过期通知/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/07/15/Scrapy信号机制/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Redis缓存过期通知
+          Scrapy信号机制
         
       </div>
     </a>
   
   
-    <a href="/2018/07/13/BeautifulSoup4（BS4）/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">BeautifulSoup4（BS4）</div>
+    <a href="/2018/07/15/logging-日志模块/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">logging 日志模块</div>
       <i class="icon-circle-right"></i>
     </a>
   

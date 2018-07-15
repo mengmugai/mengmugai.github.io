@@ -6,20 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>redis(python版) | 萌木盖的博客</title>
+  <title>Scrapy信号机制 | 萌木盖的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Redis简介 Redis是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库 非关系型数据库的一种，经常用作缓存 官网：redis.io，中文网：redis.cn 丰富的数据类型：字符串、哈希、列表、集合、有序集合等 端口：6379 安装：sudo apt-get install redis-server  连接测试 检查服务是否启动：ps -e">
-<meta name="keywords" content="redis,数据库,python操作">
+  <meta name="description" content="需求：想让程序完成某样事情之后发生一个信号，或着。。。不或者了，反正是就是发送信号的。哼。 首先看一下scrapy dispatcher1234567891011121314151617181920from pydispatch import dispatcherSIGNAL = &amp;apos;aa&amp;apos;SIGNAL1 = &amp;apos;bb&amp;apos;def handle_event(send">
+<meta name="keywords" content="爬虫,Scrapy,信号">
 <meta property="og:type" content="article">
-<meta property="og:title" content="redis(python版)">
-<meta property="og:url" content="http://yoursite.com/2018/07/14/redis-python版/index.html">
+<meta property="og:title" content="Scrapy信号机制">
+<meta property="og:url" content="http://yoursite.com/2018/07/15/Scrapy信号机制/index.html">
 <meta property="og:site_name" content="萌木盖的博客">
-<meta property="og:description" content="Redis简介 Redis是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库 非关系型数据库的一种，经常用作缓存 官网：redis.io，中文网：redis.cn 丰富的数据类型：字符串、哈希、列表、集合、有序集合等 端口：6379 安装：sudo apt-get install redis-server  连接测试 检查服务是否启动：ps -e">
+<meta property="og:description" content="需求：想让程序完成某样事情之后发生一个信号，或着。。。不或者了，反正是就是发送信号的。哼。 首先看一下scrapy dispatcher1234567891011121314151617181920from pydispatch import dispatcherSIGNAL = &amp;apos;aa&amp;apos;SIGNAL1 = &amp;apos;bb&amp;apos;def handle_event(send">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-07-14T04:05:26.831Z">
+<meta property="og:updated_time" content="2018-07-15T15:07:50.837Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="redis(python版)">
-<meta name="twitter:description" content="Redis简介 Redis是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库 非关系型数据库的一种，经常用作缓存 官网：redis.io，中文网：redis.cn 丰富的数据类型：字符串、哈希、列表、集合、有序集合等 端口：6379 安装：sudo apt-get install redis-server  连接测试 检查服务是否启动：ps -e">
+<meta name="twitter:title" content="Scrapy信号机制">
+<meta name="twitter:description" content="需求：想让程序完成某样事情之后发生一个信号，或着。。。不或者了，反正是就是发送信号的。哼。 首先看一下scrapy dispatcher1234567891011121314151617181920from pydispatch import dispatcherSIGNAL = &amp;apos;aa&amp;apos;SIGNAL1 = &amp;apos;bb&amp;apos;def handle_event(send">
   
     <link rel="alternative" href="/atom.xml" title="萌木盖的博客" type="application/atom+xml">
   
@@ -167,120 +167,42 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-redis-python版" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-Scrapy信号机制" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      redis(python版)
+      Scrapy信号机制
     </h1>
   
 
         
-        <a href="/2018/07/14/redis-python版/" class="archive-article-date">
-  	<time datetime="2018-07-14T04:04:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-14</time>
+        <a href="/2018/07/15/Scrapy信号机制/" class="archive-article-date">
+  	<time datetime="2018-07-15T15:07:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-15</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><ul>
-<li>Redis是一个开源的使用ANSI <a href="https://baike.baidu.com/item/C%E8%AF%AD%E8%A8%80" target="_blank" rel="noopener">C语言</a>编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库</li>
-<li>非关系型数据库的一种，经常用作缓存</li>
-<li>官网：redis.io，中文网：redis.cn</li>
-<li>丰富的数据类型：字符串、哈希、列表、集合、有序集合等</li>
-<li>端口：6379</li>
-<li>安装：<code>sudo apt-get install redis-server</code></li>
-</ul>
-<h3 id="连接测试"><a href="#连接测试" class="headerlink" title="连接测试"></a>连接测试</h3><ul>
-<li>检查服务是否启动：<code>ps -ef | grep redis</code></li>
-<li>连接：<code>redis-cli -h 主机 -p 端口 -a 密码</code><ul>
-<li>-h：指定主机</li>
-<li>-p：指定端口</li>
-<li>-a：指定密码</li>
-<li>–help：查看帮助</li>
-<li>示例：<code>redis-cli -h localhost -p 6379</code></li>
-</ul>
-</li>
-<li>测试：<ul>
-<li>127.0.0.1:6379&gt;ping</li>
-<li>127.0.0.1:6379&gt;PONG</li>
-</ul>
-</li>
-<li>退出：quit</li>
-<li>密码管理：默认没有密码，若设置了密码，没有密码也可以登录成功，但是什么都不能做<ul>
-<li>单次有效，通过以下命令<ul>
-<li>获取密码：config get requirepass</li>
-<li>设置密码：config set requirepass 123456</li>
-<li>密码认证：auth 123456</li>
-</ul>
-</li>
-<li>永久有效，修改配置文件<code>/etc/redis/redis.conf</code><ul>
-<li>将<code>requirepass xxxxx</code>行取消注释</li>
-<li>后面跟上你需要的密码</li>
-<li>重启服务后即可生效</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="redis命令"><a href="#redis命令" class="headerlink" title="redis命令"></a>redis命令</h3><ul>
-<li><p>常用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">ping：测试连接情况，回复PONG表示OK</span><br><span class="line">quit：退出连接</span><br><span class="line">auth：密码认证</span><br><span class="line">select：选择库，总共有16个，序号0~15，默认是第0个</span><br><span class="line">info：查看服务器信息</span><br><span class="line">command：查看支持的命令</span><br><span class="line">flushdb：清空当前库</span><br><span class="line">flushall：清空所有库</span><br><span class="line">save：前台进行持久化存储</span><br><span class="line">bgsave：后台进行持久化存储</span><br><span class="line">exists：判断指定键是否存在</span><br><span class="line">del：删除键</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>字符串(string)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">set：设置</span><br><span class="line">get：获取</span><br><span class="line">getset：获取之后再设置</span><br><span class="line">mset：设置多个</span><br><span class="line">mget：获取多个</span><br><span class="line">incr：加1</span><br><span class="line">decr：减1</span><br><span class="line">incrby：加指定的值</span><br><span class="line">decrby：减指定的值</span><br><span class="line">append：追加内容</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>哈希(hash)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">hset：设置单个属性</span><br><span class="line">hget：获取单个属性</span><br><span class="line">hmset：设置多个属性</span><br><span class="line">hmget：获取多个属性</span><br><span class="line">hgetall：获取所有属性</span><br><span class="line">hdel：删除键值对</span><br><span class="line">hexists：判断指定键的指定字段是否存在</span><br><span class="line">hkeys：获取指定键的所有属性名</span><br><span class="line">hvals：获取指定键的所有属性值</span><br><span class="line">hlen：获取指定键的属性个数</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>列表(list)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">lpush：从左边(头部)插入数据</span><br><span class="line">lpop：从左边(头部)删除数据</span><br><span class="line">lrange：获取指定区间范围内的数据，0 -1表示所有</span><br><span class="line">lindex：根据索引获取元素</span><br><span class="line">llen：获取列表长度(元素个数)</span><br><span class="line">rpush：从右边(尾部)插入数据</span><br><span class="line">rpop：从右边(尾部)删除数据</span><br><span class="line">lrem：移除指定个数的指定元素</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>集合(set)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sadd：添加元素</span><br><span class="line">scard：统计元素个数</span><br><span class="line">sdiff：求差集</span><br><span class="line">sinter：求交集</span><br><span class="line">smembers：获取指定集合的所有成员</span><br><span class="line">sismember：判断是否在集合中</span><br><span class="line">smove：移动元素</span><br><span class="line">spop：随机的删除一个元素</span><br><span class="line">srandmember：随机获取指定个数的元素</span><br><span class="line">srem：移除元素</span><br><span class="line">sunion：求并集</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>有序集合(sorted set)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">zadd：添加元素</span><br><span class="line">zcard：统计个数</span><br><span class="line">zcount：指定分数区间内的元素数量</span><br><span class="line">zrange：返回指定索引范围内的元素</span><br><span class="line">zrangebyscore：返回指定分数区间的元素</span><br><span class="line">zrank：返回指定成员的索引值</span><br><span class="line">zrem：移除元素</span><br><span class="line">zscore：获取指定元素的排序指标(分数)</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="使用工具远程连接redis"><a href="#使用工具远程连接redis" class="headerlink" title="使用工具远程连接redis"></a>使用工具远程连接redis</h3><ul>
-<li>修改配置文件：/etc/redis/redis.conf，bind改为0.0.0.0</li>
-<li><p>修改之后重启服务即可。</p>
-<h3 id="python操作redis"><a href="#python操作redis" class="headerlink" title="python操作redis"></a>python操作redis</h3></li>
-<li><p>安装扩展库：<code>pip3 install redis</code></p>
-</li>
-<li><p>简介：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis扩展库中有两个类，Redis和StrictRedis，StrictRedis实现了官方的命令，Redis是它的子类，兼容老版本。扩展库没有实现select方法，可以通过连接时指定使用的库。</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>操作：</p>
+        <p>需求：想让程序完成某样事情之后发生一个信号，或着。。。不或者了，反正是就是发送信号的。哼。</p>
+<h2 id="首先看一下scrapy-dispatcher"><a href="#首先看一下scrapy-dispatcher" class="headerlink" title="首先看一下scrapy dispatcher"></a>首先看一下scrapy dispatcher</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">from pydispatch import dispatcher</span><br><span class="line"></span><br><span class="line">SIGNAL = &apos;aa&apos;</span><br><span class="line">SIGNAL1 = &apos;bb&apos;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def handle_event(sender):</span><br><span class="line">    print(&apos;signal aa is send by&apos;, sender)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def handle_event1(sender):</span><br><span class="line">    print(&apos;signal bb is send by&apos;, sender)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">dispatcher.connect(handle_event, signal=SIGNAL, sender=dispatcher.Any)</span><br><span class="line">dispatcher.connect(handle_event1, signal=SIGNAL1, sender=dispatcher.Any)</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line"></span><br><span class="line">    dispatcher.send(signal=SIGNAL, sender=&quot;打印中的sender&quot;)</span><br></pre></td></tr></table></figure>
+<p>输出结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">signal aa is send by 打印中的sender</span><br></pre></td></tr></table></figure></p>
+<h2 id="Signals信号槽"><a href="#Signals信号槽" class="headerlink" title="Signals信号槽"></a>Signals信号槽</h2><p>看了 scrapy 的官方文档，关于 signals 的函数在 from_crawler()中有如下示例代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">crawler.signals.connect(ext.spider_opened, signal=signals.spider_opened) #代码 1 </span><br><span class="line">crawler.signals.connect(ext.spider_closed, signal=signals.spider_closed) #代码 2  </span><br><span class="line"></span><br><span class="line">对应两个方法定义如下： </span><br><span class="line">def spider_opened(self, spider): </span><br><span class="line">    spider.log(&quot;opened spider %s&quot; % spider.name) </span><br><span class="line">def spider_closed(self, spider): </span><br><span class="line">    spider.log(&quot;closed spider %s&quot; % spider.name)</span><br></pre></td></tr></table></figure>
+<h2 id="两个都用"><a href="#两个都用" class="headerlink" title="两个都用"></a>两个都用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">from scrapy.xlib.pydispatch import dispatcher</span><br><span class="line">from scrapy import signals</span><br><span class="line">def __init__(self):</span><br><span class="line">    dispatcher.connect(self.spider_stopped, signals.engine_stopped)##建立信号和槽，在爬虫结束时调用</span><br><span class="line">    dispatcher.connect(self.spider_closed, signals.spider_closed)##建立信号和槽，在爬虫关闭时调用</span><br><span class="line">    </span><br><span class="line">    #爬虫关闭时 调用本方法</span><br><span class="line">    def spider_closed(self):</span><br><span class="line">        print(&quot;i close&quot;)</span><br><span class="line"></span><br><span class="line">    #爬虫结束时 调用本方法</span><br><span class="line">    def spider_stopped(self):</span><br><span class="line">        print(&quot;i done&quot;)</span><br></pre></td></tr></table></figure>
+<p>spider类初始化时就绑定了两个方法,<code>spider_closed</code>和<code>spider_stopped</code><br>其实还有好多，具体看<a href="https://link.jianshu.com/?t=http%3A%2F%2Fdocs.pythontab.com%2Fscrapy%2Fscrapy0.24%2Ftopics%2Fsignals.html" target="_blank" rel="noopener">官方文档</a></p>
+<h6 id="注意，-signals-spider-closed比signals-engine-stopped先执行"><a href="#注意，-signals-spider-closed比signals-engine-stopped先执行" class="headerlink" title="注意， signals.spider_closed比signals.engine_stopped先执行"></a>注意， signals.spider_closed比signals.engine_stopped先执行</h6><h2 id="完整点的看一下"><a href="#完整点的看一下" class="headerlink" title="完整点的看一下"></a>完整点的看一下</h2><p>这个是我在网上粘的python2的代码，但是不重要，重要的是思想！<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">from scrapy import signals</span><br><span class="line">from scrapy.xlib.pydispatch import dispatcher</span><br><span class="line">from scrapy.linkextractors import LinkExtractor</span><br><span class="line">from scrapy.spiders import CrawlSpider, Rule</span><br><span class="line">from items import IpProxyPoolItem</span><br><span class="line">from model.spider_running_log import SpiderCrawlLog</span><br><span class="line">from model import loadSession</span><br><span class="line">from datetime import datetime</span><br><span class="line">class ProxySpiderSpider(CrawlSpider):</span><br><span class="line">    name = &apos;MagicSpider&apos;</span><br><span class="line">    def __init__(self,rule):</span><br><span class="line">        #spider启动信号和spider_opened函数绑定</span><br><span class="line">        dispatcher.connect(self.spider_opened, signals.spider_opened)</span><br><span class="line">        #spider关闭信号和spider_spider_closed函数绑定</span><br><span class="line">        dispatcher.connect(self.spider_closed, signals.spider_closed)</span><br><span class="line">        self.rule = rule</span><br><span class="line">        self.name = rule.name</span><br><span class="line">        self.allowed_domains = rule.allowed_domains.split(&apos;,&apos;)</span><br><span class="line">        self.start_urls = rule.start_urls.split(&apos;,&apos;)</span><br><span class="line">        rule_list = []</span><br><span class="line"></span><br><span class="line">        # 添加`下一页`的规则</span><br><span class="line">        if len(rule.next_page):</span><br><span class="line">            rule_list.append(Rule(LinkExtractor(restrict_xpaths=rule.next_page), follow=True))</span><br><span class="line"></span><br><span class="line">        rule_list.append(Rule(LinkExtractor(</span><br><span class="line">            allow=rule.allow_url.split(&apos;,&apos;),</span><br><span class="line">            unique=True),</span><br><span class="line">            follow=True,</span><br><span class="line">            callback=&apos;parse_item&apos;))</span><br><span class="line"></span><br><span class="line">        self.rules = tuple(rule_list)</span><br><span class="line">        super(ProxySpiderSpider, self).__init__()</span><br><span class="line">    #spider关闭时的逻辑</span><br><span class="line">    def spider_closed(self, spider):</span><br><span class="line">        print &quot;spider is closed!&quot;</span><br><span class="line">        session = loadSession()</span><br><span class="line">        log = session.query(SpiderCrawlLog).filter(SpiderCrawlLog.spiderID == self.rule.id,</span><br><span class="line">                                                   SpiderCrawlLog.endTime == None</span><br><span class="line">                                                   ).first()</span><br><span class="line">        log.endTime = datetime.now().strftime(&quot;%Y-%m-%d %H:%M:%S&quot;)</span><br><span class="line">        log.status = &quot;closed&quot;</span><br><span class="line">        session.commit()</span><br><span class="line"></span><br><span class="line">    #spider启动时的逻辑</span><br><span class="line">    def spider_opened(self, spider):</span><br><span class="line">        print &quot;spider is running!&quot;</span><br><span class="line">        item = SpiderCrawlLog(</span><br><span class="line">                              spiderID=self.rule.id,</span><br><span class="line">                              spiderName=self.rule.name,</span><br><span class="line">                              status=&quot;Running...&quot;,</span><br><span class="line">                              startTime=datetime.now().strftime(&quot;%Y-%m-%d %H:%M:%S&quot;),</span><br><span class="line">                              endTime=None,</span><br><span class="line">                              pages=0,</span><br><span class="line">                              items=0</span><br><span class="line">                              )</span><br><span class="line">        session = loadSession()</span><br><span class="line">        log = session.query(SpiderCrawlLog).filter(</span><br><span class="line">            SpiderCrawlLog.spiderID == self.rule.id,</span><br><span class="line">            SpiderCrawlLog.endTime == None)</span><br><span class="line"></span><br><span class="line">        # 查询当前spider是否有未结束的日志</span><br><span class="line">        if log.count() == 0 :</span><br><span class="line">            session.add(item)</span><br><span class="line">            session.commit()</span><br><span class="line">        else:</span><br><span class="line">            pass</span><br><span class="line"></span><br><span class="line">    def parse_item(self, response):</span><br><span class="line">        # print &apos;Hi, this is an item page! %s&apos; % response.url</span><br><span class="line">        #print response.body</span><br><span class="line"></span><br><span class="line">        session = loadSession()</span><br><span class="line">        log = session.query(SpiderCrawlLog).filter(SpiderCrawlLog.spiderID == self.rule.id,</span><br><span class="line">                                                   SpiderCrawlLog.endTime == None).first()</span><br><span class="line">        log.pages = int(log.pages) + 1</span><br><span class="line">        session.commit()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        item=IpProxyPoolItem()</span><br><span class="line"></span><br><span class="line">        if len(self.rule.loop_xpath):</span><br><span class="line">            # print &apos;Find %d items!&apos;% len(response.xpath(self.rule.loop_xpath))</span><br><span class="line">            for proxy in response.xpath(self.rule.loop_xpath):</span><br><span class="line">                if len(self.rule.ip_xpath):</span><br><span class="line">                    tmp_ip = proxy.xpath(self.rule.ip_xpath).extract_first()</span><br><span class="line">                    ip = tmp_ip.strip() if tmp_ip is not None else &quot;&quot;</span><br><span class="line">                else:</span><br><span class="line">                    ip = &quot;&quot;</span><br><span class="line">                if len(self.rule.port_xpath):</span><br><span class="line">                    tmp_port = proxy.xpath(self.rule.port_xpath).extract_first()</span><br><span class="line">                    port = tmp_port.strip() if tmp_port is not None else &quot;&quot;</span><br><span class="line">                else:</span><br><span class="line">                    port = &quot;&quot;</span><br><span class="line">                if len(self.rule.location1_xpath):</span><br><span class="line">                    tmp_location1 = proxy.xpath(self.rule.location1_xpath).extract_first()</span><br><span class="line">                    location1 = tmp_location1.strip() if tmp_location1 is not None else &quot;&quot;</span><br><span class="line">                else:</span><br><span class="line">                    location1 = &quot;&quot;</span><br><span class="line">                if len(self.rule.location2_xpath):</span><br><span class="line">                    tmp_location2 = proxy.xpath(self.rule.location2_xpath).extract_first()</span><br><span class="line">                    location2 = tmp_location2.strip() if tmp_location2 is not None else &quot;&quot;</span><br><span class="line">                else:</span><br><span class="line">                    location2 = &quot;&quot;</span><br><span class="line">                if len(self.rule.lifetime_xpath):</span><br><span class="line">                    tmp_lifetime = proxy.xpath(self.rule.lifetime_xpath).extract_first()</span><br><span class="line">                    lifetime = tmp_lifetime.strip() if tmp_lifetime is not None else &quot;&quot;</span><br><span class="line">                else:</span><br><span class="line">                    lifetime = &quot;&quot;</span><br><span class="line">                if len(self.rule.lastcheck_xpath):</span><br><span class="line">                    tmp_lastcheck = proxy.xpath(self.rule.lastcheck_xpath).extract_first()</span><br><span class="line">                    lastcheck = tmp_lastcheck.strip() if tmp_lastcheck is not None else &quot;&quot;</span><br><span class="line">                else:</span><br><span class="line">                    lastcheck = &quot;&quot;</span><br><span class="line">                if len(self.rule.level_xpath):</span><br><span class="line">                    tmp_level = proxy.xpath(self.rule.level_xpath).extract_first()</span><br><span class="line">                    level = tmp_level.strip() if tmp_level is not None else &quot;&quot;</span><br><span class="line">                else:</span><br><span class="line">                    level = &quot;&quot;</span><br><span class="line">                if len(self.rule.type_xpath):</span><br><span class="line">                    tmp_type = proxy.xpath(self.rule.type_xpath).extract_first()</span><br><span class="line">                    type = tmp_type.strip() if tmp_type is not None else &quot;&quot;</span><br><span class="line">                else:</span><br><span class="line">                    type = &quot;&quot;</span><br><span class="line">                if len(self.rule.speed_xpath):</span><br><span class="line">                    tmp_speed = proxy.xpath(self.rule.speed_xpath).extract_first()</span><br><span class="line">                    speed = tmp_speed.strip() if tmp_speed is not None else &quot;&quot;</span><br><span class="line">                else:</span><br><span class="line">                    speed = &quot;&quot;</span><br><span class="line"></span><br><span class="line">                item[&apos;ip_port&apos;]=(&quot;:&quot;.join([ip,port])) if len(port) else ip</span><br><span class="line">                item[&apos;type&apos;]=type</span><br><span class="line">                item[&apos;level&apos;]=level</span><br><span class="line">                item[&apos;location&apos;]=(&quot; &quot;.join([location1,location2])) if location2 is not None and len(location2) else location1</span><br><span class="line">                item[&apos;speed&apos;]=speed</span><br><span class="line">                item[&apos;lifetime&apos;]=lifetime</span><br><span class="line">                item[&apos;lastcheck&apos;]=lastcheck</span><br><span class="line">                item[&apos;rule_id&apos;]=self.rule.id</span><br><span class="line">                item[&apos;source&apos;]=response.url</span><br><span class="line">                yield item</span><br></pre></td></tr></table></figure></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这几个代码总能搞清楚这个信号机制怎么用了吧。</p>
+<p>参考：</p>
 <ul>
-<li><p>简单连接</p>
-<ul>
-<li>导入redis，创建Redis对象，所有命令行下的命令在代码中都是Redis对象的方法<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">import redis</span><br><span class="line"></span><br><span class="line"># 创建Redis对象进行连接</span><br><span class="line"># 参数：decode_responses是否解码返回值</span><br><span class="line">r = redis.Redis(host=&apos;localhost&apos;, port=6379, password=&apos;123456&apos;, decode_responses=True)</span><br><span class="line"></span><br><span class="line"># 终端下的命令在代码中都是函数</span><br><span class="line">r.set(&apos;name&apos;, &apos;xiaoming&apos;)</span><br><span class="line"></span><br><span class="line">print(r.get(&apos;name&apos;))</span><br></pre></td></tr></table></figure>
-</li>
+<li><a href="http://jinbitou.net/2016/12/19/2271.html" target="_blank" rel="noopener">http://jinbitou.net/2016/12/19/2271.html</a></li>
+<li><a href="https://blog.csdn.net/u011429899/article/details/79458406" target="_blank" rel="noopener">https://blog.csdn.net/u011429899/article/details/79458406</a></li>
+<li><a href="https://www.jianshu.com/p/d4668a5d3b61" target="_blank" rel="noopener">https://www.jianshu.com/p/d4668a5d3b61</a></li>
+<li><a href="http://docs.pythontab.com/scrapy/scrapy0.24/topics/api.html#topics-api-signals" target="_blank" rel="noopener">http://docs.pythontab.com/scrapy/scrapy0.24/topics/api.html#topics-api-signals</a></li>
 </ul>
-</li>
-<li><p>连接池</p>
-<ul>
-<li>多个redis对象使用同一个连接池进行连接，避免了多次连接、断开等操作的系统开销</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import redis</span><br><span class="line"></span><br><span class="line"># 创建连接池，减少了多次的连接、断开的开销</span><br><span class="line">pool = redis.ConnectionPool(password=&apos;123456&apos;, decode_responses=True)</span><br><span class="line"></span><br><span class="line"># 创建Redis对象</span><br><span class="line">r = redis.Redis(connection_pool=pool)</span><br><span class="line"></span><br><span class="line">print(r.get(&apos;name&apos;))</span><br></pre></td></tr></table></figure>
-<ul>
-<li>使用管道(pipeline)<ul>
-<li>可以记录多个操作，然后一次将操作发送至数据库，避免了多次向服务器发送少量的数据</li>
-<li>多个操作可以依次进行保存，然后发送，也可以进行连贯操作</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import redis</span><br><span class="line"></span><br><span class="line"># 创建连接池，减少了多次的连接、断开的开销</span><br><span class="line">pool = redis.ConnectionPool(password=&apos;123456&apos;, decode_responses=True)</span><br><span class="line"></span><br><span class="line"># 创建Redis对象</span><br><span class="line">r = redis.Redis(connection_pool=pool)</span><br><span class="line"></span><br><span class="line"># 创建管道</span><br><span class="line">pipe = r.pipeline()</span><br><span class="line"></span><br><span class="line"># 保存记录操作</span><br><span class="line">#pipe.set(&apos;name&apos;, &apos;dahua&apos;)</span><br><span class="line">#pipe.set(&apos;age&apos;, 20)</span><br><span class="line"># 执行操作(发送到服务器)，一次可以执行多个操作，可以避免多次的想服武器发送数据</span><br><span class="line">#pipe.execute()</span><br><span class="line"></span><br><span class="line"># 也可以进行连贯操作</span><br><span class="line">pipe.set(&apos;name&apos;, &apos;haha&apos;).set(&apos;age&apos;, 10).execute()</span><br><span class="line"></span><br><span class="line">print(r.get(&apos;name&apos;))</span><br></pre></td></tr></table></figure>
 
       
 
@@ -315,15 +237,15 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">爬虫</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Scrapy</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">python操作</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">信号</a>
         		</li>
       		
 		</ul>
@@ -379,7 +301,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/07/14/redis-python版/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/07/15/Scrapy信号机制/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -393,18 +315,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/07/14/Redis缓存过期通知/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Redis缓存过期通知
-        
-      </div>
-    </a>
   
-  
-    <a href="/2018/07/13/BeautifulSoup4（BS4）/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">BeautifulSoup4（BS4）</div>
+    <a href="/2018/07/15/Scrapy对接Selenium/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Scrapy对接Selenium</div>
       <i class="icon-circle-right"></i>
     </a>
   
