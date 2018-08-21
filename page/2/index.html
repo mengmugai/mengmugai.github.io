@@ -164,6 +164,457 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-logging-日志模块" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/15/logging-日志模块/">logging 日志模块</a>
+    </h1>
+  
+
+        
+        <a href="/2018/07/15/logging-日志模块/" class="archive-article-date">
+  	<time datetime="2018-07-15T14:04:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在 PyCon 2018 上，Mario Corchero 介绍了在开发过程中如何更方便轻松地记录日志的流程。<br><img src="https://user-gold-cdn.xitu.io/2018/6/3/163c61861faf256f?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="image"></p>
+<p>整个演讲的内容包括：</p>
+<ul>
+<li>为什么日志记录非常重要</li>
+<li>日志记录的流程是怎样的</li>
+<li>怎样来进行日志记录</li>
+<li>怎样进行日志记录相关配置</li>
+<li>日志记录使用常见误区</li>
+</ul>
+<p>下面我们来梳理一下整个演讲的过程，其实其核心就是介绍了 <code>logging</code> 模块的使用方法和一些配置。</p>
+<h3 id="日志记录的重要性"><a href="#日志记录的重要性" class="headerlink" title="日志记录的重要性"></a>日志记录的重要性</h3><p>在开发过程中，如果程序运行出现了问题，我们是可以使用我们自己的 Debug 工具来检测到到底是哪一步出现了问题，如果出现了问题的话，是很容易排查的。但程序开发完成之后，我们会将它部署到生产环境中去，这时候代码相当于是在一个黑盒环境下运行的，我们只能看到其运行的效果，是不能直接看到代码运行过程中每一步的状态的。在这个环境下，运行过程中难免会在某个地方出现问题，甚至这个问题可能是我们开发过程中未曾遇到的问题，碰到这种情况应该怎么办？</p>
+<p>如果我们现在只能得知当前问题的现象，而没有其他任何信息的话，如果我们想要解决掉这个问题的话，那么只能根据问题的现象来试图复现一下，然后再一步步去调试，这恐怕是很难的，很大的概率上我们是无法精准地复现这个问题的，而且 <code>Debug</code> 的过程也会耗费巨多的时间，这样一旦生产环境上出现了问题，修复就会变得非常棘手。但这如果我们当时有做日志记录的话，不论是正常运行还是出现报错，都有相关的时间记录，状态记录，错误记录等，那么这样我们就可以方便地追踪到在当时的运行过程中出现了怎样的状况，从而可以快速排查问题。</p>
+<p>因此，日志记录是非常有必要的，任何一款软件如果没有标准的日志记录，都不能算作一个合格的软件。作为开发者，我们需要重视并做好日志记录过程。</p>
+<h3 id="日志记录的流程框架"><a href="#日志记录的流程框架" class="headerlink" title="日志记录的流程框架"></a>日志记录的流程框架</h3><p>那么在 Python 中，怎样才能算作一个比较标准的日志记录过程呢？或许很多人会使用 print 语句输出一些运行信息，然后再在控制台观察，运行的时候再将输出重定向到文件输出流保存到文件中，这样其实是非常不规范的，在 Python 中有一个标准的 <code>logging</code> 模块，我们可以使用它来进行标注的日志记录，利用它我们可以更方便地进行日志记录，同时还可以做更方便的级别区分以及一些额外日志信息的记录，如时间、运行模块信息等。</p>
+<p>接下来我们先了解一下日志记录流程的整体框架。</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/6/3/163c618941cfc03f?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="image"></p>
+<p>如图所示，整个日志记录的框架可以分为这么几个部分：</p>
+<ul>
+<li><code>Logger</code>：即 <code>Logger Main</code> Class，是我们进行日志记录时创建的对象，我们可以调用它的方法传入日志模板和信息，来生成一条条日志记录，称作 <code>Log Record</code>。</li>
+<li><code>Log Record</code>：就代指生成的一条条日志记录。</li>
+<li><code>Handler</code>：即用来处理日志记录的类，它可以将 <code>Log Record</code> 输出到我们指定的日志位置和存储形式等，如我们可以指定将日志通过 <code>TP</code> 协议记录到远程的服务器上，<code>Handler</code> 就会帮我们完成这些事情。</li>
+<li><code>Formatter</code>：实际上生成的 <code>Log Record</code> 也是一个个对象，那么我们想要把它们保存成一条条我们想要的日志文本的话，就需要有一个格式化的过程，那么这个过程就由 Formatter 来完成，返回的就是日志字符串，然后传回给 Handler 来处理。</li>
+<li>Filter：另外保存日志的时候我们可能不需要全部保存，我们可能只需要保存我们想要的部分就可以了，所以保存前还需要进行一下过滤，留下我们想要的日志，如只保存某个级别的日志，或只保存包含某个关键字的日志等，那么这个过滤过程就交给 <code>Filter</code> 来完成。</li>
+<li><code>Parent Handler：Handler</code> 之间可以存在分层关系，以使得不同 <code>Handler</code> 之间共享相同功能的代码。<br>以上就是整个 <code>logging</code> 模块的基本架构和对象功能，了解了之后我们详细来了解一下 <code>logging</code> 模块的用法。</li>
+</ul>
+<h3 id="日志记录的相关用法"><a href="#日志记录的相关用法" class="headerlink" title="日志记录的相关用法"></a>日志记录的相关用法</h3><p>总的来说 <code>logging</code> 模块相比 <code>print</code> 有这么几个优点：</p>
+<ul>
+<li>可以在 <code>logging</code> 模块中设置日志等级，在不同的版本（如开发环境、生产环境）上通过设置不同的输出等级来记录对应的日志，非常灵活。</li>
+<li><code>print</code> 的输出信息都会输出到标准输出流中，而 logging 模块就更加灵活，可以设置输出到任意位置，如写入文件、写入远程服务器等。</li>
+<li><code>logging</code> 模块具有灵活的配置和格式化功能，如配置输出当前模块信息、运行时间等，相比 print 的字符串格式化更加方便易用。</li>
+</ul>
+<p>下面我们初步来了解下 <code>logging</code> 模块的基本用法，先用一个实例来感受一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import logging</span><br><span class="line"></span><br><span class="line">logging.basicConfig(level=logging.INFO, format=&apos;%(asctime)s - %(name)s - %(levelname)s - %(message)s&apos;)</span><br><span class="line">logger = logging.getLogger(__name__)</span><br><span class="line"></span><br><span class="line">logger.info(&apos;This is a log info&apos;)</span><br><span class="line">logger.debug(&apos;Debugging&apos;)</span><br><span class="line">logger.warning(&apos;Warning exists&apos;)</span><br><span class="line">logger.info(&apos;Finish&apos;)</span><br></pre></td></tr></table></figure>
+<p>在这里我们首先引入了 <code>logging</code> 模块，然后进行了一下基本的配置，这里通过 <code>basicConfig</code> 配置了 <code>level</code> 信息和 <code>format</code> 信息，这里 level 配置为 INFO 信息，即只输出 <code>INFO</code> 级别的信息，另外这里指定了 <code>format</code> 格式的字符串，包括 <code>asctime</code>、<code>name</code>、<code>levelname</code>、<code>message</code> 四个内容，分别代表运行时间、模块名称、日志级别、日志内容，这样输出内容便是这四者组合而成的内容了，这就是 logging 的全局配置。</p>
+<p>接下来声明了一个 <code>Logger</code> 对象，它就是日志输出的主类，调用对象的 <code>info()</code> 方法就可以输出 <code>INFO</code> 级别的日志信息，调用 <code>debug()</code> 方法就可以输出 <code>DEBUG</code> 级别的日志信息，非常方便。在初始化的时候我们传入了模块的名称，这里直接使用 <code>__name__</code> 来代替了，就是模块的名称，如果直接运行这个脚本的话就是 <code>__main__</code>，如果是 <code>import</code> 的模块的话就是被引入模块的名称，这个变量在不同的模块中的名字是不同的，所以一般使用 <code>__name__</code> 来表示就好了，再接下来输出了四条日志信息，其中有两条 <code>INFO</code>、一条 <code>WARNING</code>、一条 <code>DEBUG</code> 信息，我们看下输出结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2018-06-03 13:42:43,526 - __main__ - INFO - This is a log info</span><br><span class="line">2018-06-03 13:42:43,526 - __main__ - WARNING - Warning exists</span><br><span class="line">2018-06-03 13:42:43,526 - __main__ - INFO - Finish</span><br></pre></td></tr></table></figure>
+<p>可以看到输出结果一共有三条日志信息，每条日志都是对应了指定的格式化内容，另外我们发现 <code>DEBUG</code> 的信息是没有输出的，这是因为我们在全局配置的时候设置了输出为 <code>INFO</code> 级别，所以 <code>DEBUG</code> 级别的信息就被过滤掉了。</p>
+<p>这时如果我们将输出的日志级别设置为 <code>DEBUG</code>，就可以看到 <code>DEBUG</code> 级别的日志输出了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logging.basicConfig(level=logging.DEBUG, format=&apos;%(asctime)s - %(name)s - %(levelname)s - %(message)s&apos;)</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">2018-06-03 13:49:22,770 - __main__ - INFO - This is a log info</span><br><span class="line">2018-06-03 13:49:22,770 - __main__ - DEBUG - Debugging</span><br><span class="line">2018-06-03 13:49:22,770 - __main__ - WARNING - Warning exists</span><br><span class="line">2018-06-03 13:49:22,770 - __main__ - INFO - Finish</span><br></pre></td></tr></table></figure>
+<p>由此可见，相比 <code>print</code> 来说，通过刚才的代码，我们既可以输出时间、模块名称，又可以输出不同级别的日志信息作区分并加以过滤，是不是灵活多了？</p>
+<p>当然这只是 <code>logging</code> 模块的一小部分功能，接下来我们首先来全面了解一下 <code>basicConfig</code> 的参数都有哪些：</p>
+<ul>
+<li><code>filename</code>：即日志输出的文件名，如果指定了这个信息之后，实际上会启用 <code>FileHandler</code>，而不再是 <code>StreamHandler</code>，这样日志信息便会输出到文件中了。</li>
+<li><code>filemode</code>：这个是指定日志文件的写入方式，有两种形式，一种是 <code>w</code>，一种是 <code>a</code>，分别代表清除后写入和追加写入。</li>
+<li><code>format</code>：指定日志信息的输出格式，即上文示例所示的参数，详细参数可以参考<a href="https://link.juejin.im/?target=https%3A%2F%2Fdocs.python.org%2F3%2Flibrary%2Flogging.html%3Fhighlight%3Dlogging%2520threadname%23logrecord-attributes" target="_blank" rel="noopener">python文档</a>部分参数如下所示：<ul>
+<li><code>%(levelno)s</code>：打印日志级别的数值。</li>
+<li><code>%(levelname)s</code>：打印日志级别的名称。</li>
+<li><code>%(pathname)s</code>：打印当前执行程序的路径，其实就是sys.argv[0]。</li>
+<li><code>%(filename)s</code>：打印当前执行程序名。</li>
+<li><code>%(funcName)s</code>：打印日志的当前函数。</li>
+<li><code>%(lineno)d</code>：打印日志的当前行号。</li>
+<li><code>%(asctime)s</code>：打印日志的时间。</li>
+<li><code>%(thread)d</code>：打印线程ID。</li>
+<li><code>%(threadName)s</code>：打印线程名称。</li>
+<li><code>%(process)d</code>：打印进程ID。</li>
+<li><code>%(processName)s</code>：打印线程名称。</li>
+<li><code>%(module)s</code>：打印模块名称。</li>
+<li><code>%(message)s</code>：打印日志信息。</li>
+</ul>
+</li>
+<li><code>datefmt</code>：指定时间的输出格式。</li>
+<li><code>style</code>：如果 <code>format</code> 参数指定了，这个参数就可以指定格式化时的占位符风格，如 %、{、$ 等。</li>
+<li><code>level</code>：指定日志输出的类别，程序会输出大于等于此级别的信息。</li>
+<li><code>stream</code>：在没有指定 <code>filename</code> 的时候会默认使用 <code>StreamHandler</code>，这时 <code>stream</code> 可以指定初始化的文件流。</li>
+<li><code>handlers</code>：可以指定日志处理时所使用的 <code>Handlers</code>，必须是可迭代的。<br>下面我们再用一个实例来感受一下：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import logging</span><br><span class="line"></span><br><span class="line">logging.basicConfig(level=logging.DEBUG,</span><br><span class="line">                    filename=&apos;output.log&apos;,</span><br><span class="line">                    datefmt=&apos;%Y/%m/%d %H:%M:%S&apos;,</span><br><span class="line">                    format=&apos;%(asctime)s - %(name)s - %(levelname)s - %(lineno)d - %(module)s - %(message)s&apos;)</span><br><span class="line">logger = logging.getLogger(__name__)</span><br><span class="line"></span><br><span class="line">logger.info(&apos;This is a log info&apos;)</span><br><span class="line">logger.debug(&apos;Debugging&apos;)</span><br><span class="line">logger.warning(&apos;Warning exists&apos;)</span><br><span class="line">logger.info(&apos;Finish&apos;)</span><br></pre></td></tr></table></figure>
+<p>这里我们指定了输出文件的名称为 <code>output.log</code>，另外指定了日期的输出格式，其中年月日的格式变成了 <code>%Y/%m/%d</code>，另外输出的 <code>format</code> 格式增加了<code>lineno、module</code> 这两个信息，运行之后便会生成一个 <code>output.log</code> 的文件，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">2018/06/03 14:43:26 - __main__ - INFO - 9 - demo3 - This is a log info</span><br><span class="line">2018/06/03 14:43:26 - __main__ - DEBUG - 10 - demo3 - Debugging</span><br><span class="line">2018/06/03 14:43:26 - __main__ - WARNING - 11 - demo3 - Warning exists</span><br><span class="line">2018/06/03 14:43:26 - __main__ - INFO - 12 - demo3 - Finish</span><br></pre></td></tr></table></figure>
+<p>可以看到日志便会输出到文件中，同时输出了行号、模块名称等信息。</p>
+<p>以上我们通过 <code>basicConfig</code> 来进行了一些全局的配置，我们同样可以使用 <code>Formatter、Handler</code> 进行更灵活的处理，下面我们来了解一下。</p>
+<h4 id="Level"><a href="#Level" class="headerlink" title="Level"></a>Level</h4><p>首先我们来了解一下输出日志的等级信息，logging 模块共提供了如下等级，每个等级其实都对应了一个数值，列表如下：</p>
+<p>等级    数值</p>
+<table>
+<thead>
+<tr>
+<th>等级</th>
+<th>数值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CRITICAL</td>
+<td>50</td>
+</tr>
+<tr>
+<td>FATAL</td>
+<td>50</td>
+</tr>
+<tr>
+<td>ERROR</td>
+<td>40</td>
+</tr>
+<tr>
+<td>WARNING</td>
+<td>30</td>
+</tr>
+<tr>
+<td>WARN</td>
+<td>30</td>
+</tr>
+<tr>
+<td>INFO</td>
+<td>20</td>
+</tr>
+<tr>
+<td>DEBUG</td>
+<td>10</td>
+</tr>
+<tr>
+<td>NOTSET</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>这里最高的等级是 <code>CRITICAL</code> 和 <code>FATAL</code>，两个对应的数值都是 <code>50</code>，另外对于 <code>WARNING</code> 还提供了简写形式 <code>WARN</code>，两个对应的数值都是 <code>30</code>。</p>
+<p>我们设置了输出 <code>level</code>，系统便只会输出 <code>level</code> 数值大于或等于该 <code>level</code> 的的日志结果，例如我们设置了输出日志 <code>level</code> 为 <code>INFO</code>，那么输出级别大于等于 <code>INFO</code> 的日志，如 <code>WARNING、ERROR</code> 等，<code>DEBUG</code> 和 <code>NOSET</code> 级别的不会输出。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import logging</span><br><span class="line"></span><br><span class="line">logger = logging.getLogger(__name__)</span><br><span class="line">logger.setLevel(level=logging.WARN)</span><br><span class="line"></span><br><span class="line"># Log</span><br><span class="line">logger.debug(&apos;Debugging&apos;)</span><br><span class="line">logger.critical(&apos;Critical Something&apos;)</span><br><span class="line">logger.error(&apos;Error Occurred&apos;)</span><br><span class="line">logger.warning(&apos;Warning exists&apos;)</span><br><span class="line">logger.info(&apos;Finished&apos;)</span><br></pre></td></tr></table></figure>
+<p>这里我们设置了输出级别为 <code>WARN</code>，然后对应输出了五种不同级别的日志信息，运行结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Critical Something</span><br><span class="line">Error Occurred</span><br><span class="line">Warning exists</span><br></pre></td></tr></table></figure>
+<p>可以看到只有 <code>CRITICAL、ERROR、WARNING</code> 信息输出了，<code>DEBUG、INFO</code> 信息没有输出。</p>
+<h4 id="Handler"><a href="#Handler" class="headerlink" title="Handler"></a>Handler</h4><p>下面我们先来了解一下 <code>Handler</code> 的用法，看下面的实例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">import logging</span><br><span class="line"></span><br><span class="line">logger = logging.getLogger(__name__)</span><br><span class="line">logger.setLevel(level=logging.INFO)</span><br><span class="line">handler = logging.FileHandler(&apos;output.log&apos;)</span><br><span class="line">formatter = logging.Formatter(&apos;%(asctime)s - %(name)s - %(levelname)s - %(message)s&apos;)</span><br><span class="line">handler.setFormatter(formatter)</span><br><span class="line">logger.addHandler(handler)</span><br><span class="line"></span><br><span class="line">logger.info(&apos;This is a log info&apos;)</span><br><span class="line">logger.debug(&apos;Debugging&apos;)</span><br><span class="line">logger.warning(&apos;Warning exists&apos;)</span><br><span class="line">logger.info(&apos;Finish&apos;)</span><br></pre></td></tr></table></figure>
+<p>这里我们没有再使用 <code>basicConfig</code> 全局配置，而是先声明了一个 <code>Logger</code> 对象，然后指定了其对应的 <code>Handler</code> 为 <code>FileHandler</code> 对象，然后 <code>Handler</code> 对象还单独指定了 <code>Formatter</code> 对象单独配置输出格式，最后给 <code>Logger</code> 对象添加对应的 <code>Handler</code> 即可，最后可以发现日志就会被输出到 <code>output.log</code> 中，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2018-06-03 14:53:36,467 - __main__ - INFO - This is a log info</span><br><span class="line">2018-06-03 14:53:36,468 - __main__ - WARNING - Warning exists</span><br><span class="line">2018-06-03 14:53:36,468 - __main__ - INFO - Finish</span><br></pre></td></tr></table></figure>
+<p>另外我们还可以使用其他的 <code>Handler</code> 进行日志的输出，<code>logging</code> 模块提供的 <code>Handler</code> 有：</p>
+<ul>
+<li><code>StreamHandler：logging.StreamHandler</code>；日志输出到流，可以是 <code>sys.stderr，sys.stdout</code> 或者文件。</li>
+<li><code>FileHandler：logging.FileHandler</code>；日志输出到文件。</li>
+<li><code>BaseRotatingHandler：logging.handlers.BaseRotatingHandler</code>；基本的日志回滚方式。</li>
+<li><code>RotatingHandler</code>：<code>logging.handlers.RotatingHandler</code>；日志回滚方式，支持日志文件最大数量和日志文件回滚。</li>
+<li><code>TimeRotatingHandler</code>：<code>logging.handlers.TimeRotatingHandler</code>；日志回滚方式，在一定时间区域内回滚日志文件。</li>
+<li><code>SocketHandler</code>：<code>logging.handlers.SocketHandler</code>；远程输出日志到<code>TCP/IP sockets</code>。</li>
+<li><code>DatagramHandler</code>：<code>logging.handlers.DatagramHandler</code>；远程输出日志到<code>UDP sockets</code>。</li>
+<li><code>SMTPHandler：logging.handlers.SMTPHandler</code>；远程输出日志到邮件地址。</li>
+<li><code>SysLogHandler</code>：<code>logging.handlers.SysLogHandler</code>；日志输出到<code>syslog</code>。</li>
+<li><code>NTEventLogHandler</code>：l<code>ogging.handlers.NTEventLogHandler</code>；远程输出日志到<code>Windows NT/2000/X</code>P的事件日志。</li>
+<li><code>MemoryHandler</code>：<code>logging.handlers.MemoryHandler</code>；日志输出到内存中的指定<code>buffer</code>。</li>
+<li><code>HTTPHandler</code>：<code>logging.handlers.HTTPHandler</code>；通过”<code>GET</code>”或者”<code>POST</code>”远程输出到HTTP服务器。</li>
+</ul>
+<p>下面我们使用三个 <code>Handler</code> 来实现日志同时输出到控制台、文件、HTTP 服务器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">import logging</span><br><span class="line">from logging.handlers import HTTPHandler</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">logger = logging.getLogger(__name__)</span><br><span class="line">logger.setLevel(level=logging.DEBUG)</span><br><span class="line"></span><br><span class="line"># StreamHandler</span><br><span class="line">stream_handler = logging.StreamHandler(sys.stdout)</span><br><span class="line">stream_handler.setLevel(level=logging.DEBUG)</span><br><span class="line">logger.addHandler(stream_handler)</span><br><span class="line"></span><br><span class="line"># FileHandler</span><br><span class="line">file_handler = logging.FileHandler(&apos;output.log&apos;)</span><br><span class="line">file_handler.setLevel(level=logging.INFO)</span><br><span class="line">formatter = logging.Formatter(&apos;%(asctime)s - %(name)s - %(levelname)s - %(message)s&apos;)</span><br><span class="line">file_handler.setFormatter(formatter)</span><br><span class="line">logger.addHandler(file_handler)</span><br><span class="line"></span><br><span class="line"># HTTPHandler</span><br><span class="line">http_handler = HTTPHandler(host=&apos;localhost:8001&apos;, url=&apos;log&apos;, method=&apos;POST&apos;)</span><br><span class="line">logger.addHandler(http_handler)</span><br><span class="line"></span><br><span class="line"># Log</span><br><span class="line">logger.info(&apos;This is a log info&apos;)</span><br><span class="line">logger.debug(&apos;Debugging&apos;)</span><br><span class="line">logger.warning(&apos;Warning exists&apos;)</span><br><span class="line">logger.info(&apos;Finish&apos;)</span><br></pre></td></tr></table></figure>
+<p>运行之前我们需要先启动 <code>HTTP Server</code>，并运行在 <code>8001</code> 端口，其中 <code>log</code> 接口是用来接收日志的接口。</p>
+<p>运行之后控制台输出会输出如下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">This is a log info</span><br><span class="line">Debugging</span><br><span class="line">Warning exists</span><br><span class="line">Finish</span><br></pre></td></tr></table></figure>
+<p><code>output.log</code> 文件会写入如下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2018-06-03 15:13:44,895 - __main__ - INFO - This is a log info</span><br><span class="line">2018-06-03 15:13:44,947 - __main__ - WARNING - Warning exists</span><br><span class="line">2018-06-03 15:13:44,949 - __main__ - INFO - Finish</span><br></pre></td></tr></table></figure>
+<p><code>HTTP Server</code> 会收到控制台输出的信息。</p>
+<p>这样一来，我们就通过设置多个 <code>Handler</code> 来控制了日志的多目标输出。</p>
+<p>另外值得注意的是，在这里 <code>StreamHandler</code> 对象我们没有设置 <code>Formatter</code>，因此控制台只输出了日志的内容，而没有包含时间、模块等信息，而 <code>FileHandler</code> 我们通过 <code>setFormatter()</code> 方法设置了一个 <code>Formatter</code> 对象，因此输出的内容便是格式化后的日志信息。</p>
+<p>另外每个 <code>Handler</code> 还可以设置 <code>level</code> 信息，最终输出结果的 <code>level</code> 信息会取 <code>Logger</code> 对象的 <code>level</code> 和 <code>Handler</code> 对象的 <code>level</code> 的交集。</p>
+<h4 id="Formatter"><a href="#Formatter" class="headerlink" title="Formatter"></a>Formatter</h4><p>在进行日志格式化输出的时候，我们可以不借助于 <code>basicConfig</code> 来全局配置格式化输出内容，可以借助于 <code>Formatter</code> 来完成，下面我们再来单独看下 <code>Formatter</code> 的用法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import logging</span><br><span class="line"></span><br><span class="line">logger = logging.getLogger(__name__)</span><br><span class="line">logger.setLevel(level=logging.WARN)</span><br><span class="line">formatter = logging.Formatter(fmt=&apos;%(asctime)s - %(name)s - %(levelname)s - %(message)s&apos;, datefmt=&apos;%Y/%m/%d %H:%M:%S&apos;)</span><br><span class="line">handler = logging.StreamHandler()</span><br><span class="line">handler.setFormatter(formatter)</span><br><span class="line">logger.addHandler(handler)</span><br><span class="line"></span><br><span class="line"># Log</span><br><span class="line">logger.debug(&apos;Debugging&apos;)</span><br><span class="line">logger.critical(&apos;Critical Something&apos;)</span><br><span class="line">logger.error(&apos;Error Occurred&apos;)</span><br><span class="line">logger.warning(&apos;Warning exists&apos;)</span><br><span class="line">logger.info(&apos;Finished&apos;)</span><br></pre></td></tr></table></figure>
+<p>在这里我们指定了一个 <code>Formatter</code>，并传入了 <code>fmt</code> 和 <code>datefmt</code> 参数，这样就指定了日志结果的输出格式和时间格式，然后 <code>handler</code> 通过 <code>setFormatter()</code> 方法设置此 <code>Formatter</code> 对象即可，输出结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2018/06/03 15:47:15 - __main__ - CRITICAL - Critical Something</span><br><span class="line">2018/06/03 15:47:15 - __main__ - ERROR - Error Occurred</span><br><span class="line">2018/06/03 15:47:15 - __main__ - WARNING - Warning exists</span><br></pre></td></tr></table></figure>
+<p>这样我们可以每个 <code>Handler</code> 单独配置输出的格式，非常灵活。</p>
+<h4 id="捕获-Traceback"><a href="#捕获-Traceback" class="headerlink" title="捕获 Traceback"></a>捕获 Traceback</h4><p>如果遇到错误，我们更希望报错时出现的详细 <code>Traceback</code> 信息，便于调试，利用 <code>logging</code> 模块我们可以非常方便地实现这个记录，我们用一个实例来感受一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">import logging</span><br><span class="line"></span><br><span class="line">logger = logging.getLogger(__name__)</span><br><span class="line">logger.setLevel(level=logging.DEBUG)</span><br><span class="line"></span><br><span class="line"># Formatter</span><br><span class="line">formatter = logging.Formatter(&apos;%(asctime)s - %(name)s - %(levelname)s - %(message)s&apos;)</span><br><span class="line"></span><br><span class="line"># FileHandler</span><br><span class="line">file_handler = logging.FileHandler(&apos;result.log&apos;)</span><br><span class="line">file_handler.setFormatter(formatter)</span><br><span class="line">logger.addHandler(file_handler)</span><br><span class="line"></span><br><span class="line"># StreamHandler</span><br><span class="line">stream_handler = logging.StreamHandler()</span><br><span class="line">stream_handler.setFormatter(formatter)</span><br><span class="line">logger.addHandler(stream_handler)</span><br><span class="line"></span><br><span class="line"># Log</span><br><span class="line">logger.info(&apos;Start&apos;)</span><br><span class="line">logger.warning(&apos;Something maybe fail.&apos;)</span><br><span class="line">try:</span><br><span class="line">    result = 10 / 0</span><br><span class="line">except Exception:</span><br><span class="line">    logger.error(&apos;Faild to get result&apos;, exc_info=True)</span><br><span class="line">logger.info(&apos;Finished&apos;)</span><br></pre></td></tr></table></figure>
+<p>这里我们在 <code>error()</code> 方法中添加了一个参数，将 <code>exc_info</code>设置为了 <code>True</code>，这样我们就可以输出执行过程中的信息了，即完整的 <code>Traceback</code> 信息。</p>
+<p>运行结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">2018-06-03 16:00:15,382 - __main__ - INFO - Start print log</span><br><span class="line">2018-06-03 16:00:15,382 - __main__ - DEBUG - Do something</span><br><span class="line">2018-06-03 16:00:15,382 - __main__ - WARNING - Something maybe fail.</span><br><span class="line">2018-06-03 16:00:15,382 - __main__ - ERROR - Faild to get result</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File &quot;/private/var/books/aicodes/loggingtest/demo8.py&quot;, line 23, in &lt;module&gt;</span><br><span class="line">    result = 10 / 0</span><br><span class="line">ZeroDivisionError: division by zero</span><br><span class="line">2018-06-03 16:00:15,383 - __main__ - INFO - Finished</span><br></pre></td></tr></table></figure>
+<p>可以看到这样我们就非常方便地记录下来了报错的信息，一旦出现了错误，我们也能非常方便地排查。</p>
+<h4 id="配置共享"><a href="#配置共享" class="headerlink" title="配置共享"></a>配置共享</h4><p>在写项目的时候，我们肯定会将许多配置放置在许多模块下面，这时如果我们每个文件都来配置 <code>logging</code> 配置那就太繁琐了，<code>logging</code> 模块提供了父子模块共享配置的机制，会根据 <code>Logger</code> 的名称来自动加载父模块的配置。</p>
+<p>例如我们这里首先定义一个 <code>main.py</code> 文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import logging</span><br><span class="line">import core</span><br><span class="line"></span><br><span class="line">logger = logging.getLogger(&apos;main&apos;)</span><br><span class="line">logger.setLevel(level=logging.DEBUG)</span><br><span class="line"></span><br><span class="line"># Handler</span><br><span class="line">handler = logging.FileHandler(&apos;result.log&apos;)</span><br><span class="line">handler.setLevel(logging.INFO)</span><br><span class="line">formatter = logging.Formatter(&apos;%(asctime)s - %(name)s - %(levelname)s - %(message)s&apos;)</span><br><span class="line">handler.setFormatter(formatter)</span><br><span class="line">logger.addHandler(handler)</span><br><span class="line"></span><br><span class="line">logger.info(&apos;Main Info&apos;)</span><br><span class="line">logger.debug(&apos;Main Debug&apos;)</span><br><span class="line">logger.error(&apos;Main Error&apos;)</span><br><span class="line">core.run()</span><br></pre></td></tr></table></figure>
+<p>这里我们配置了日志的输出格式和文件路径，同时定义了 <code>Logger</code> 的名称为 <code>main</code>，然后引入了另外一个模块 <code>core</code>，最后调用了 <code>core</code> 的 <code>run()</code> 方法。</p>
+<p>接下来我们定义 <code>core.py</code>，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import logging</span><br><span class="line"></span><br><span class="line">logger = logging.getLogger(&apos;main.core&apos;)</span><br><span class="line"></span><br><span class="line">def run():</span><br><span class="line">    logger.info(&apos;Core Info&apos;)</span><br><span class="line">    logger.debug(&apos;Core Debug&apos;)</span><br><span class="line">    logger.error(&apos;Core Error&apos;)</span><br></pre></td></tr></table></figure>
+<p>这里我们定义了 <code>Logger</code> 的名称为 <code>main.core</code>，注意这里开头是 <code>main</code>，即刚才我们在 <code>main.py</code> 里面的 <code>Logger</code> 的名称，这样 <code>core.py</code> 里面的 <code>Logger</code> 就会复用 <code>main.py</code> 里面的<code>Logger</code> 配置，而不用再去配置一次了。</p>
+<p>运行之后会生成一个 <code>result.log</code> 文件，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">2018-06-03 16:55:56,259 - main - INFO - Main Info</span><br><span class="line">2018-06-03 16:55:56,259 - main - ERROR - Main Error</span><br><span class="line">2018-06-03 16:55:56,259 - main.core - INFO - Core Info</span><br><span class="line">2018-06-03 16:55:56,259 - main.core - ERROR - Core Error</span><br></pre></td></tr></table></figure>
+<p>可以看到父子模块都使用了同样的输出配置。</p>
+<p>如此一来，我们只要在入口文件里面定义好 logging 模块的输出配置，子模块只需要在定义 Logger 对象时名称使用父模块的名称开头即可共享配置，非常方便。</p>
+<h4 id="文件配置"><a href="#文件配置" class="headerlink" title="文件配置"></a>文件配置</h4><p>在开发过程中，将配置在代码里面写死并不是一个好的习惯，更好的做法是将配置写在配置文件里面，我们可以将配置写入到配置文件，然后运行时读取配置文件里面的配置，这样是更方便管理和维护的，下面我们以一个实例来说明一下，首先我们定义一个 yaml 配置文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">version: 1</span><br><span class="line">formatters:</span><br><span class="line">  brief:</span><br><span class="line">    format: &quot;%(asctime)s - %(message)s&quot;</span><br><span class="line">  simple:</span><br><span class="line">    format: &quot;%(asctime)s - %(name)s - %(levelname)s - %(message)s&quot;</span><br><span class="line">handlers:</span><br><span class="line">  console:</span><br><span class="line">    class : logging.StreamHandler</span><br><span class="line">    formatter: brief</span><br><span class="line">    level   : INFO</span><br><span class="line">    stream  : ext://sys.stdout</span><br><span class="line">  file:</span><br><span class="line">    class : logging.FileHandler</span><br><span class="line">    formatter: simple</span><br><span class="line">    level: DEBUG</span><br><span class="line">    filename: debug.log</span><br><span class="line">  error:</span><br><span class="line">    class: logging.handlers.RotatingFileHandler</span><br><span class="line">    level: ERROR</span><br><span class="line">    formatter: simple</span><br><span class="line">    filename: error.log</span><br><span class="line">    maxBytes: 10485760</span><br><span class="line">    backupCount: 20</span><br><span class="line">    encoding: utf8</span><br><span class="line">loggers:</span><br><span class="line">  main.core:</span><br><span class="line">    level: DEBUG</span><br><span class="line">    handlers: [console, file, error]</span><br><span class="line">root:</span><br><span class="line">  level: DEBUG</span><br><span class="line">  handlers: [console]</span><br></pre></td></tr></table></figure>
+<p>这里我们定义了 <code>formatters、handlers、loggers、root</code> 等模块，实际上对应的就是各个 <code>Formatter、Handler、Logger</code> 的配置，参数和它们的构造方法都是相同的。</p>
+<p>接下来我们定义一个主入口文件，<code>main.py</code>，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">import logging</span><br><span class="line">import core</span><br><span class="line">import yaml</span><br><span class="line">import logging.config</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def setup_logging(default_path=&apos;config.yaml&apos;, default_level=logging.INFO):</span><br><span class="line">    path = default_path</span><br><span class="line">    if os.path.exists(path):</span><br><span class="line">        with open(path, &apos;r&apos;, encoding=&apos;utf-8&apos;) as f:</span><br><span class="line">            config = yaml.load(f)</span><br><span class="line">            logging.config.dictConfig(config)</span><br><span class="line">    else:</span><br><span class="line">        logging.basicConfig(level=default_level)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def log():</span><br><span class="line">    logging.debug(&apos;Start&apos;)</span><br><span class="line">    logging.info(&apos;Exec&apos;)</span><br><span class="line">    logging.info(&apos;Finished&apos;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    yaml_path = &apos;config.yaml&apos;</span><br><span class="line">    setup_logging(yaml_path)</span><br><span class="line">    log()</span><br><span class="line">    core.run()</span><br></pre></td></tr></table></figure>
+<p>这里我们定义了一个 <code>setup_logging()</code> 方法，里面读取了 <code>yaml</code> 文件的配置，然后通过 <code>dictConfig()</code>方法将配置项传给了 <code>logging</code> 模块进行全局初始化。</p>
+<p>另外这个模块还引入了另外一个模块 <code>core</code>，所以我们定义 <code>core.py</code> 如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import logging</span><br><span class="line"></span><br><span class="line">logger = logging.getLogger(&apos;main.core&apos;)</span><br><span class="line"></span><br><span class="line">def run():</span><br><span class="line">    logger.info(&apos;Core Info&apos;)</span><br><span class="line">    logger.debug(&apos;Core Debug&apos;)</span><br><span class="line">    logger.error(&apos;Core Error&apos;)</span><br></pre></td></tr></table></figure>
+<p>这个文件的内容和上文是没有什么变化的。</p>
+<p>观察配置文件，主入口文件 <code>main.py</code> 实际上对应的是 <code>root</code> 一项配置，它指定了 <code>handlers</code> 是 <code>console</code>，即只输出到控制台。另外在 <code>loggers</code> 一项配置里面，我们定义了 <code>main.core</code> 模块，<code>handlers</code> 是 <code>console</code>、<code>file</code>、<code>error</code> 三项，即输出到控制台、输出到普通文件和回滚文件。</p>
+<p>这样运行之后，我们便可以看到所有的运行结果输出到了控制台：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">2018-06-03 17:07:12,727 - Exec</span><br><span class="line">2018-06-03 17:07:12,727 - Finished</span><br><span class="line">2018-06-03 17:07:12,727 - Core Info</span><br><span class="line">2018-06-03 17:07:12,727 - Core Info</span><br><span class="line">2018-06-03 17:07:12,728 - Core Error</span><br><span class="line">2018-06-03 17:07:12,728 - Core Error</span><br></pre></td></tr></table></figure>
+<p>在 <code>debug.log</code> 文件中则包含了 <code>core.py</code> 的运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2018-06-03 17:07:12,727 - main.core - INFO - Core Info</span><br><span class="line">2018-06-03 17:07:12,727 - main.core - DEBUG - Core Debug</span><br><span class="line">2018-06-03 17:07:12,728 - main.core - ERROR - Core Error</span><br></pre></td></tr></table></figure>
+<p>可以看到，通过配置文件，我们可以非常灵活地定义 <code>Handler</code>、<code>Formatter</code>、<code>Logger</code> 等配置，同时也显得非常直观，也非常容易维护，在实际项目中，推荐使用此种方式进行配置。</p>
+<p>以上便是 <code>logging</code> 模块的基本使用方法，有了它，我们可以方便地进行日志管理和维护，会给我们的工作带来极大的方便。</p>
+<h4 id="日志记录使用常见误区"><a href="#日志记录使用常见误区" class="headerlink" title="日志记录使用常见误区"></a>日志记录使用常见误区</h4><p>在日志输出的时候经常我们会用到字符串拼接的形式，很多情况下我们可能会使用字符串的 format() 来构造一个字符串，但这其实并不是一个好的方法，因为还有更好的方法，下面我们对比两个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import logging</span><br><span class="line"></span><br><span class="line">logging.basicConfig(level=logging.DEBUG, format=&apos;%(asctime)s - %(name)s - %(levelname)s - %(message)s&apos;)</span><br><span class="line"></span><br><span class="line"># bad</span><br><span class="line">logging.debug(&apos;Hello &#123;0&#125;, &#123;1&#125;!&apos;.format(&apos;World&apos;, &apos;Congratulations&apos;))</span><br><span class="line"># good</span><br><span class="line">logging.debug(&apos;Hello %s, %s!&apos;, &apos;World&apos;, &apos;Congratulations&apos;)</span><br></pre></td></tr></table></figure>
+<p>这里有两种打印 <code>Log</code> 的方法，第一种使用了字符串的 <code>format()</code> 的方法进行构造，传给 <code>logging</code> 的只用到了第一个参数，实际上 <code>logging</code> 模块提供了字符串格式化的方法，我们只需要在第一个参数写上要打印输出的模板，占位符用<code>%s</code>、<code>%d</code> 等表示即可，然后在后续参数添加对应的值就可以了，推荐使用这种方法。</p>
+<p>运行结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2018-06-03 22:27:51,220 - root - DEBUG - Hello World, Congratulations!</span><br><span class="line">2018-06-03 22:27:51,220 - root - DEBUG - Hello World, Congratulations!</span><br></pre></td></tr></table></figure>
+<p><img src="https://user-gold-cdn.xitu.io/2018/6/3/163c618ce73174a9?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="image"></p>
+<p>另外在进行异常处理的时候，通常我们会直接将异常进行字符串格式化，但其实可以直接指定一个参数将 <code>traceback</code> 打印出来，示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">import logging</span><br><span class="line"></span><br><span class="line">logging.basicConfig(level=logging.DEBUG, format=&apos;%(asctime)s - %(name)s - %(levelname)s - %(message)s&apos;)</span><br><span class="line"></span><br><span class="line">try:</span><br><span class="line">    result = 5 / 0</span><br><span class="line">except Exception as e:</span><br><span class="line">    # bad</span><br><span class="line">    logging.error(&apos;Error: %s&apos;, e)</span><br><span class="line">    # good</span><br><span class="line">    logging.error(&apos;Error&apos;, exc_info=True)</span><br><span class="line">    # good</span><br><span class="line">    logging.exception(&apos;Error&apos;)</span><br></pre></td></tr></table></figure>
+<p>如果我们直接使用字符串格式化的方法将错误输出的话，是不会包含 <code>Traceback</code> 信息的，但如果我们加上 <code>exc_info</code> 参数或者直接使用 <code>exception()</code> 方法打印的话，那就会输出 <code>Traceback</code> 信息了。</p>
+<p>运行结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">2018-06-03 22:24:31,927 - root - ERROR - Error: division by zero</span><br><span class="line">2018-06-03 22:24:31,927 - root - ERROR - Error</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File &quot;/private/var/books/aicodes/loggingtest/demo9.py&quot;, line 6, in &lt;module&gt;</span><br><span class="line">    result = 5 / 0</span><br><span class="line">ZeroDivisionError: division by zero</span><br><span class="line">2018-06-03 22:24:31,928 - root - ERROR - Error</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File &quot;/private/var/books/aicodes/loggingtest/demo9.py&quot;, line 6, in &lt;module&gt;</span><br><span class="line">    result = 5 / 0</span><br><span class="line">ZeroDivisionError: division by zero</span><br></pre></td></tr></table></figure>
+<p><img src="https://user-gold-cdn.xitu.io/2018/6/3/163c618f69092989?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="image"><br>以上便是整个对 logging 模块的介绍。嗯，是时候抛弃 print 了，开始体验下 logging 的便利吧！</p>
+<p>转载自：<a href="https://cuiqingcai.com/6080.html" target="_blank" rel="noopener">https://cuiqingcai.com/6080.html</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">日志</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/07/15/logging-日志模块/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Scrapyd爬虫部署（win版" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/14/Scrapyd爬虫部署（win版/">Scrapyd爬虫部署（win版)</a>
+    </h1>
+  
+
+        
+        <a href="/2018/07/14/Scrapyd爬虫部署（win版/" class="archive-article-date">
+  	<time datetime="2018-07-14T10:50:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://img.colabug.com/2018/03/e66e3c71c5e8bc31600d609e97d271f4.png" alt="image"><br>用Shell配合Python做了一个离线的作业控制系统，功能是有了，但是拓展性着实有点差，对小脚本小工具来说效果还可以，但是对于大型的爬虫类以及需要灵活控制的项目，可能就不太适合了。所以要用到Scrapyd。</p>
+<p>首先呢，这玩意是应该在linux用的，抱着玩一玩的心态，我们来搞一搞。</p>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>我的编码环境如下：</p>
+<ul>
+<li>OS： windows10</li>
+<li>Python：Python3.6</li>
+<li>Scrapy: Scrapy 1.5.0</li>
+<li>Scrapyd: 1.2.0</li>
+<li>Scrapyd-client: 1.1.0</li>
+</ul>
+<p>具体的安装方式很简单，Python3.6自带了超好用的包管理工具pip，因此安装起来就很方便了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pip install scrapy</span><br><span class="line"># 如果已经安装了scrapy ,现在想升级的话也可以使用下面的命令</span><br><span class="line">#pip install scrapy --upgrade</span><br><span class="line"></span><br><span class="line">pip install scrapyd</span><br><span class="line">pip install scrapyd-client</span><br></pre></td></tr></table></figure>
+<p>经过一段时间的等待，我们环境所依赖的应该就安装好了。</p>
+<h2 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h2><p>创建完项目会有scrapy.cfg文件（创建项目就不写了，创建都不会的话，先学学框架吧）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[settings]</span><br><span class="line">default = 项目名.settings</span><br><span class="line"></span><br><span class="line">[deploy]</span><br><span class="line">#url = http://localhost:6800/  # 部署爬虫项目的时候这个注释记得打开</span><br><span class="line">project = 项目名</span><br></pre></td></tr></table></figure>
+<h2 id="crapyd爬虫部署服务"><a href="#crapyd爬虫部署服务" class="headerlink" title="crapyd爬虫部署服务"></a>crapyd爬虫部署服务</h2><h3 id="开启scrapyd服务"><a href="#开启scrapyd服务" class="headerlink" title="开启scrapyd服务"></a>开启scrapyd服务</h3><p>在任意目录下的打开终端，输入<code>scrapyd</code>,观察是否运行成功，运行成功的话，就可以打开<code>http://localhost:6800</code>看是否正常显示．</p>
+<h2 id="部署爬虫"><a href="#部署爬虫" class="headerlink" title="部署爬虫"></a>部署爬虫</h2><p>服务已经开启，这个时候要记得打开<code>scrapy.cfg</code>中的deploy的url参数。否则scrapy爬虫部署可能就失败了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[deploy:target]</span><br><span class="line">url = http://localhost:6800/</span><br><span class="line">project = 项目名</span><br></pre></td></tr></table></figure>
+<hr>
+<p>写好爬虫、安装好了<code>scrapyd</code>和<code>scrapd-client</code>后，我们可能会遇到scrapyd-deploy不是windows下的命令的问题。这是由于环境变量找不到导致的。下面有两种方法：</p>
+<h3 id="方法1（我没成功，网上的办法）："><a href="#方法1（我没成功，网上的办法）：" class="headerlink" title="方法1（我没成功，网上的办法）："></a>方法1（我没成功，网上的办法）：</h3><p><img src="https://img.colabug.com/2018/03/69741661011524bb1bdc01936160d02d.png" alt="image"></p>
+<h4 id="编辑两个文件："><a href="#编辑两个文件：" class="headerlink" title="编辑两个文件："></a>编辑两个文件：</h4><ul>
+<li>scrapy.bat文件中输入以下内容 ：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@echo off</span><br><span class="line">D:\Python3.6\python D:\Python3.6\Scripts\scrapy %*</span><br><span class="line">#地址根据自己安装的来看，跟环境变量一致</span><br></pre></td></tr></table></figure>
+<ul>
+<li>scrapyd-deploy.bat 文件中输入以下内容：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@echo off</span><br><span class="line">D:\Python3.6\python D:\Python3.6\Scripts\scrapyd-deploy %*</span><br><span class="line">#地址根据自己安装的来看，跟环境变量一致</span><br></pre></td></tr></table></figure>
+<p>输入部署命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapyd-deploy target -p 项目名</span><br></pre></td></tr></table></figure></p>
+<p>按照输出信息的提示，我们只需要访问 <a href="https://note.youdao.com/" target="_blank" rel="noopener">http://localhost:6800/addversion.json</a> 资源就可以看到具体的部署信息了。</p>
+<h3 id="方法2（我用的方法）"><a href="#方法2（我用的方法）" class="headerlink" title="方法2（我用的方法）"></a>方法2（我用的方法）</h3><p>在项目的根目录下运行如下的命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python D:\Python3.6\Scripts\scrapyd-deploy target -p 项目名</span><br></pre></td></tr></table></figure></p>
+<p>这里的<code>D:\Python3.6\Scripts\</code>是你的python安装目录，Scripts是安装目录下的一个文件夹，</p>
+<ul>
+<li>注意前面一定要加上python,</li>
+<li>target是在前面<code>scrapy.cfg</code>中设置的<code>[deploy:XXX]</code>，XXX就是target,中括号中<code>:XXX</code>没有，现在加上去，叫什么都行，只要他们一致。</li>
+<li>project 是<code>scrapy.cfg</code>文件中<code>project = 项目名</code>的项目名。</li>
+</ul>
+<h4 id="验证是否成功"><a href="#验证是否成功" class="headerlink" title="验证是否成功"></a>验证是否成功</h4><p>你可以在网页上看有没有显示你的工程名字，另外在根目录下输入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python D:\Python3.6\Scripts\scrapyd-deploy -l</span><br></pre></td></tr></table></figure></p>
+<p>就能列出你所有部署过的项目了</p>
+<p>按照输出信息的提示，我们只需要访问 <a href="https://note.youdao.com/" target="_blank" rel="noopener">http://localhost:6800/addversion.json</a> 资源就可以看到具体的部署信息了。</p>
+<hr>
+<p>方法2结束</p>
+<h2 id="安装curl"><a href="#安装curl" class="headerlink" title="安装curl"></a>安装curl</h2><p>本来是要作业控制了，但是windows没有<code>curl</code>，所以还要安装它！</p>
+<p>下载连接：<a href="https://note.youdao.com/" target="_blank" rel="noopener">https://curl.haxx.se/download.html</a><br>记得找windows版本啊，要是Linux系统直接一句命令就行了，我下载的时候架梯子下载的。下载完解压就好了，exe文件不是给你运行的，是把他的文件路径放到环境变量PATH里。</p>
+<h2 id="作业控制"><a href="#作业控制" class="headerlink" title="作业控制"></a>作业控制</h2><p>scrapyd的官方文档也是很详细，我们可以通过对<code>schedule.json</code>，<code>cancle.json</code>等资源来实现以HTTP服务的方式控制爬虫。具体的文档为 <a href="https://note.youdao.com/" target="_blank" rel="noopener">http://scrapyd.readthedocs.io/en/latest/api.html</a></p>
+<p>比如下面的开启爬虫：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/schedule.json -d project=项目名 -d spider=爬虫名</span><br></pre></td></tr></table></figure>
+<p>然后的下面的结果就说明已经成功开启了一个爬虫。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#这里的jobid比较重要，下面会用到这个取消爬虫</span><br><span class="line">&#123;&quot;status&quot;: &quot;ok&quot;, &quot;jobid&quot;: &quot;3013f9d1283611e79a63acb57dec5d04&quot;, &quot;node_name&quot;: &quot;DESKTOP-L78TJQ7&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的jobid比较重要，下面会用到这个取消爬虫</p>
+<p>查看具体的爬虫运行信息了： <a href="https://note.youdao.com/" target="_blank" rel="noopener">http://localhost:6800/jobs</a><br><img src="https://img.colabug.com/2018/03/4f6712189c91d620efaf00e0a52aa605.png" alt="image"><br>点击“ <code>Log</code>”超链接，就可以看到爬虫的具体的输出信息了。<br><img src="https://img.colabug.com/2018/03/40c3ccdd69d8de53a55e245156c69d25.png" alt="image"></p>
+<ul>
+<li>取消爬虫：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/cancel.json -d project=myproject -d job=jobid</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><code>jobid</code>就是上面的提到过的，如果取消我的这个实例代码如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/cancel.json -d project=项目名 -d job=3013f9d1283611e79a63acb57dec5d04</span><br></pre></td></tr></table></figure></p>
+<p>那么它的状态就会变成如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;status&quot;: &quot;ok&quot;, &quot;prevstate&quot;: &quot;running&quot;, &quot;node_name&quot;: &quot;DESKTOP-L78TJQ7&quot;&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>列出项目：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/listprojects.json</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>,下面将会出现你已经部署的项目</p>
+<ul>
+<li><p>删除项目：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/delproject.json -d project=myproject</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>列出版本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/listversions.json?project=myproject</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>,这里的<code>project</code>是项目的名字，是在<code>scrapy.cfg</code>设置的</p>
+<ul>
+<li>列出爬虫：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/listspiders.json?project=myproject</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>这里的<code>project</code>是项目的名字，是在<code>scrapy.cfg</code>设置的</p>
+<ul>
+<li>列出job:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/listjobs.json?project=myproject</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>这里的<code>project</code>是项目的名字，是在<code>scrapy.cfg</code>设置的</p>
+<ul>
+<li>删除版本：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/delversion.json -d project=myproject -d version=r99</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>，这里的<code>version</code>是自己的项目版本号，在删除之前需要查看版本号</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>scrapyd就是一个底层使用了<code>twisted</code>的集成了的IPC服务套件（注意即使是同一个spider，两次run也要放到不同的JOBDIR，具体可以参考文档），很方便。然而自己去实现的话，对这块的内容也会理解的更深刻。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">爬虫</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Scrapyd</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">部署</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/07/14/Scrapyd爬虫部署（win版/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Redis缓存过期通知" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -947,6 +1398,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
@@ -956,10 +1411,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">python操作</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -979,11 +1430,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -992,6 +1443,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">信号</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">协程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">aiohttp</a>
               </li>
              
               <li class="article-tag-list-item">
