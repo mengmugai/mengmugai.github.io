@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Tag: 协程 | 萌木盖的博客</title>
+  <title>python简单的retry模块 | 萌木盖的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="萌木盖的博客">
-<meta property="og:url" content="http://yoursite.com/tags/协程/index.html">
+  <meta name="description" content="背景我们经常遇到一个场景，就是如果操作失败则需要多次重试某些操作，这种情况下，如果想优雅的实现功能，又不关心重试逻辑，则可以学习该模块 安装1pip install retry API 介绍retry decorator12345678910111213def retry(exceptions=Exception, tries=-1, delay=0, max_delay=None, backof">
+<meta name="keywords" content="python,扩展包">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python简单的retry模块">
+<meta property="og:url" content="http://yoursite.com/2018/08/24/python简单的retry模块/index.html">
 <meta property="og:site_name" content="萌木盖的博客">
+<meta property="og:description" content="背景我们经常遇到一个场景，就是如果操作失败则需要多次重试某些操作，这种情况下，如果想优雅的实现功能，又不关心重试逻辑，则可以学习该模块 安装1pip install retry API 介绍retry decorator12345678910111213def retry(exceptions=Exception, tries=-1, delay=0, max_delay=None, backof">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-08-23T16:24:59.083Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="萌木盖的博客">
+<meta name="twitter:title" content="python简单的retry模块">
+<meta name="twitter:description" content="背景我们经常遇到一个场景，就是如果操作失败则需要多次重试某些操作，这种情况下，如果想优雅的实现功能，又不关心重试逻辑，则可以学习该模块 安装1pip install retry API 介绍retry decorator12345678910111213def retry(exceptions=Exception, tries=-1, delay=0, max_delay=None, backof">
   
     <link rel="alternative" href="/atom.xml" title="萌木盖的博客" type="application/atom+xml">
   
@@ -162,36 +167,84 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-python简单的retry模块" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/22/ahttp：基于协程的Http请求库/" class="archive-article-date">
-  	<time datetime="2018-08-21T16:03:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-22</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/08/22/ahttp：基于协程的Http请求库/">ahttp：基于协程的Http请求库</a>
+    <h1 class="article-title" itemprop="name">
+      python简单的retry模块
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2018/08/24/python简单的retry模块/" class="archive-article-date">
+  	<time datetime="2018-08-23T16:19:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-24</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>我们经常遇到一个场景，就是如果操作失败则需要多次重试某些操作，这种情况下，如果想优雅的实现功能，又不关心重试逻辑，则可以学习该模块</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install retry</span><br></pre></td></tr></table></figure>
+<h2 id="API-介绍"><a href="#API-介绍" class="headerlink" title="API 介绍"></a>API 介绍</h2><h3 id="retry-decorator"><a href="#retry-decorator" class="headerlink" title="retry decorator"></a>retry decorator</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">def retry(exceptions=Exception, tries=-1, delay=0, max_delay=None, backoff=1, jitter=0, logger=logging_logger):</span><br><span class="line">    &quot;&quot;&quot;Return a retry decorator.</span><br><span class="line"></span><br><span class="line">    :param exceptions: an exception or a tuple of exceptions to catch. default: Exception.</span><br><span class="line">    :param tries: the maximum number of attempts. default: -1 (infinite).</span><br><span class="line">    :param delay: initial delay between attempts. default: 0.</span><br><span class="line">    :param max_delay: the maximum value of delay. default: None (no limit).</span><br><span class="line">    :param backoff: multiplier applied to delay between attempts. default: 1 (no backoff).</span><br><span class="line">    :param jitter: extra seconds added to delay between attempts. default: 0.</span><br><span class="line">                   fixed if a number, random if a range tuple (min, max)</span><br><span class="line">    :param logger: logger.warning(fmt, error, delay) will be called on failed attempts.</span><br><span class="line">                   default: retry.logging_logger. if None, logging is disabled.</span><br><span class="line">    &quot;&quot;&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="retry-参数介绍"><a href="#retry-参数介绍" class="headerlink" title="retry 参数介绍"></a>retry 参数介绍</h3><ul>
+<li>无参</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from retry import retry</span><br><span class="line"></span><br><span class="line">@retry()</span><br><span class="line">def make_trouble():</span><br><span class="line">    &apos;&apos;&apos;Retry until succeed&apos;&apos;&apos;</span><br><span class="line">    print (&apos;retrying...&apos;)</span><br><span class="line">    raise</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    make_trouble()</span><br><span class="line"></span><br><span class="line"># 输出: 一直重试，直到运行成功</span><br><span class="line">retrying...</span><br><span class="line">retrying...</span><br><span class="line">retrying...</span><br><span class="line">retrying...</span><br><span class="line">retrying...</span><br><span class="line">retrying...</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Exception参数， 默认 Exception, 只捕获重试指定的异常，可以是元组</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">@retry(ZeroDivisionError, tries=3, delay=2)</span><br><span class="line">def make_trouble():</span><br><span class="line">    &apos;&apos;&apos;Retry on ZeroDivisionError, raise error after 3 attempts, sleep 2 seconds between attempts.&apos;&apos;&apos;</span><br><span class="line">    print &apos;aaa&apos;</span><br><span class="line">    a = 1/0</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    make_trouble()</span><br><span class="line"></span><br><span class="line">输出:</span><br><span class="line">aaa</span><br><span class="line">aaa</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File &quot;E:/WORKSPACE/document/document/test/1.py&quot;, line 20, in &lt;module&gt;</span><br><span class="line">    make_trouble()</span><br><span class="line">  File &quot;&lt;decorator-gen-2&gt;&quot;, line 2, in make_trouble</span><br><span class="line">  File &quot;D:\python27\WinPython-64bit-2.7.10.3\python-2.7.10.amd64\lib\site-packages\retry\api.py&quot;, line 74, in retry_decorator</span><br><span class="line">    logger)</span><br><span class="line">  File &quot;D:\python27\WinPython-64bit-2.7.10.3\python-2.7.10.amd64\lib\site-packages\retry\api.py&quot;, line 33, in __retry_internal</span><br><span class="line">    return f()</span><br><span class="line">  File &quot;E:/WORKSPACE/document/document/test/1.py&quot;, line 16, in make_trouble</span><br><span class="line">    a = 1/0</span><br><span class="line">ZeroDivisionError: integer division or modulo by zero</span><br><span class="line">aaa</span><br></pre></td></tr></table></figure>
+<ul>
+<li>backoff参数，尝试间隔时间，成倍数增加</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">import time</span><br><span class="line">@retry((ValueError, TypeError), delay=1, backoff=2)</span><br><span class="line">def make_trouble():</span><br><span class="line">    &apos;&apos;&apos;Retry on ValueError or TypeError, sleep 1, 2, 4, 8, ... seconds between attempts.&apos;&apos;&apos;</span><br><span class="line">    print (1,  int(time.time()))</span><br><span class="line"></span><br><span class="line">    raise ValueError(&apos;a&apos;)</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    make_trouble()</span><br><span class="line"></span><br><span class="line">输出:</span><br><span class="line">(1, 1504107288)</span><br><span class="line">(1, 1504107289)</span><br><span class="line">(1, 1504107291)</span><br><span class="line">(1, 1504107295)</span><br><span class="line">(1, 1504107303)</span><br><span class="line">(1, 1504107319)</span><br><span class="line">(1, 1504107351)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>max_delay 指定最大间隔时间，backoff参数触发的休眠时间大于max_delay时，休眠时间以max_delay为准则</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">import time</span><br><span class="line"></span><br><span class="line">@retry((ValueError, TypeError), delay=1, backoff=2, max_delay=8)</span><br><span class="line">def make_trouble():</span><br><span class="line">    &apos;&apos;&apos;Retry on ValueError or TypeError, sleep 1, 2, 4, 4, ... seconds between attempts.&apos;&apos;&apos;</span><br><span class="line"></span><br><span class="line">    print (1, int(time.time()))</span><br><span class="line">    raise ValueError(&apos;aa&apos;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    make_trouble()</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">(1, 1504107496)</span><br><span class="line">(1, 1504107497)</span><br><span class="line">(1, 1504107499)</span><br><span class="line">(1, 1504107503)</span><br><span class="line">(1, 1504107511)</span><br><span class="line">(1, 1504107519)</span><br><span class="line">(1, 1504107527)</span><br><span class="line">(1, 1504107535)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>jitter参数，累加，以及异常触发的日志</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">import time</span><br><span class="line"></span><br><span class="line">@retry(ValueError, delay=1, jitter=1)</span><br><span class="line">def make_trouble():</span><br><span class="line">    &apos;&apos;&apos;Retry on ValueError, sleep 1, 2, 3, 4, ... seconds between attempts.&apos;&apos;&apos;</span><br><span class="line">    print (1, int(time.time()))</span><br><span class="line">    raise ValueError(&apos;e&apos;)</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    import logging</span><br><span class="line">    logging.basicConfig()</span><br><span class="line">    make_trouble()</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">WARNING:retry.api:e, retrying in 1 seconds...</span><br><span class="line">(1, 1504107644)</span><br><span class="line">WARNING:retry.api:e, retrying in 2 seconds...</span><br><span class="line">(1, 1504107645)</span><br><span class="line">WARNING:retry.api:e, retrying in 3 seconds...</span><br><span class="line">(1, 1504107647)</span><br><span class="line">WARNING:retry.api:e, retrying in 4 seconds...</span><br><span class="line">(1, 1504107650)</span><br><span class="line">WARNING:retry.api:e, retrying in 5 seconds...</span><br><span class="line">(1, 1504107654)</span><br><span class="line">WARNING:retry.api:e, retrying in 6 seconds...</span><br><span class="line">(1, 1504107659)</span><br><span class="line">(1, 1504107665)</span><br><span class="line">WARNING:retry.api:e, retrying in 7 seconds...</span><br><span class="line">(1, 1504107672)</span><br><span class="line">WARNING:retry.api:e, retrying in 8 seconds...</span><br></pre></td></tr></table></figure>
+<h3 id="retry-call"><a href="#retry-call" class="headerlink" title="retry_call"></a>retry_call</h3><p>def retry_call(f, fargs=None, fkwargs=None, exceptions=Exception, tries=-1, delay=0, max_delay=None, backoff=1,<br>jitter=0,<br>logger=logging_logger): </p>
+<p>“”” </p>
+<p>调用函数并在失败时重新执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">:param f: the function to execute.</span><br><span class="line">:param fargs: the positional arguments of the function to execute.</span><br><span class="line">:param fkwargs: the named arguments of the function to execute.</span><br><span class="line">:param exceptions: an exception or a tuple of exceptions to catch. default: Exception.</span><br><span class="line">:param tries: the maximum number of attempts. default: -1 (infinite).</span><br><span class="line">:param delay: initial delay between attempts. default: 0.</span><br><span class="line">:param max_delay: the maximum value of delay. default: None (no limit).</span><br><span class="line">:param backoff: multiplier applied to delay between attempts. default: 1 (no backoff).</span><br><span class="line">:param jitter: extra seconds added to delay between attempts. default: 0.</span><br><span class="line">               fixed if a number, random if a range tuple (min, max)</span><br><span class="line">:param logger: logger.warning(fmt, error, delay) will be called on failed attempts.</span><br><span class="line">               default: retry.logging_logger. if None, logging is disabled.</span><br><span class="line">:returns: the result of the f function.</span><br><span class="line">&quot;&quot;&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">from retry.api import retry_call</span><br><span class="line"></span><br><span class="line">def make_trouble(service, info=None):</span><br><span class="line">    if not info:</span><br><span class="line">        info = &apos;&apos;</span><br><span class="line">    print (&apos;retry..., service: &#123;&#125;,  info: &#123;&#125;&apos;.format(service, info))</span><br><span class="line">    r = requests.get(service + info)</span><br><span class="line">    print r.text</span><br><span class="line">    raise Exception(&apos;info&apos;)</span><br><span class="line"></span><br><span class="line">def what_is_my_ip(approach=None):</span><br><span class="line">    if approach == &quot;optimistic&quot;:</span><br><span class="line">        tries = 1</span><br><span class="line">    elif approach == &quot;conservative&quot;:</span><br><span class="line">        tries = 3</span><br><span class="line">    else:</span><br><span class="line">        # skeptical</span><br><span class="line">        tries = -1</span><br><span class="line">    result = retry_call(make_trouble, fargs=[&quot;http://ipinfo.io/&quot;], fkwargs=&#123;&quot;info&quot;: &quot;ip&quot;&#125;, tries=tries)</span><br><span class="line">    print(result)</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    import logging</span><br><span class="line">    logging.basicConfig()</span><br><span class="line">    what_is_my_ip(&quot;conservative&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">输出:</span><br><span class="line">retry..., service: http://ipinfo.io/,  info: ip</span><br><span class="line">118.113.1.255</span><br><span class="line"></span><br><span class="line">retry..., service: http://ipinfo.io/,  info: ip</span><br><span class="line">WARNING:retry.api:info, retrying in 0 seconds...</span><br><span class="line">WARNING:retry.api:info, retrying in 0 seconds...</span><br><span class="line">118.113.1.255</span><br><span class="line"></span><br><span class="line">retry..., service: http://ipinfo.io/,  info: ip</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File &quot;E:/WORKSPACE/document/document/test/1.py&quot;, line 74, in &lt;module&gt;</span><br><span class="line">    what_is_my_ip(&quot;conservative&quot;)</span><br><span class="line">  File &quot;E:/WORKSPACE/document/document/test/1.py&quot;, line 66, in what_is_my_ip</span><br><span class="line">    result = retry_call(make_trouble, fargs=[&quot;http://ipinfo.io/&quot;], fkwargs=&#123;&quot;info&quot;: &quot;ip&quot;&#125;, tries=tries)</span><br><span class="line">  File &quot;D:\python27\WinPython-64bit-2.7.10.3\python-2.7.10.amd64\lib\site-packages\retry\api.py&quot;, line 101, in retry_call</span><br><span class="line">    return __retry_internal(partial(f, *args, **kwargs), exceptions, tries, delay, max_delay, backoff, jitter, logger)</span><br><span class="line">  File &quot;D:\python27\WinPython-64bit-2.7.10.3\python-2.7.10.amd64\lib\site-packages\retry\api.py&quot;, line 33, in __retry_internal</span><br><span class="line">    return f()</span><br><span class="line">  File &quot;E:/WORKSPACE/document/document/test/1.py&quot;, line 54, in make_trouble</span><br><span class="line">    raise Exception(&apos;info&apos;)</span><br><span class="line">Exception: info</span><br><span class="line">118.113.1.255</span><br></pre></td></tr></table></figure>
+<p>其他参数同retry decorator<br><a href="https://pypi.python.org/pypi/retry" target="_blank" rel="noopener">官网</a></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -201,75 +254,121 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">协程</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">aiohttp</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">扩展包</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/08/24/python简单的retry模块/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/22/aiohttp简易使用教程/" class="archive-article-date">
-  	<time datetime="2018-08-21T16:00:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-22</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2018/08/24/python的retrying模块/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          python的retrying模块
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/08/24/xpath特殊用法/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">xpath特殊用法</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/08/22/aiohttp简易使用教程/">aiohttp简易使用教程</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">协程</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">aiohttp</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
+
+  
 
 
           </div>
@@ -292,9 +391,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
