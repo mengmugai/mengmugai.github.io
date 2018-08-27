@@ -20,7 +20,7 @@
 <meta property="og:image" content="https://img.colabug.com/2018/03/69741661011524bb1bdc01936160d02d.png">
 <meta property="og:image" content="https://img.colabug.com/2018/03/4f6712189c91d620efaf00e0a52aa605.png">
 <meta property="og:image" content="https://img.colabug.com/2018/03/40c3ccdd69d8de53a55e245156c69d25.png">
-<meta property="og:updated_time" content="2018-07-14T10:58:54.197Z">
+<meta property="og:updated_time" content="2018-08-26T16:35:49.599Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Scrapyd爬虫部署（win版)">
 <meta name="twitter:description" content="用Shell配合Python做了一个离线的作业控制系统，功能是有了，但是拓展性着实有点差，对小脚本小工具来说效果还可以，但是对于大型的爬虫类以及需要灵活控制的项目，可能就不太适合了。所以要用到Scrapyd。 首先呢，这玩意是应该在linux用的，抱着玩一玩的心态，我们来搞一搞。 环境我的编码环境如下：  OS： windows10 Python：Python3.6 Scrapy: Scrapy">
@@ -53,7 +53,7 @@
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
-			<img src="/mmg.png" class="js-avatar show">
+			<img src="/mmg.png" class="js-avatar">
 		</a>
 		<hgroup>
 		  <h1 class="header-author"><a href="/">萌木盖</a></h1>
@@ -68,6 +68,8 @@
 				<li><a href="/">主页</a></li>
 	        
 				<li><a href="https://space.bilibili.com/13894927/#/">B站</a></li>
+	        
+				<li><a href="/categories">分类</a></li>
 	        
 			</ul>
 		</nav>
@@ -131,6 +133,8 @@
 			
 				
 			
+				
+			
 			
 			
 			<nav class="header-nav">
@@ -152,12 +156,14 @@
 			</nav>
 
 			<nav class="header-menu js-header-menu">
-				<ul style="width: 50%">
+				<ul style="width: 70%">
 				
 				
-					<li style="width: 50%"><a href="/">主页</a></li>
+					<li style="width: 33.333333333333336%"><a href="/">主页</a></li>
 		        
-					<li style="width: 50%"><a href="https://space.bilibili.com/13894927/#/">B站</a></li>
+					<li style="width: 33.333333333333336%"><a href="https://space.bilibili.com/13894927/#/">B站</a></li>
+		        
+					<li style="width: 33.333333333333336%"><a href="/categories">分类</a></li>
 		        
 				</ul>
 			</nav>
@@ -203,34 +209,34 @@
 <li>Scrapyd-client: 1.1.0</li>
 </ul>
 <p>具体的安装方式很简单，Python3.6自带了超好用的包管理工具pip，因此安装起来就很方便了。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pip install scrapy</span><br><span class="line"># 如果已经安装了scrapy ,现在想升级的话也可以使用下面的命令</span><br><span class="line">#pip install scrapy --upgrade</span><br><span class="line"></span><br><span class="line">pip install scrapyd</span><br><span class="line">pip install scrapyd-client</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pip install scrapy</span><br><span class="line"><span class="comment"># 如果已经安装了scrapy ,现在想升级的话也可以使用下面的命令</span></span><br><span class="line"><span class="comment">#pip install scrapy --upgrade</span></span><br><span class="line"></span><br><span class="line">pip install scrapyd</span><br><span class="line">pip install scrapyd-client</span><br></pre></td></tr></table></figure>
 <p>经过一段时间的等待，我们环境所依赖的应该就安装好了。</p>
 <h2 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h2><p>创建完项目会有scrapy.cfg文件（创建项目就不写了，创建都不会的话，先学学框架吧）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[settings]</span><br><span class="line">default = 项目名.settings</span><br><span class="line"></span><br><span class="line">[deploy]</span><br><span class="line">#url = http://localhost:6800/  # 部署爬虫项目的时候这个注释记得打开</span><br><span class="line">project = 项目名</span><br></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[settings]</span><br><span class="line">default = 项目名.settings</span><br><span class="line"></span><br><span class="line">[deploy]</span><br><span class="line"><span class="comment">#url = http://localhost:6800/  # 部署爬虫项目的时候这个注释记得打开</span></span><br><span class="line">project = 项目名</span><br></pre></td></tr></table></figure>
 <h2 id="crapyd爬虫部署服务"><a href="#crapyd爬虫部署服务" class="headerlink" title="crapyd爬虫部署服务"></a>crapyd爬虫部署服务</h2><h3 id="开启scrapyd服务"><a href="#开启scrapyd服务" class="headerlink" title="开启scrapyd服务"></a>开启scrapyd服务</h3><p>在任意目录下的打开终端，输入<code>scrapyd</code>,观察是否运行成功，运行成功的话，就可以打开<code>http://localhost:6800</code>看是否正常显示．</p>
 <h2 id="部署爬虫"><a href="#部署爬虫" class="headerlink" title="部署爬虫"></a>部署爬虫</h2><p>服务已经开启，这个时候要记得打开<code>scrapy.cfg</code>中的deploy的url参数。否则scrapy爬虫部署可能就失败了。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[deploy:target]</span><br><span class="line">url = http://localhost:6800/</span><br><span class="line">project = 项目名</span><br></pre></td></tr></table></figure>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[deploy:target]</span></span><br><span class="line"><span class="attr">url</span> = http://localhost:<span class="number">6800</span>/</span><br><span class="line"><span class="attr">project</span> = 项目名</span><br></pre></td></tr></table></figure>
 <hr>
 <p>写好爬虫、安装好了<code>scrapyd</code>和<code>scrapd-client</code>后，我们可能会遇到scrapyd-deploy不是windows下的命令的问题。这是由于环境变量找不到导致的。下面有两种方法：</p>
 <h3 id="方法1（我没成功，网上的办法）："><a href="#方法1（我没成功，网上的办法）：" class="headerlink" title="方法1（我没成功，网上的办法）："></a>方法1（我没成功，网上的办法）：</h3><p><img src="https://img.colabug.com/2018/03/69741661011524bb1bdc01936160d02d.png" alt="image"></p>
 <h4 id="编辑两个文件："><a href="#编辑两个文件：" class="headerlink" title="编辑两个文件："></a>编辑两个文件：</h4><ul>
 <li>scrapy.bat文件中输入以下内容 ：</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@echo off</span><br><span class="line">D:\Python3.6\python D:\Python3.6\Scripts\scrapy %*</span><br><span class="line">#地址根据自己安装的来看，跟环境变量一致</span><br></pre></td></tr></table></figure>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@echo <span class="literal">off</span></span><br><span class="line">D:<span class="string">\Python3.6\python</span> D:<span class="string">\Python3.6\Scripts\scrapy</span> %*</span><br><span class="line"><span class="comment">#地址根据自己安装的来看，跟环境变量一致</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>scrapyd-deploy.bat 文件中输入以下内容：</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@echo off</span><br><span class="line">D:\Python3.6\python D:\Python3.6\Scripts\scrapyd-deploy %*</span><br><span class="line">#地址根据自己安装的来看，跟环境变量一致</span><br></pre></td></tr></table></figure>
-<p>输入部署命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapyd-deploy target -p 项目名</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@echo <span class="literal">off</span></span><br><span class="line">D:<span class="string">\Python3.6\python</span> D:<span class="string">\Python3.6\Scripts\scrapyd-deploy</span> %*</span><br><span class="line"><span class="comment">#地址根据自己安装的来看，跟环境变量一致</span></span><br></pre></td></tr></table></figure>
+<p>输入部署命令<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapyd-deploy target -<span class="selector-tag">p</span> 项目名</span><br></pre></td></tr></table></figure></p>
 <p>按照输出信息的提示，我们只需要访问 <a href="https://note.youdao.com/" target="_blank" rel="noopener">http://localhost:6800/addversion.json</a> 资源就可以看到具体的部署信息了。</p>
-<h3 id="方法2（我用的方法）"><a href="#方法2（我用的方法）" class="headerlink" title="方法2（我用的方法）"></a>方法2（我用的方法）</h3><p>在项目的根目录下运行如下的命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python D:\Python3.6\Scripts\scrapyd-deploy target -p 项目名</span><br></pre></td></tr></table></figure></p>
+<h3 id="方法2（我用的方法）"><a href="#方法2（我用的方法）" class="headerlink" title="方法2（我用的方法）"></a>方法2（我用的方法）</h3><p>在项目的根目录下运行如下的命令<br><figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python D:<span class="symbol">\P</span>ython3.6<span class="symbol">\S</span>cripts<span class="symbol">\s</span>crapyd-deploy target -p 项目名</span><br></pre></td></tr></table></figure></p>
 <p>这里的<code>D:\Python3.6\Scripts\</code>是你的python安装目录，Scripts是安装目录下的一个文件夹，</p>
 <ul>
 <li>注意前面一定要加上python,</li>
 <li>target是在前面<code>scrapy.cfg</code>中设置的<code>[deploy:XXX]</code>，XXX就是target,中括号中<code>:XXX</code>没有，现在加上去，叫什么都行，只要他们一致。</li>
 <li>project 是<code>scrapy.cfg</code>文件中<code>project = 项目名</code>的项目名。</li>
 </ul>
-<h4 id="验证是否成功"><a href="#验证是否成功" class="headerlink" title="验证是否成功"></a>验证是否成功</h4><p>你可以在网页上看有没有显示你的工程名字，另外在根目录下输入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python D:\Python3.6\Scripts\scrapyd-deploy -l</span><br></pre></td></tr></table></figure></p>
+<h4 id="验证是否成功"><a href="#验证是否成功" class="headerlink" title="验证是否成功"></a>验证是否成功</h4><p>你可以在网页上看有没有显示你的工程名字，另外在根目录下输入<br><figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python D:<span class="symbol">\P</span>ython3.6<span class="symbol">\S</span>cripts<span class="symbol">\s</span>crapyd-deploy -l</span><br></pre></td></tr></table></figure></p>
 <p>就能列出你所有部署过的项目了</p>
 <p>按照输出信息的提示，我们只需要访问 <a href="https://note.youdao.com/" target="_blank" rel="noopener">http://localhost:6800/addversion.json</a> 资源就可以看到具体的部署信息了。</p>
 <hr>
@@ -239,44 +245,44 @@
 <p>下载连接：<a href="https://note.youdao.com/" target="_blank" rel="noopener">https://curl.haxx.se/download.html</a><br>记得找windows版本啊，要是Linux系统直接一句命令就行了，我下载的时候架梯子下载的。下载完解压就好了，exe文件不是给你运行的，是把他的文件路径放到环境变量PATH里。</p>
 <h2 id="作业控制"><a href="#作业控制" class="headerlink" title="作业控制"></a>作业控制</h2><p>scrapyd的官方文档也是很详细，我们可以通过对<code>schedule.json</code>，<code>cancle.json</code>等资源来实现以HTTP服务的方式控制爬虫。具体的文档为 <a href="https://note.youdao.com/" target="_blank" rel="noopener">http://scrapyd.readthedocs.io/en/latest/api.html</a></p>
 <p>比如下面的开启爬虫：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/schedule.json -d project=项目名 -d spider=爬虫名</span><br></pre></td></tr></table></figure>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">http:</span><span class="comment">//localhost:6800/schedule.json -d project=项目名 -d spider=爬虫名</span></span><br></pre></td></tr></table></figure>
 <p>然后的下面的结果就说明已经成功开启了一个爬虫。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#这里的jobid比较重要，下面会用到这个取消爬虫</span><br><span class="line">&#123;&quot;status&quot;: &quot;ok&quot;, &quot;jobid&quot;: &quot;3013f9d1283611e79a63acb57dec5d04&quot;, &quot;node_name&quot;: &quot;DESKTOP-L78TJQ7&quot;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#这里的jobid比较重要，下面会用到这个取消爬虫</span></span><br><span class="line">&#123;<span class="string">"status"</span>: <span class="string">"ok"</span>, <span class="string">"jobid"</span>: <span class="string">"3013f9d1283611e79a63acb57dec5d04"</span>, <span class="string">"node_name"</span>: <span class="string">"DESKTOP-L78TJQ7"</span>&#125;</span><br></pre></td></tr></table></figure>
 <p>这里的jobid比较重要，下面会用到这个取消爬虫</p>
 <p>查看具体的爬虫运行信息了： <a href="https://note.youdao.com/" target="_blank" rel="noopener">http://localhost:6800/jobs</a><br><img src="https://img.colabug.com/2018/03/4f6712189c91d620efaf00e0a52aa605.png" alt="image"><br>点击“ <code>Log</code>”超链接，就可以看到爬虫的具体的输出信息了。<br><img src="https://img.colabug.com/2018/03/40c3ccdd69d8de53a55e245156c69d25.png" alt="image"></p>
 <ul>
-<li>取消爬虫：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/cancel.json -d project=myproject -d job=jobid</span><br></pre></td></tr></table></figure>
+<li>取消爬虫：<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">http:</span><span class="comment">//localhost:6800/cancel.json -d project=myproject -d job=jobid</span></span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<p><code>jobid</code>就是上面的提到过的，如果取消我的这个实例代码如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/cancel.json -d project=项目名 -d job=3013f9d1283611e79a63acb57dec5d04</span><br></pre></td></tr></table></figure></p>
+<p><code>jobid</code>就是上面的提到过的，如果取消我的这个实例代码如：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">http:</span><span class="comment">//localhost:6800/cancel.json -d project=项目名 -d job=3013f9d1283611e79a63acb57dec5d04</span></span><br></pre></td></tr></table></figure></p>
 <p>那么它的状态就会变成如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;status&quot;: &quot;ok&quot;, &quot;prevstate&quot;: &quot;running&quot;, &quot;node_name&quot;: &quot;DESKTOP-L78TJQ7&quot;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"status"</span>: <span class="string">"ok"</span>, <span class="attr">"prevstate"</span>: <span class="string">"running"</span>, <span class="attr">"node_name"</span>: <span class="string">"DESKTOP-L78TJQ7"</span>&#125;</span><br></pre></td></tr></table></figure>
 <ul>
-<li>列出项目：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/listprojects.json</span><br></pre></td></tr></table></figure>
+<li>列出项目：<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">http:</span><span class="comment">//localhost:6800/listprojects.json</span></span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>,下面将会出现你已经部署的项目</p>
 <ul>
 <li><p>删除项目：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/delproject.json -d project=myproject</span><br></pre></td></tr></table></figure>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">http:</span><span class="comment">//localhost:6800/delproject.json -d project=myproject</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>列出版本：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/listversions.json?project=myproject</span><br></pre></td></tr></table></figure>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">http:</span><span class="comment">//localhost:6800/listversions.json?project=myproject</span></span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>,这里的<code>project</code>是项目的名字，是在<code>scrapy.cfg</code>设置的</p>
 <ul>
-<li>列出爬虫：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/listspiders.json?project=myproject</span><br></pre></td></tr></table></figure>
+<li>列出爬虫：<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">http:</span><span class="comment">//localhost:6800/listspiders.json?project=myproject</span></span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>这里的<code>project</code>是项目的名字，是在<code>scrapy.cfg</code>设置的</p>
 <ul>
-<li>列出job:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/listjobs.json?project=myproject</span><br></pre></td></tr></table></figure>
+<li>列出job:<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">http:</span><span class="comment">//localhost:6800/listjobs.json?project=myproject</span></span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>这里的<code>project</code>是项目的名字，是在<code>scrapy.cfg</code>设置的</p>
 <ul>
-<li>删除版本：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:6800/delversion.json -d project=myproject -d version=r99</span><br></pre></td></tr></table></figure>
+<li>删除版本：<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">http:</span><span class="comment">//localhost:6800/delversion.json -d project=myproject -d version=r99</span></span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>，这里的<code>version</code>是自己的项目版本号，在删除之前需要查看版本号</p>
@@ -424,6 +430,19 @@
         </div>
         
         
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#环境"><span class="toc-number">1.</span> <span class="toc-text">环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改配置"><span class="toc-number">2.</span> <span class="toc-text">修改配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#crapyd爬虫部署服务"><span class="toc-number">3.</span> <span class="toc-text">crapyd爬虫部署服务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#开启scrapyd服务"><span class="toc-number">3.1.</span> <span class="toc-text">开启scrapyd服务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#部署爬虫"><span class="toc-number">4.</span> <span class="toc-text">部署爬虫</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#方法1（我没成功，网上的办法）："><span class="toc-number">4.1.</span> <span class="toc-text">方法1（我没成功，网上的办法）：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#编辑两个文件："><span class="toc-number">4.1.1.</span> <span class="toc-text">编辑两个文件：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法2（我用的方法）"><span class="toc-number">4.2.</span> <span class="toc-text">方法2（我用的方法）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#验证是否成功"><span class="toc-number">4.2.1.</span> <span class="toc-text">验证是否成功</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装curl"><span class="toc-number">5.</span> <span class="toc-text">安装curl</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#作业控制"><span class="toc-number">6.</span> <span class="toc-text">作业控制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">7.</span> <span class="toc-text">总结</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
+        
     </div>
 </aside>
 
@@ -440,6 +459,34 @@
   
 
 
+
+<!-- 目录内容 -->
+        
+            <p class="show-toc-btn" id="show-toc-btn" onclick="showToc();" style="display:none">
+            <span class="btn-bg"></span>
+            <span class="btn-text">文章导航</span>
+            </p>
+            <div id="toc-article" class="toc-article">
+                <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
+                <strong class="toc-title">文章目录</strong>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#环境"><span class="toc-number">1.</span> <span class="toc-text">环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改配置"><span class="toc-number">2.</span> <span class="toc-text">修改配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#crapyd爬虫部署服务"><span class="toc-number">3.</span> <span class="toc-text">crapyd爬虫部署服务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#开启scrapyd服务"><span class="toc-number">3.1.</span> <span class="toc-text">开启scrapyd服务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#部署爬虫"><span class="toc-number">4.</span> <span class="toc-text">部署爬虫</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#方法1（我没成功，网上的办法）："><span class="toc-number">4.1.</span> <span class="toc-text">方法1（我没成功，网上的办法）：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#编辑两个文件："><span class="toc-number">4.1.1.</span> <span class="toc-text">编辑两个文件：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法2（我用的方法）"><span class="toc-number">4.2.</span> <span class="toc-text">方法2（我用的方法）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#验证是否成功"><span class="toc-number">4.2.1.</span> <span class="toc-text">验证是否成功</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装curl"><span class="toc-number">5.</span> <span class="toc-text">安装curl</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#作业控制"><span class="toc-number">6.</span> <span class="toc-text">作业控制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">7.</span> <span class="toc-text">总结</span></a></li></ol>
+           </div>
+           <script type="text/javascript">
+            function showToc(){
+                var toc_article = document.getElementById("toc-article");
+                var show_toc_btn = document.getElementById("show-toc-btn");
+                toc_article.setAttribute("style","display:block");
+                show_toc_btn.setAttribute("style","display:none");
+                };
+            function showBtn(){
+                var toc_article = document.getElementById("toc-article");
+                var show_toc_btn = document.getElementById("show-toc-btn");
+                toc_article.setAttribute("style","display:none");
+                show_toc_btn.setAttribute("style","display:block");
+                };
+           </script>
+             
+        <!-- 目录内容结束 -->
           </div>
         </div>
       </div>
@@ -449,6 +496,7 @@
     	<div class="footer-left">
     		&copy; 2018 萌木盖
     	</div>
+		<span id="busuanzi_container_site_pv">    本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
       	</div>
@@ -464,11 +512,11 @@
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
-		open_in_new: false,
+		open_in_new: true,
 		toc_hide_index: true,
 		root: "/",
 		innerArchive: true,
-		showTags: false
+		showTags: true
 	}
 </script>
 
@@ -542,10 +590,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
@@ -555,6 +599,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">python操作</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -594,11 +642,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
+                <a href="javascript:void(0)" class="js-tag color3">信号</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">信号</a>
+                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
               </li>
              
               <li class="article-tag-list-item">

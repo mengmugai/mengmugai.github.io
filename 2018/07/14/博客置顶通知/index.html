@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://wx2.sinaimg.cn/mw690/e196ca14ly1ft9r729pulj20d00bygmi.jpg">
 <meta property="og:image" content="https://wx4.sinaimg.cn/mw690/e196ca14ly1ft9r72uyrlj20ix0dkafm.jpg">
 <meta property="og:image" content="https://wx2.sinaimg.cn/mw690/e196ca14ly1ft9r72mb01j20iz0axwif.jpg">
-<meta property="og:updated_time" content="2018-07-14T14:57:11.397Z">
+<meta property="og:updated_time" content="2018-08-26T16:37:01.852Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="博客置顶通知">
 <meta name="twitter:description" content="本博客刚刚搭建，基于Hexo+github，本人资料全放在有道云笔记，所以等我慢慢整理再发表。（不整理的话除了我没人能看懂，哈哈）。 查找方法：  首先点击所有文章 再点击tag 可以直接在搜索栏搜索或者点击标签">
@@ -52,7 +52,7 @@
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
-			<img src="/mmg.png" class="js-avatar show">
+			<img src="/mmg.png" class="js-avatar">
 		</a>
 		<hgroup>
 		  <h1 class="header-author"><a href="/">萌木盖</a></h1>
@@ -67,6 +67,8 @@
 				<li><a href="/">主页</a></li>
 	        
 				<li><a href="https://space.bilibili.com/13894927/#/">B站</a></li>
+	        
+				<li><a href="/categories">分类</a></li>
 	        
 			</ul>
 		</nav>
@@ -130,6 +132,8 @@
 			
 				
 			
+				
+			
 			
 			
 			<nav class="header-nav">
@@ -151,12 +155,14 @@
 			</nav>
 
 			<nav class="header-menu js-header-menu">
-				<ul style="width: 50%">
+				<ul style="width: 70%">
 				
 				
-					<li style="width: 50%"><a href="/">主页</a></li>
+					<li style="width: 33.333333333333336%"><a href="/">主页</a></li>
 		        
-					<li style="width: 50%"><a href="https://space.bilibili.com/13894927/#/">B站</a></li>
+					<li style="width: 33.333333333333336%"><a href="https://space.bilibili.com/13894927/#/">B站</a></li>
+		        
+					<li style="width: 33.333333333333336%"><a href="/categories">分类</a></li>
 		        
 				</ul>
 			</nav>
@@ -327,6 +333,19 @@
         </div>
         
         
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    目录，不存在的…
+                    </div>
+                </span>
+            </div>
+        </div>
+        
     </div>
 </aside>
 
@@ -343,6 +362,34 @@
   
 
 
+
+<!-- 目录内容 -->
+        
+            <p class="show-toc-btn" id="show-toc-btn" onclick="showToc();" style="display:none">
+            <span class="btn-bg"></span>
+            <span class="btn-text">文章导航</span>
+            </p>
+            <div id="toc-article" class="toc-article">
+                <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
+                <strong class="toc-title">文章目录</strong>
+                
+           </div>
+           <script type="text/javascript">
+            function showToc(){
+                var toc_article = document.getElementById("toc-article");
+                var show_toc_btn = document.getElementById("show-toc-btn");
+                toc_article.setAttribute("style","display:block");
+                show_toc_btn.setAttribute("style","display:none");
+                };
+            function showBtn(){
+                var toc_article = document.getElementById("toc-article");
+                var show_toc_btn = document.getElementById("show-toc-btn");
+                toc_article.setAttribute("style","display:none");
+                show_toc_btn.setAttribute("style","display:block");
+                };
+           </script>
+             
+        <!-- 目录内容结束 -->
           </div>
         </div>
       </div>
@@ -352,6 +399,7 @@
     	<div class="footer-left">
     		&copy; 2018 萌木盖
     	</div>
+		<span id="busuanzi_container_site_pv">    本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
       	</div>
@@ -367,11 +415,11 @@
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
-		open_in_new: false,
+		open_in_new: true,
 		toc_hide_index: true,
 		root: "/",
 		innerArchive: true,
-		showTags: false
+		showTags: true
 	}
 </script>
 
@@ -445,10 +493,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
@@ -458,6 +502,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">python操作</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -497,11 +545,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
+                <a href="javascript:void(0)" class="js-tag color3">信号</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">信号</a>
+                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
               </li>
              
               <li class="article-tag-list-item">

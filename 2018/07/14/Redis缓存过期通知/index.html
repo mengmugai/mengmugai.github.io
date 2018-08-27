@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="萌木盖的博客">
 <meta property="og:description" content="需求：redis中的缓存数据时间到了，消失的时候，需要发出通知解析： https://redis.io/topics/notifications    利用redis的 Keyspace notifications订阅和发布即可实现。 实现步骤： a)    修改redis的配置文件：  123vi /etc/redis.conf    # 不同系统可能路径不一样# 找到notify-keyspa">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-07-14T04:14:01.466Z">
+<meta property="og:updated_time" content="2018-08-26T16:35:48.766Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis缓存过期通知">
 <meta name="twitter:description" content="需求：redis中的缓存数据时间到了，消失的时候，需要发出通知解析： https://redis.io/topics/notifications    利用redis的 Keyspace notifications订阅和发布即可实现。 实现步骤： a)    修改redis的配置文件：  123vi /etc/redis.conf    # 不同系统可能路径不一样# 找到notify-keyspa">
@@ -48,7 +48,7 @@
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
-			<img src="/mmg.png" class="js-avatar show">
+			<img src="/mmg.png" class="js-avatar">
 		</a>
 		<hgroup>
 		  <h1 class="header-author"><a href="/">萌木盖</a></h1>
@@ -63,6 +63,8 @@
 				<li><a href="/">主页</a></li>
 	        
 				<li><a href="https://space.bilibili.com/13894927/#/">B站</a></li>
+	        
+				<li><a href="/categories">分类</a></li>
 	        
 			</ul>
 		</nav>
@@ -126,6 +128,8 @@
 			
 				
 			
+				
+			
 			
 			
 			<nav class="header-nav">
@@ -147,12 +151,14 @@
 			</nav>
 
 			<nav class="header-menu js-header-menu">
-				<ul style="width: 50%">
+				<ul style="width: 70%">
 				
 				
-					<li style="width: 50%"><a href="/">主页</a></li>
+					<li style="width: 33.333333333333336%"><a href="/">主页</a></li>
 		        
-					<li style="width: 50%"><a href="https://space.bilibili.com/13894927/#/">B站</a></li>
+					<li style="width: 33.333333333333336%"><a href="https://space.bilibili.com/13894927/#/">B站</a></li>
+		        
+					<li style="width: 33.333333333333336%"><a href="/categories">分类</a></li>
 		        
 				</ul>
 			</nav>
@@ -192,21 +198,21 @@
 <h3 id="实现步骤："><a href="#实现步骤：" class="headerlink" title="实现步骤："></a>实现步骤：</h3><ul>
 <li>a)    修改redis的配置文件：</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/redis.conf    # 不同系统可能路径不一样</span><br><span class="line"># 找到notify-keyspace-events 改为&quot;Ex&quot;</span><br><span class="line">notify-keyspace-events &quot;Ex&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vi <span class="meta-keyword">/etc/</span>redis.conf    <span class="meta"># 不同系统可能路径不一样</span></span><br><span class="line"><span class="meta"># 找到notify-keyspace-events 改为<span class="string">"Ex"</span></span></span><br><span class="line">notify-keyspace-events <span class="string">"Ex"</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>b)    重启redis：    </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># linux下</span><br><span class="line">service redis restart</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># mac下</span><br><span class="line">brew services restart redis</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> linux下</span></span><br><span class="line">service redis restart</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> mac下</span></span><br><span class="line">brew services restart redis</span><br></pre></td></tr></table></figure>
 <ul>
 <li>c)    redis-cli测试：</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># redis-cli</span><br><span class="line"># 语法：@0 代表监听0号数据库</span><br><span class="line">127.0.0.1:6379&gt; psubscribe __keyevent@0__:expired</span><br><span class="line"># 执行后会发生阻塞</span><br><span class="line"></span><br><span class="line">新开一个redis-cli</span><br><span class="line"># 新开一个redis-cli</span><br><span class="line">127.0.0.1:6379&gt; setex test 5 &quot;test_value&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># redis-cli</span></span><br><span class="line"><span class="comment"># 语法：@0 代表监听0号数据库</span></span><br><span class="line"><span class="meta">127.0.0.1:6379&gt;</span> psubscribe __keyevent@0__<span class="symbol">:expired</span></span><br><span class="line"><span class="comment"># 执行后会发生阻塞</span></span><br><span class="line"></span><br><span class="line">新开一个redis-cli</span><br><span class="line"><span class="comment"># 新开一个redis-cli</span></span><br><span class="line"><span class="meta">127.0.0.1:6379&gt;</span> setex test <span class="number">5</span> <span class="string">"test_value"</span></span><br></pre></td></tr></table></figure>
 <p>5秒过后，前一个redis-cli会显示出test这个key名称</p>
 <ul>
 <li>d)    python代码实现：</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import redis</span><br><span class="line"></span><br><span class="line"># 创建redis客户端链接对象：默认localhost，和0号数据库</span><br><span class="line">client = redis.StrictRedis()</span><br><span class="line"></span><br><span class="line"># 创建发布订阅对象</span><br><span class="line">psub = client.pubsub()</span><br><span class="line"></span><br><span class="line"># 发布监听key失效的订阅</span><br><span class="line">psub.psubscribe(&quot;__keyevent@0__:expired&quot;)</span><br><span class="line"></span><br><span class="line"># 开始监听：</span><br><span class="line"># psub.listen返回一个迭代器</span><br><span class="line">for data in psub.listen():</span><br><span class="line">    print(data)</span><br></pre></td></tr></table></figure>
-<p>启动刚刚py文件，同样会发生阻塞，另外新开一个redis-cli<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 新开一个redis-cli</span><br><span class="line">127.0.0.1:6379&gt; setex test 5 &quot;test_value&quot;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建redis客户端链接对象：默认localhost，和0号数据库</span></span><br><span class="line">client = redis.StrictRedis()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建发布订阅对象</span></span><br><span class="line">psub = client.pubsub()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 发布监听key失效的订阅</span></span><br><span class="line">psub.psubscribe(<span class="string">"__keyevent@0__:expired"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开始监听：</span></span><br><span class="line"><span class="comment"># psub.listen返回一个迭代器</span></span><br><span class="line"><span class="keyword">for</span> data <span class="keyword">in</span> psub.listen():</span><br><span class="line">    print(data)</span><br></pre></td></tr></table></figure>
+<p>启动刚刚py文件，同样会发生阻塞，另外新开一个redis-cli<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 新开一个redis-<span class="keyword">cli</span></span><br><span class="line"><span class="number">127.0</span><span class="meta">.0</span><span class="meta">.1</span>:<span class="number">6379</span>&gt; setex <span class="keyword">test</span> <span class="number">5</span> <span class="string">"test_value"</span></span><br></pre></td></tr></table></figure></p>
 <p>5秒过后， 也会打印出对应的数据</p>
 
       
@@ -351,6 +357,19 @@
         </div>
         
         
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#需求：redis中的缓存数据时间到了，消失的时候，需要发出通知"><span class="toc-number">1.</span> <span class="toc-text">需求：redis中的缓存数据时间到了，消失的时候，需要发出通知</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#实现步骤："><span class="toc-number">1.1.</span> <span class="toc-text">实现步骤：</span></a></li></ol></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
+        
     </div>
 </aside>
 
@@ -367,6 +386,34 @@
   
 
 
+
+<!-- 目录内容 -->
+        
+            <p class="show-toc-btn" id="show-toc-btn" onclick="showToc();" style="display:none">
+            <span class="btn-bg"></span>
+            <span class="btn-text">文章导航</span>
+            </p>
+            <div id="toc-article" class="toc-article">
+                <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
+                <strong class="toc-title">文章目录</strong>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#需求：redis中的缓存数据时间到了，消失的时候，需要发出通知"><span class="toc-number">1.</span> <span class="toc-text">需求：redis中的缓存数据时间到了，消失的时候，需要发出通知</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#实现步骤："><span class="toc-number">1.1.</span> <span class="toc-text">实现步骤：</span></a></li></ol></li></ol>
+           </div>
+           <script type="text/javascript">
+            function showToc(){
+                var toc_article = document.getElementById("toc-article");
+                var show_toc_btn = document.getElementById("show-toc-btn");
+                toc_article.setAttribute("style","display:block");
+                show_toc_btn.setAttribute("style","display:none");
+                };
+            function showBtn(){
+                var toc_article = document.getElementById("toc-article");
+                var show_toc_btn = document.getElementById("show-toc-btn");
+                toc_article.setAttribute("style","display:none");
+                show_toc_btn.setAttribute("style","display:block");
+                };
+           </script>
+             
+        <!-- 目录内容结束 -->
           </div>
         </div>
       </div>
@@ -376,6 +423,7 @@
     	<div class="footer-left">
     		&copy; 2018 萌木盖
     	</div>
+		<span id="busuanzi_container_site_pv">    本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
       	</div>
@@ -391,11 +439,11 @@
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
-		open_in_new: false,
+		open_in_new: true,
 		toc_hide_index: true,
 		root: "/",
 		innerArchive: true,
-		showTags: false
+		showTags: true
 	}
 </script>
 
@@ -469,10 +517,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
@@ -482,6 +526,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">python操作</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -521,11 +569,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
+                <a href="javascript:void(0)" class="js-tag color3">信号</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">信号</a>
+                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
               </li>
              
               <li class="article-tag-list-item">

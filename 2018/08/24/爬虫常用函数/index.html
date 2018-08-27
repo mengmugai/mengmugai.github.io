@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>爬虫常用函数 | 萌木盖的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="遇到去不掉空格时，可以尝试如下方法  12345678def remove_all_space_char(ss):    &amp;quot;&amp;quot;&amp;quot;    去掉所有的不可见字符，包括空格，换行等等    :param ss:    :return:    &amp;quot;&amp;quot;&amp;quot;    temp = re.sub(ur&amp;apos;[\x00-\x20]|\xa0&amp;apos;">
+  <meta name="description" content="遇到去不掉空格时，可以尝试如下方法  12345678def remove_all_space_char(ss):    &quot;&quot;&quot;    去掉所有的不可见字符，包括空格，换行等等    :param ss:    :return:    &quot;&quot;&quot;    temp = re.sub(ur&apos;[\x00-\x20]|\xa0&apos;, &apos;&apos;, unicode(ss))    return temp  解析过程中">
 <meta name="keywords" content="爬虫,python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="爬虫常用函数">
 <meta property="og:url" content="http://yoursite.com/2018/08/24/爬虫常用函数/index.html">
 <meta property="og:site_name" content="萌木盖的博客">
-<meta property="og:description" content="遇到去不掉空格时，可以尝试如下方法  12345678def remove_all_space_char(ss):    &amp;quot;&amp;quot;&amp;quot;    去掉所有的不可见字符，包括空格，换行等等    :param ss:    :return:    &amp;quot;&amp;quot;&amp;quot;    temp = re.sub(ur&amp;apos;[\x00-\x20]|\xa0&amp;apos;">
+<meta property="og:description" content="遇到去不掉空格时，可以尝试如下方法  12345678def remove_all_space_char(ss):    &quot;&quot;&quot;    去掉所有的不可见字符，包括空格，换行等等    :param ss:    :return:    &quot;&quot;&quot;    temp = re.sub(ur&apos;[\x00-\x20]|\xa0&apos;, &apos;&apos;, unicode(ss))    return temp  解析过程中">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-23T16:18:52.388Z">
+<meta property="og:updated_time" content="2018-08-26T16:35:58.354Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="爬虫常用函数">
-<meta name="twitter:description" content="遇到去不掉空格时，可以尝试如下方法  12345678def remove_all_space_char(ss):    &amp;quot;&amp;quot;&amp;quot;    去掉所有的不可见字符，包括空格，换行等等    :param ss:    :return:    &amp;quot;&amp;quot;&amp;quot;    temp = re.sub(ur&amp;apos;[\x00-\x20]|\xa0&amp;apos;">
+<meta name="twitter:description" content="遇到去不掉空格时，可以尝试如下方法  12345678def remove_all_space_char(ss):    &quot;&quot;&quot;    去掉所有的不可见字符，包括空格，换行等等    :param ss:    :return:    &quot;&quot;&quot;    temp = re.sub(ur&apos;[\x00-\x20]|\xa0&apos;, &apos;&apos;, unicode(ss))    return temp  解析过程中">
   
     <link rel="alternative" href="/atom.xml" title="萌木盖的博客" type="application/atom+xml">
   
@@ -48,7 +48,7 @@
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
-			<img src="/mmg.png" class="js-avatar show">
+			<img src="/mmg.png" class="js-avatar">
 		</a>
 		<hgroup>
 		  <h1 class="header-author"><a href="/">萌木盖</a></h1>
@@ -63,6 +63,8 @@
 				<li><a href="/">主页</a></li>
 	        
 				<li><a href="https://space.bilibili.com/13894927/#/">B站</a></li>
+	        
+				<li><a href="/categories">分类</a></li>
 	        
 			</ul>
 		</nav>
@@ -126,6 +128,8 @@
 			
 				
 			
+				
+			
 			
 			
 			<nav class="header-nav">
@@ -147,12 +151,14 @@
 			</nav>
 
 			<nav class="header-menu js-header-menu">
-				<ul style="width: 50%">
+				<ul style="width: 70%">
 				
 				
-					<li style="width: 50%"><a href="/">主页</a></li>
+					<li style="width: 33.333333333333336%"><a href="/">主页</a></li>
 		        
-					<li style="width: 50%"><a href="https://space.bilibili.com/13894927/#/">B站</a></li>
+					<li style="width: 33.333333333333336%"><a href="https://space.bilibili.com/13894927/#/">B站</a></li>
+		        
+					<li style="width: 33.333333333333336%"><a href="/categories">分类</a></li>
 		        
 				</ul>
 			</nav>
@@ -190,15 +196,15 @@
         <ul>
 <li>遇到去不掉空格时，可以尝试如下方法</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">def remove_all_space_char(ss):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    去掉所有的不可见字符，包括空格，换行等等</span><br><span class="line">    :param ss:</span><br><span class="line">    :return:</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    temp = re.sub(ur&apos;[\x00-\x20]|\xa0&apos;, &apos;&apos;, unicode(ss))</span><br><span class="line">    return temp</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">remove_all_space_char</span><span class="params">(ss)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    去掉所有的不可见字符，包括空格，换行等等</span></span><br><span class="line"><span class="string">    :param ss:</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    temp = re.sub(<span class="string">ur'[\x00-\x20]|\xa0'</span>, <span class="string">''</span>, unicode(ss))</span><br><span class="line">    <span class="keyword">return</span> temp</span><br></pre></td></tr></table></figure>
 <ul>
 <li>解析过程中遇到不完整的标签时，可以尝试将原文进行如下操作</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">soup = BeautifulSoup(html, &apos;html5lib&apos;) # 选择html5lib</span><br><span class="line"> html = soup.prettify()</span><br></pre></td></tr></table></figure>
+<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">soup = BeautifulSoup<span class="comment">(html, 'html5lib')</span> <span class="attr"># 选择html5</span>lib</span><br><span class="line"> html = soup.prettify<span class="comment">()</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>解析原文时，遇到html转义字符时，可以使用如下方法</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">html = u&apos; &amp;amp;abc\u003c&apos;</span><br><span class="line">html_parser = HTMLParser.HTMLParser()</span><br><span class="line">txt = html_parser.unescape(html)</span><br><span class="line">print txt  # 输出  &amp;abc&lt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">html = <span class="string">u' &amp;amp;abc\u003c'</span></span><br><span class="line">html_parser = HTMLParser.HTMLParser()</span><br><span class="line">txt = html_parser.unescape(html)</span><br><span class="line"><span class="keyword">print</span> txt  <span class="comment"># 输出  &amp;abc&lt;</span></span><br></pre></td></tr></table></figure>
 
       
 
@@ -338,6 +344,19 @@
         </div>
         
         
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    目录，不存在的…
+                    </div>
+                </span>
+            </div>
+        </div>
+        
     </div>
 </aside>
 
@@ -354,6 +373,34 @@
   
 
 
+
+<!-- 目录内容 -->
+        
+            <p class="show-toc-btn" id="show-toc-btn" onclick="showToc();" style="display:none">
+            <span class="btn-bg"></span>
+            <span class="btn-text">文章导航</span>
+            </p>
+            <div id="toc-article" class="toc-article">
+                <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
+                <strong class="toc-title">文章目录</strong>
+                
+           </div>
+           <script type="text/javascript">
+            function showToc(){
+                var toc_article = document.getElementById("toc-article");
+                var show_toc_btn = document.getElementById("show-toc-btn");
+                toc_article.setAttribute("style","display:block");
+                show_toc_btn.setAttribute("style","display:none");
+                };
+            function showBtn(){
+                var toc_article = document.getElementById("toc-article");
+                var show_toc_btn = document.getElementById("show-toc-btn");
+                toc_article.setAttribute("style","display:none");
+                show_toc_btn.setAttribute("style","display:block");
+                };
+           </script>
+             
+        <!-- 目录内容结束 -->
           </div>
         </div>
       </div>
@@ -363,6 +410,7 @@
     	<div class="footer-left">
     		&copy; 2018 萌木盖
     	</div>
+		<span id="busuanzi_container_site_pv">    本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
       	</div>
@@ -378,11 +426,11 @@
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
-		open_in_new: false,
+		open_in_new: true,
 		toc_hide_index: true,
 		root: "/",
 		innerArchive: true,
-		showTags: false
+		showTags: true
 	}
 </script>
 
@@ -456,10 +504,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
@@ -469,6 +513,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">python操作</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -508,11 +556,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
+                <a href="javascript:void(0)" class="js-tag color3">信号</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">信号</a>
+                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
               </li>
              
               <li class="article-tag-list-item">

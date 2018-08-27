@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://img-blog.csdn.net/20170909001604837?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzA4NzUxMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
 <meta property="og:image" content="https://img-blog.csdn.net/20170910135801950?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzA4NzUxMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
 <meta property="og:image" content="https://img-blog.csdn.net/20170910140247051?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzA4NzUxMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
-<meta property="og:updated_time" content="2018-07-18T15:20:27.374Z">
+<meta property="og:updated_time" content="2018-08-26T16:35:58.323Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySql优化">
 <meta name="twitter:description" content="MySQL优化三大方向 ① 优化MySQL所在服务器内核(此优化一般由运维人员完成)。 ② 对MySQL配置参数进行优化（my.cnf）此优化需要进行压力测试来进行参数调整。 ③ 对SQL语句以及表优化。MySQL参数优化 1:MySQL 默认的最大连接数为 100，可以在 mysql 客户端使用以下命令查看mysql&amp;gt; show variables like ‘max_connection">
@@ -52,7 +52,7 @@
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
-			<img src="/mmg.png" class="js-avatar show">
+			<img src="/mmg.png" class="js-avatar">
 		</a>
 		<hgroup>
 		  <h1 class="header-author"><a href="/">萌木盖</a></h1>
@@ -67,6 +67,8 @@
 				<li><a href="/">主页</a></li>
 	        
 				<li><a href="https://space.bilibili.com/13894927/#/">B站</a></li>
+	        
+				<li><a href="/categories">分类</a></li>
 	        
 			</ul>
 		</nav>
@@ -130,6 +132,8 @@
 			
 				
 			
+				
+			
 			
 			
 			<nav class="header-nav">
@@ -151,12 +155,14 @@
 			</nav>
 
 			<nav class="header-menu js-header-menu">
-				<ul style="width: 50%">
+				<ul style="width: 70%">
 				
 				
-					<li style="width: 50%"><a href="/">主页</a></li>
+					<li style="width: 33.333333333333336%"><a href="/">主页</a></li>
 		        
-					<li style="width: 50%"><a href="https://space.bilibili.com/13894927/#/">B站</a></li>
+					<li style="width: 33.333333333333336%"><a href="https://space.bilibili.com/13894927/#/">B站</a></li>
+		        
+					<li style="width: 33.333333333333336%"><a href="/categories">分类</a></li>
 		        
 				</ul>
 			</nav>
@@ -218,7 +224,7 @@
 </ul>
 <p>具体描述如下：</p>
 <h3 id="一-使用查询缓存优化查询"><a href="#一-使用查询缓存优化查询" class="headerlink" title="(一) 使用查询缓存优化查询"></a>(一) 使用查询缓存优化查询</h3><p>大多数的MySQL服务器都开启了查询缓存。这是提高性能最有效的方法之一，而且这是被MySQL引擎处理的。当有很多相同的查询被执行了多次的时候，这些查询结果会被放入一个缓存中，这样后续的相同查询就不用操作而直接访问缓存结果了。<br>这里最主要的问题是，对于我们程序员来说，这个事情是很容易被忽略的。因为我们某些查询语句会让MySQL不使用缓存，示例如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1：SELECT username FROM user WHERE    signup_date &gt;= CURDATE()</span><br><span class="line">2：SELECT username FROM user WHERE    signup_date &gt;= &apos;2014-06-24‘</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1：<span class="keyword">SELECT</span> username <span class="keyword">FROM</span> <span class="keyword">user</span> <span class="keyword">WHERE</span>    signup_date &gt;= <span class="keyword">CURDATE</span>()</span><br><span class="line"><span class="number">2</span>：<span class="keyword">SELECT</span> username <span class="keyword">FROM</span> <span class="keyword">user</span> <span class="keyword">WHERE</span>    signup_date &gt;= <span class="string">'2014-06-24‘</span></span><br></pre></td></tr></table></figure>
 <p>上面两条SQL语句的差别就是 CURDATE() ，MySQL的查询缓存对这个函数不起作用。所以，像 NOW() 和 RAND() 或是其它的诸如此类的SQL函数都不会开启查询缓存，因为这些函数的返回是会不定的易变的。所以，你所需要的就是用一个变量来代替MySQL的函数，从而开启缓存。</p>
 <h3 id="二-使用EXPLAIN关键字检测查询"><a href="#二-使用EXPLAIN关键字检测查询" class="headerlink" title="(二) 使用EXPLAIN关键字检测查询"></a>(二) 使用EXPLAIN关键字检测查询</h3><p>使用EXPLAIN关键字可以使我们知道MySQL是如何处理SQL语句的，这样可以帮助我们分析我们的查询语句或是表结构的性能瓶颈；EXPLAIN的查询结果还会告诉我们索引主键是如何被利用的，数据表是如何被被搜索或排序的….等等。语法格式是：EXPLAIN +SELECT语句;<br><img src="https://img-blog.csdn.net/20170909001604837?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzA4NzUxMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="image"><br>我们可以看到，前一个结果显示搜索了 7883 行，而后一个只是搜索了两个表的 9 和 16 行。查看rows列可以让我们找到潜在的性能问题。 </p>
 <h3 id="三-当只要一行数据时使用LIMIT-1"><a href="#三-当只要一行数据时使用LIMIT-1" class="headerlink" title="(三)当只要一行数据时使用LIMIT 1"></a>(三)当只要一行数据时使用LIMIT 1</h3><p>加上LIMIT 1可以增加性能。MySQL数据库引擎会在查找到一条数据后停止搜索，而不是继续往后查询下一条符合条件的数据记录。</p>
@@ -229,11 +235,11 @@
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE table_name ADD INDEX index_name (column_list);</span><br><span class="line">ALTER TABLE table_name ADD UNIQUE (column_list);</span><br><span class="line">ALTER TABLE table_name ADD PRIMARY KEY (column_list);</span><br><span class="line">ALTER TABLE table_name ADD FULLTEXT (column_list);</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> table_name <span class="keyword">ADD</span> <span class="keyword">INDEX</span> index_name (column_list);</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> table_name <span class="keyword">ADD</span> <span class="keyword">UNIQUE</span> (column_list);</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> table_name <span class="keyword">ADD</span> PRIMARY <span class="keyword">KEY</span> (column_list);</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> table_name <span class="keyword">ADD</span> FULLTEXT (column_list);</span><br></pre></td></tr></table></figure>
 <p>其中table_name是要增加索引名的表名，column_list指出对哪些列列进行索引，多列时各列之间使用半角逗号隔开。索引名index_name是可选的，如果不指定索引名称，MySQL将根据第一个索引列自动指定索引名称，另外，ALTER TABLE允许在单个语句中更改多个表，因此可以在同时创建多个索引。</p>
 <pre><code>- 1.2&gt; CREATE INDEX
 </code></pre><p>CREATE INDEX可对表增加普通索引或UNIQUE索引以及全文索引，但是不可以对表增加主键索引</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CREATE INDEX index_name ON table_name (column_list);</span><br><span class="line">CREATE UNIQUE index_name ON table_name (column_list);</span><br><span class="line">CREATE FULLTEXT index_name ON table_name (column_list);</span><br></pre></td></tr></table></figure>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">INDEX</span> index_name <span class="keyword">ON</span> table_name (column_list);</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">UNIQUE</span> index_name <span class="keyword">ON</span> table_name (column_list);</span><br><span class="line"><span class="keyword">CREATE</span> FULLTEXT index_name <span class="keyword">ON</span> table_name (column_list);</span><br></pre></td></tr></table></figure>
 <p>table_name、index_name和column_list具有与ALTER TABLE语句中相同的含义，索引名必须指定。另外，不能用CREATE INDEX语句创建PRIMARY KEY索引。</p>
 <ul>
 <li>2.索引类型<ul>
@@ -245,9 +251,9 @@
 </li>
 </ul>
 <p>注意：全文索引和普通索引是有很大区别的，如果建立的是普通索引，一般会使用like进行模糊查询，只会对查询内容前一部分有效，即只对前面不使用通配符的查询有效，如果前后都有通配符，普通索引将不会起作用。对于全文索引而言在查询时有自己独特的匹配方式，例如我们在对一篇文章的标题和内容进行全文索引时：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE article ADD FULLTEXT (&apos;title&apos;, &apos;content&apos;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> article <span class="keyword">ADD</span> FULLTEXT (<span class="string">'title'</span>, <span class="string">'content'</span>);</span><br></pre></td></tr></table></figure>
 <p> 在进行检索时就需要使用如下的语法进行检索：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM article WHERE MATCH(&apos;title&apos;, &apos;content&apos;) AGAINST (&apos;查询字符串&apos;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> article <span class="keyword">WHERE</span> <span class="keyword">MATCH</span>(<span class="string">'title'</span>, <span class="string">'content'</span>) AGAINST (<span class="string">'查询字符串'</span>);</span><br></pre></td></tr></table></figure>
 <p>在使用全文检索时的注意事项：<br>MySql自带的<font color="#FF0000">   全文索引只能用于数据库引擎为MYISAM的数据表，如果是其他数据引擎</font>，则全文索引不会生效。此外，<font color="#FF0000">MySql自带的全文索引只能对英文进行全文检索，目前无法对中文进行全文检索。如果需要对包含中文在内的文本数据进行全文检索，我们需要采用Sphinx（斯芬克斯）/Coreseek技术来处理中文</font>。另外使用MySql自带的全文索引时，<font color="#FF0000">  如果查询字符串的长度过短将无法得到期望的搜索结果。MySql全文索引所能找到的词默认最小长度为4个字符</font>。另外，如果查询的字符串包含停止词，那么该停止词将会被忽略。</p>
 <ul>
 <li>3.组合索引</li>
@@ -258,25 +264,25 @@
 <p>前边的任意一个索引没有参与查询，后边的全部不生效。</p>
 <p>前边的任意一个索引字段参与的是范围查询，后面的不会生效。</p>
 <p>断点跟索引字字段在SQL语句中的位置前后无关，只与是否存在有关。在网上找到了很好的示例：<br>比如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">where a=3 and b=45 and c=5 .... #这种三个索引顺序使用中间没有断点，全部发挥作用；</span><br><span class="line">where a=3 and c=5... #这种情况下b就是断点，a发挥了效果，c没有效果</span><br><span class="line">where b=3 and c=4... #这种情况下a就是断点，在a后面的索引都没有发挥作用，这种写法联合索引没有发挥任何效果；</span><br><span class="line">where b=45 and a=3 and c=5 .... #这个跟第一个一样，全部发挥作用，abc只要用上了就行，跟写的顺序无关</span><br></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">where <span class="attribute">a</span>=3 <span class="keyword">and</span> <span class="attribute">b</span>=45 <span class="keyword">and</span> <span class="attribute">c</span>=5 <span class="built_in">..</span><span class="built_in">..</span> #这种三个索引顺序使用中间没有断点，全部发挥作用；</span><br><span class="line">where <span class="attribute">a</span>=3 <span class="keyword">and</span> <span class="attribute">c</span>=5... #这种情况下b就是断点，a发挥了效果，c没有效果</span><br><span class="line">where <span class="attribute">b</span>=3 <span class="keyword">and</span> <span class="attribute">c</span>=4... #这种情况下a就是断点，在a后面的索引都没有发挥作用，这种写法联合索引没有发挥任何效果；</span><br><span class="line">where <span class="attribute">b</span>=45 <span class="keyword">and</span> <span class="attribute">a</span>=3 <span class="keyword">and</span> <span class="attribute">c</span>=5 <span class="built_in">..</span><span class="built_in">..</span> #这个跟第一个一样，全部发挥作用，abc只要用上了就行，跟写的顺序无关</span><br></pre></td></tr></table></figure>
 <p>（a,b,c） 三个列上加了联合索引（是联合索引 不是在每个列上单独加索引）而是建立了a,(a,b),(a,b,c)三个索引，另外(a,b,c)多列索引和 (a,c,b)是不一样的。</p>
 <p>具体实例可以说明：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">(0) select * from mytable where a=3 and b=5 and c=4;</span><br><span class="line">#abc三个索引都在where条件里面用到了，而且都发挥了作用</span><br><span class="line">(1) select * from mytable where  c=4 and b=6 and a=3;</span><br><span class="line">#这条语句为了说明 组合索引与在SQL中的位置先后无关，where里面的条件顺序在查询之前会被mysql自动优化，效果跟上一句一样</span><br><span class="line">(2) select * from mytable where a=3 and c=7;</span><br><span class="line">#a用到索引，b没有用，所以c是没有用到索引效果的</span><br><span class="line">(3) select * from mytable where a=3 and b&gt;7 and c=3;</span><br><span class="line">#a用到了，b也用到了，c没有用到，这个地方b是范围值，也算断点，只不过自身用到了索引</span><br><span class="line">(4) select * from mytable where b=3 and c=4;</span><br><span class="line">#因为a索引没有使用，所以这里 bc都没有用上索引效果</span><br><span class="line">(5) select * from mytable where a&gt;4 and b=7 and c=9;</span><br><span class="line">#a用到了  b没有使用，c没有使用</span><br><span class="line">(6) select * from mytable where a=3 order by b;</span><br><span class="line">#a用到了索引，b在结果排序中也用到了索引的效果，前面说了，a下面任意一段的b是排好序的</span><br><span class="line">(7) select * from mytable where a=3 order by c;</span><br><span class="line">#a用到了索引，但是这个地方c没有发挥排序效果，因为中间断点了，使用 explain 可以看到 filesort</span><br><span class="line">(8) select * from mytable where b=3 order by a;</span><br><span class="line">#b没有用到索引，排序中a也没有发挥索引效果</span><br></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">(0) select * <span class="keyword">from</span> mytable where <span class="attribute">a</span>=3 <span class="keyword">and</span> <span class="attribute">b</span>=5 <span class="keyword">and</span> <span class="attribute">c</span>=4;</span><br><span class="line"><span class="comment">#abc三个索引都在where条件里面用到了，而且都发挥了作用</span></span><br><span class="line">(1) select * <span class="keyword">from</span> mytable where  <span class="attribute">c</span>=4 <span class="keyword">and</span> <span class="attribute">b</span>=6 <span class="keyword">and</span> <span class="attribute">a</span>=3;</span><br><span class="line"><span class="comment">#这条语句为了说明 组合索引与在SQL中的位置先后无关，where里面的条件顺序在查询之前会被mysql自动优化，效果跟上一句一样</span></span><br><span class="line">(2) select * <span class="keyword">from</span> mytable where <span class="attribute">a</span>=3 <span class="keyword">and</span> <span class="attribute">c</span>=7;</span><br><span class="line"><span class="comment">#a用到索引，b没有用，所以c是没有用到索引效果的</span></span><br><span class="line">(3) select * <span class="keyword">from</span> mytable where <span class="attribute">a</span>=3 <span class="keyword">and</span> b&gt;7 <span class="keyword">and</span> <span class="attribute">c</span>=3;</span><br><span class="line"><span class="comment">#a用到了，b也用到了，c没有用到，这个地方b是范围值，也算断点，只不过自身用到了索引</span></span><br><span class="line">(4) select * <span class="keyword">from</span> mytable where <span class="attribute">b</span>=3 <span class="keyword">and</span> <span class="attribute">c</span>=4;</span><br><span class="line"><span class="comment">#因为a索引没有使用，所以这里 bc都没有用上索引效果</span></span><br><span class="line">(5) select * <span class="keyword">from</span> mytable where a&gt;4 <span class="keyword">and</span> <span class="attribute">b</span>=7 <span class="keyword">and</span> <span class="attribute">c</span>=9;</span><br><span class="line"><span class="comment">#a用到了  b没有使用，c没有使用</span></span><br><span class="line">(6) select * <span class="keyword">from</span> mytable where <span class="attribute">a</span>=3 order by b;</span><br><span class="line"><span class="comment">#a用到了索引，b在结果排序中也用到了索引的效果，前面说了，a下面任意一段的b是排好序的</span></span><br><span class="line">(7) select * <span class="keyword">from</span> mytable where <span class="attribute">a</span>=3 order by c;</span><br><span class="line"><span class="comment">#a用到了索引，但是这个地方c没有发挥排序效果，因为中间断点了，使用 explain 可以看到 filesort</span></span><br><span class="line">(8) select * <span class="keyword">from</span> mytable where <span class="attribute">b</span>=3 order by a;</span><br><span class="line"><span class="comment">#b没有用到索引，排序中a也没有发挥索引效果</span></span><br></pre></td></tr></table></figure>
 <p>注意：在查询时，MYSQL只能使用一个索引，如果建立的是多个单列的普通索引，在查询时会根据查询的索引字段，从中选择一个限制最严格的单例索引进行查询。别的索引都不会生效。</p>
 <ul>
 <li>4.查看索引</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show index from tblname;</span><br><span class="line">mysql&gt; show keys from tblname;</span><br></pre></td></tr></table></figure>
+<figure class="highlight q"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; <span class="built_in">show</span> index <span class="keyword">from</span> tblname;</span><br><span class="line">mysql&gt; <span class="built_in">show</span> <span class="built_in">keys</span> <span class="keyword">from</span> tblname;</span><br></pre></td></tr></table></figure>
 <p>5.删除索引</p>
-<p>删除索引的mysql格式 :<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DORP INDEX IndexName ON tab_name；</span><br></pre></td></tr></table></figure></p>
+<p>删除索引的mysql格式 :<br><figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DORP <span class="keyword">INDEX</span> IndexName <span class="keyword">ON</span> tab_name；</span><br></pre></td></tr></table></figure></p>
 <font color="#FF0000"> 注意：不能使用索引的情况 </font> 
 
 <p>对于普通索引而言 在使用like进行通配符模糊查询时,如果首尾之间都使用了通配符，索引时无效的。</p>
 <p>假设查询内容的关键词为’abc’</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM tab_name WHERE index_column LIKE  &apos;abc%&apos;;  #索引是有效的</span><br><span class="line">SELECT * FROM tab_name WHERE index_column LIKE  &apos;%abc&apos;;  #索引是无效的</span><br><span class="line">SELECT * FROM tab_name WHERE index_column LIKE  &apos;%cba&apos;;  #索引是有效的</span><br><span class="line">SELECT * FROM tab_name WHERE index_column LIKE  &apos;%abc%&apos;;  #索引是无效的</span><br></pre></td></tr></table></figure>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> tab_name <span class="keyword">WHERE</span> index_column <span class="keyword">LIKE</span>  <span class="string">'abc%'</span>;  #索引是有效的</span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> tab_name <span class="keyword">WHERE</span> index_column <span class="keyword">LIKE</span>  <span class="string">'%abc'</span>;  #索引是无效的</span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> tab_name <span class="keyword">WHERE</span> index_column <span class="keyword">LIKE</span>  <span class="string">'%cba'</span>;  #索引是有效的</span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> tab_name <span class="keyword">WHERE</span> index_column <span class="keyword">LIKE</span>  <span class="string">'%abc%'</span>;  #索引是无效的</span><br></pre></td></tr></table></figure>
 <p>当检索的字段内容比较大而且检索内容前后部分都不确定的情况下，可以改为全文索引，并使用特定的检索方式。</p>
 <h3 id="五-在join表的时候使用相当类型的列，并将其索引"><a href="#五-在join表的时候使用相当类型的列，并将其索引" class="headerlink" title="(五)在join表的时候使用相当类型的列，并将其索引"></a>(五)在join表的时候使用相当类型的列，并将其索引</h3><p>如果在程序中有很多JOIN查询，应该保证两个表中join的字段时被建立过索引的。这样MySQL颞部会启动优化JOIN的SQL语句的机制。注意：这些被用来JOIN的字段，应该是相同类型的。例如：如果要把 DECIMAL 字段和一个 INT 字段Join在一起，MySQL就无法使用它们的索引。对于那些STRING类型，还需要有相同的字符集才行。（两个表的字符集有可能不一样）<br>例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT company_name FROM users LEFT JOIN companies ON (users.state = companies.state) WHERE users.id = “user_id”</span><br></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT company_name <span class="keyword">FROM</span><span class="built_in"> users </span>LEFT JOIN companies ON (users.state = companies.state) WHERE users.id = “user_id”</span><br></pre></td></tr></table></figure>
 <p>两个 state 字段应该是被建过索引的，而且应该是相当的类型，相同的字符集。</p>
 <h3 id="六-切记不要使用ORDER-BY-RAND"><a href="#六-切记不要使用ORDER-BY-RAND" class="headerlink" title="(六)切记不要使用ORDER BY RAND()"></a>(六)切记不要使用ORDER BY RAND()</h3><p>如果你真的想把返回的数据行打乱了，你有N种方法可以达到这个目的。这样使用只让你的数据库的性能呈指数级的下降。这里的问题是：MySQL会不得不去执行RAND()函数（很耗CPU时间），而且这是为了每一行记录去记行，然后再对其排序。就算是你用了Limit 1也无济于事（因为要排序） </p>
 <h3 id="七-避免使用SELECT"><a href="#七-避免使用SELECT" class="headerlink" title="(七)避免使用SELECT *"></a>(七)避免使用SELECT *</h3><p>从数据库里读出越多的数据，那么查询就会变得越慢。并且，如果我们的数据库服务器和WEB服务器是两台独立的服务器的话，这还会增加网络传输的负载。 所以，我们应该养成一个需要什么就取什么的好的习惯。<br>Hibernate性能方面就会差，它不用*，但它将整个表的所有字段全查出来<br>优点：开发速度快</p>
@@ -436,6 +442,19 @@
         </div>
         
         
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#MySQL优化三大方向"><span class="toc-number">1.</span> <span class="toc-text">MySQL优化三大方向</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MySQL参数优化"><span class="toc-number">2.</span> <span class="toc-text">MySQL参数优化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对MySQL语句性能优化的16条经验"><span class="toc-number">3.</span> <span class="toc-text">对MySQL语句性能优化的16条经验</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一-使用查询缓存优化查询"><span class="toc-number"></span> <span class="toc-text">(一) 使用查询缓存优化查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二-使用EXPLAIN关键字检测查询"><span class="toc-number"></span> <span class="toc-text">(二) 使用EXPLAIN关键字检测查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三-当只要一行数据时使用LIMIT-1"><span class="toc-number"></span> <span class="toc-text">(三)当只要一行数据时使用LIMIT 1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#四-为搜索字段建立索引"><span class="toc-number"></span> <span class="toc-text">(四)为搜索字段建立索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#五-在join表的时候使用相当类型的列，并将其索引"><span class="toc-number"></span> <span class="toc-text">(五)在join表的时候使用相当类型的列，并将其索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#六-切记不要使用ORDER-BY-RAND"><span class="toc-number"></span> <span class="toc-text">(六)切记不要使用ORDER BY RAND()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#七-避免使用SELECT"><span class="toc-number"></span> <span class="toc-text">(七)避免使用SELECT *</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#八-永远为每张表设置一个ID主键"><span class="toc-number"></span> <span class="toc-text">(八)永远为每张表设置一个ID主键</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#九-使用ENUM而不是VARCHAR"><span class="toc-number"></span> <span class="toc-text">(九)使用ENUM而不是VARCHAR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#十-尽可能的不要赋值为NULL"><span class="toc-number"></span> <span class="toc-text">(十)尽可能的不要赋值为NULL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#十一-固定长度的表会更快"><span class="toc-number"></span> <span class="toc-text">(十一) 固定长度的表会更快</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#十二-垂直分割"><span class="toc-number"></span> <span class="toc-text">(十二)垂直分割</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#十三-拆分大的DELETE或INSERT"><span class="toc-number"></span> <span class="toc-text">(十三)拆分大的DELETE或INSERT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#十四-越小的列会越快"><span class="toc-number"></span> <span class="toc-text">(十四)越小的列会越快</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#十五-选择正确的存储引擎"><span class="toc-number"></span> <span class="toc-text">(十五)选择正确的存储引擎</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#十六-小心永久链接"><span class="toc-number"></span> <span class="toc-text">(十六)小心永久链接</span></a>
+                    </div>
+                </span>
+            </div>
+        </div>
+        
     </div>
 </aside>
 
@@ -452,6 +471,34 @@
   
 
 
+
+<!-- 目录内容 -->
+        
+            <p class="show-toc-btn" id="show-toc-btn" onclick="showToc();" style="display:none">
+            <span class="btn-bg"></span>
+            <span class="btn-text">文章导航</span>
+            </p>
+            <div id="toc-article" class="toc-article">
+                <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
+                <strong class="toc-title">文章目录</strong>
+                <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#MySQL优化三大方向"><span class="toc-number">1.</span> <span class="toc-text">MySQL优化三大方向</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MySQL参数优化"><span class="toc-number">2.</span> <span class="toc-text">MySQL参数优化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对MySQL语句性能优化的16条经验"><span class="toc-number">3.</span> <span class="toc-text">对MySQL语句性能优化的16条经验</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一-使用查询缓存优化查询"><span class="toc-number"></span> <span class="toc-text">(一) 使用查询缓存优化查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二-使用EXPLAIN关键字检测查询"><span class="toc-number"></span> <span class="toc-text">(二) 使用EXPLAIN关键字检测查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三-当只要一行数据时使用LIMIT-1"><span class="toc-number"></span> <span class="toc-text">(三)当只要一行数据时使用LIMIT 1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#四-为搜索字段建立索引"><span class="toc-number"></span> <span class="toc-text">(四)为搜索字段建立索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#五-在join表的时候使用相当类型的列，并将其索引"><span class="toc-number"></span> <span class="toc-text">(五)在join表的时候使用相当类型的列，并将其索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#六-切记不要使用ORDER-BY-RAND"><span class="toc-number"></span> <span class="toc-text">(六)切记不要使用ORDER BY RAND()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#七-避免使用SELECT"><span class="toc-number"></span> <span class="toc-text">(七)避免使用SELECT *</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#八-永远为每张表设置一个ID主键"><span class="toc-number"></span> <span class="toc-text">(八)永远为每张表设置一个ID主键</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#九-使用ENUM而不是VARCHAR"><span class="toc-number"></span> <span class="toc-text">(九)使用ENUM而不是VARCHAR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#十-尽可能的不要赋值为NULL"><span class="toc-number"></span> <span class="toc-text">(十)尽可能的不要赋值为NULL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#十一-固定长度的表会更快"><span class="toc-number"></span> <span class="toc-text">(十一) 固定长度的表会更快</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#十二-垂直分割"><span class="toc-number"></span> <span class="toc-text">(十二)垂直分割</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#十三-拆分大的DELETE或INSERT"><span class="toc-number"></span> <span class="toc-text">(十三)拆分大的DELETE或INSERT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#十四-越小的列会越快"><span class="toc-number"></span> <span class="toc-text">(十四)越小的列会越快</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#十五-选择正确的存储引擎"><span class="toc-number"></span> <span class="toc-text">(十五)选择正确的存储引擎</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#十六-小心永久链接"><span class="toc-number"></span> <span class="toc-text">(十六)小心永久链接</span></a>
+           </div>
+           <script type="text/javascript">
+            function showToc(){
+                var toc_article = document.getElementById("toc-article");
+                var show_toc_btn = document.getElementById("show-toc-btn");
+                toc_article.setAttribute("style","display:block");
+                show_toc_btn.setAttribute("style","display:none");
+                };
+            function showBtn(){
+                var toc_article = document.getElementById("toc-article");
+                var show_toc_btn = document.getElementById("show-toc-btn");
+                toc_article.setAttribute("style","display:none");
+                show_toc_btn.setAttribute("style","display:block");
+                };
+           </script>
+             
+        <!-- 目录内容结束 -->
           </div>
         </div>
       </div>
@@ -461,6 +508,7 @@
     	<div class="footer-left">
     		&copy; 2018 萌木盖
     	</div>
+		<span id="busuanzi_container_site_pv">    本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
       	</div>
@@ -476,11 +524,11 @@
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
-		open_in_new: false,
+		open_in_new: true,
 		toc_hide_index: true,
 		root: "/",
 		innerArchive: true,
-		showTags: false
+		showTags: true
 	}
 </script>
 
@@ -554,10 +602,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
@@ -567,6 +611,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">python操作</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -606,11 +654,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
+                <a href="javascript:void(0)" class="js-tag color3">信号</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">信号</a>
+                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
               </li>
              
               <li class="article-tag-list-item">
