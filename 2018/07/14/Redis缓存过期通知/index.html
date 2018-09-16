@@ -9,14 +9,14 @@
   <title>Redis缓存过期通知 | 萌木盖的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="需求：redis中的缓存数据时间到了，消失的时候，需要发出通知解析： https://redis.io/topics/notifications    利用redis的 Keyspace notifications订阅和发布即可实现。 实现步骤： a)    修改redis的配置文件：  123vi /etc/redis.conf    # 不同系统可能路径不一样# 找到notify-keyspa">
-<meta name="keywords" content="redis,数据库,python操作">
+<meta name="keywords" content="数据库,redis,python操作">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis缓存过期通知">
 <meta property="og:url" content="http://yoursite.com/2018/07/14/Redis缓存过期通知/index.html">
 <meta property="og:site_name" content="萌木盖的博客">
 <meta property="og:description" content="需求：redis中的缓存数据时间到了，消失的时候，需要发出通知解析： https://redis.io/topics/notifications    利用redis的 Keyspace notifications订阅和发布即可实现。 实现步骤： a)    修改redis的配置文件：  123vi /etc/redis.conf    # 不同系统可能路径不一样# 找到notify-keyspa">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-26T16:35:48.766Z">
+<meta property="og:updated_time" content="2018-09-16T16:54:39.693Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis缓存过期通知">
 <meta name="twitter:description" content="需求：redis中的缓存数据时间到了，消失的时候，需要发出通知解析： https://redis.io/topics/notifications    利用redis的 Keyspace notifications订阅和发布即可实现。 实现步骤： a)    修改redis的配置文件：  123vi /etc/redis.conf    # 不同系统可能路径不一样# 找到notify-keyspa">
@@ -248,11 +248,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -263,6 +263,17 @@
 	</div>
 
       
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/数据库//" class="article-tag-list-link color4">数据库</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
 
       
 
@@ -505,6 +516,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">服务器</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">定时</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">爬虫</a>
               </li>
              
@@ -521,11 +544,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">redis</a>
+                <a href="javascript:void(0)" class="js-tag color4">GIT</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">MongoDB</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -557,6 +588,26 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">json</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Scrapy</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">信号</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">协程</a>
               </li>
              
@@ -565,27 +616,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Scrapy</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">信号</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">jieba</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">正则</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySql</a>
               </li>
              
               <li class="article-tag-list-item">
