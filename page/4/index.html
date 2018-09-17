@@ -170,6 +170,196 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-redis-python版" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/14/redis-python版/">redis(python版)</a>
+    </h1>
+  
+
+        
+        <a href="/2018/07/14/redis-python版/" class="archive-article-date">
+  	<time datetime="2018-07-14T04:04:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><ul>
+<li>Redis是一个开源的使用ANSI <a href="https://baike.baidu.com/item/C%E8%AF%AD%E8%A8%80" target="_blank" rel="noopener">C语言</a>编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库</li>
+<li>非关系型数据库的一种，经常用作缓存</li>
+<li>官网：redis.io，中文网：redis.cn</li>
+<li>丰富的数据类型：字符串、哈希、列表、集合、有序集合等</li>
+<li>端口：6379</li>
+<li>安装：<code>sudo apt-get install redis-server</code></li>
+</ul>
+<h3 id="连接测试"><a href="#连接测试" class="headerlink" title="连接测试"></a>连接测试</h3><ul>
+<li>检查服务是否启动：<code>ps -ef | grep redis</code></li>
+<li>连接：<code>redis-cli -h 主机 -p 端口 -a 密码</code><ul>
+<li>-h：指定主机</li>
+<li>-p：指定端口</li>
+<li>-a：指定密码</li>
+<li>–help：查看帮助</li>
+<li>示例：<code>redis-cli -h localhost -p 6379</code></li>
+</ul>
+</li>
+<li>测试：<ul>
+<li>127.0.0.1:6379&gt;ping</li>
+<li>127.0.0.1:6379&gt;PONG</li>
+</ul>
+</li>
+<li>退出：quit</li>
+<li>密码管理：默认没有密码，若设置了密码，没有密码也可以登录成功，但是什么都不能做<ul>
+<li>单次有效，通过以下命令<ul>
+<li>获取密码：config get requirepass</li>
+<li>设置密码：config set requirepass 123456</li>
+<li>密码认证：auth 123456</li>
+</ul>
+</li>
+<li>永久有效，修改配置文件<code>/etc/redis/redis.conf</code><ul>
+<li>将<code>requirepass xxxxx</code>行取消注释</li>
+<li>后面跟上你需要的密码</li>
+<li>重启服务后即可生效</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="redis命令"><a href="#redis命令" class="headerlink" title="redis命令"></a>redis命令</h3><ul>
+<li><p>常用</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">ping：测试连接情况，回复PONG表示OK</span><br><span class="line">quit：退出连接</span><br><span class="line">auth：密码认证</span><br><span class="line">select：选择库，总共有<span class="number">16</span>个，序号<span class="number">0</span>~<span class="number">15</span>，默认是第<span class="number">0</span>个</span><br><span class="line">info：查看服务器信息</span><br><span class="line">command：查看支持的命令</span><br><span class="line">flushdb：清空当前库</span><br><span class="line">flushall：清空所有库</span><br><span class="line">save：前台进行持久化存储</span><br><span class="line">bgsave：后台进行持久化存储</span><br><span class="line">exists：判断指定键是否存在</span><br><span class="line">del：删除键</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>字符串(string)</p>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span>：设置</span><br><span class="line"><span class="built_in">get</span>：获取</span><br><span class="line">getset：获取之后再设置</span><br><span class="line">mset：设置多个</span><br><span class="line">mget：获取多个</span><br><span class="line">incr：加<span class="number">1</span></span><br><span class="line">decr：减<span class="number">1</span></span><br><span class="line">incrby：加指定的值</span><br><span class="line">decrby：减指定的值</span><br><span class="line"><span class="built_in">append</span>：追加内容</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>哈希(hash)</p>
+<figure class="highlight q"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">hset：设置单个属性</span><br><span class="line">hget：获取单个属性</span><br><span class="line">hmset：设置多个属性</span><br><span class="line">hmget：获取多个属性</span><br><span class="line">hgetall：获取所有属性</span><br><span class="line"><span class="built_in">hdel</span>：删除键值对</span><br><span class="line">hexists：判断指定键的指定字段是否存在</span><br><span class="line">hkeys：获取指定键的所有属性名</span><br><span class="line">hvals：获取指定键的所有属性值</span><br><span class="line">hlen：获取指定键的属性个数</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>列表(list)</p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">lpush：从左边(头部)插入数据</span><br><span class="line">lpop：从左边(头部)删除数据</span><br><span class="line"><span class="keyword">lrange</span>：获取指定区间范围内的数据，<span class="number">0</span> <span class="number">-1</span>表示所有</span><br><span class="line"><span class="keyword">lindex</span>：根据索引获取元素</span><br><span class="line">llen：获取列表长度(元素个数)</span><br><span class="line">rpush：从右边(尾部)插入数据</span><br><span class="line">rpop：从右边(尾部)删除数据</span><br><span class="line">lrem：移除指定个数的指定元素</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>集合(set)</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sadd：添加元素</span><br><span class="line"><span class="keyword">scard：统计元素个数</span></span><br><span class="line"><span class="keyword">sdiff：求差集</span></span><br><span class="line"><span class="keyword">sinter：求交集</span></span><br><span class="line"><span class="keyword">smembers：获取指定集合的所有成员</span></span><br><span class="line"><span class="keyword">sismember：判断是否在集合中</span></span><br><span class="line"><span class="keyword">smove：移动元素</span></span><br><span class="line"><span class="keyword">spop：随机的删除一个元素</span></span><br><span class="line"><span class="keyword">srandmember：随机获取指定个数的元素</span></span><br><span class="line"><span class="keyword">srem：移除元素</span></span><br><span class="line"><span class="keyword">sunion：求并集</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>有序集合(sorted set)</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">zadd</span>：添加元素</span><br><span class="line"><span class="selector-tag">zcard</span>：统计个数</span><br><span class="line"><span class="selector-tag">zcount</span>：指定分数区间内的元素数量</span><br><span class="line"><span class="selector-tag">zrange</span>：返回指定索引范围内的元素</span><br><span class="line"><span class="selector-tag">zrangebyscore</span>：返回指定分数区间的元素</span><br><span class="line"><span class="selector-tag">zrank</span>：返回指定成员的索引值</span><br><span class="line"><span class="selector-tag">zrem</span>：移除元素</span><br><span class="line"><span class="selector-tag">zscore</span>：获取指定元素的排序指标(分数)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="使用工具远程连接redis"><a href="#使用工具远程连接redis" class="headerlink" title="使用工具远程连接redis"></a>使用工具远程连接redis</h3><ul>
+<li>修改配置文件：/etc/redis/redis.conf，bind改为0.0.0.0</li>
+<li><p>修改之后重启服务即可。</p>
+<h3 id="python操作redis"><a href="#python操作redis" class="headerlink" title="python操作redis"></a>python操作redis</h3></li>
+<li><p>安装扩展库：<code>pip3 install redis</code></p>
+</li>
+<li><p>简介：</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis扩展库中有两个类，Redis和StrictRedis，StrictRedis实现了官方的命令，Redis是它的子类，兼容老版本。扩展库没有实现<span class="keyword">select</span>方法，可以通过连接时指定使用的库。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>操作：</p>
+<ul>
+<li><p>简单连接</p>
+<ul>
+<li>导入redis，创建Redis对象，所有命令行下的命令在代码中都是Redis对象的方法<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建Redis对象进行连接</span></span><br><span class="line"><span class="comment"># 参数：decode_responses是否解码返回值</span></span><br><span class="line">r = redis.Redis(host=<span class="string">'localhost'</span>, port=<span class="number">6379</span>, password=<span class="string">'123456'</span>, decode_responses=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 终端下的命令在代码中都是函数</span></span><br><span class="line">r.set(<span class="string">'name'</span>, <span class="string">'xiaoming'</span>)</span><br><span class="line"></span><br><span class="line">print(r.get(<span class="string">'name'</span>))</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>连接池</p>
+<ul>
+<li>多个redis对象使用同一个连接池进行连接，避免了多次连接、断开等操作的系统开销</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建连接池，减少了多次的连接、断开的开销</span></span><br><span class="line">pool = redis.ConnectionPool(password=<span class="string">'123456'</span>, decode_responses=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建Redis对象</span></span><br><span class="line">r = redis.Redis(connection_pool=pool)</span><br><span class="line"></span><br><span class="line">print(r.get(<span class="string">'name'</span>))</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用管道(pipeline)<ul>
+<li>可以记录多个操作，然后一次将操作发送至数据库，避免了多次向服务器发送少量的数据</li>
+<li>多个操作可以依次进行保存，然后发送，也可以进行连贯操作</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建连接池，减少了多次的连接、断开的开销</span></span><br><span class="line">pool = redis.ConnectionPool(password=<span class="string">'123456'</span>, decode_responses=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建Redis对象</span></span><br><span class="line">r = redis.Redis(connection_pool=pool)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建管道</span></span><br><span class="line">pipe = r.pipeline()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 保存记录操作</span></span><br><span class="line"><span class="comment">#pipe.set('name', 'dahua')</span></span><br><span class="line"><span class="comment">#pipe.set('age', 20)</span></span><br><span class="line"><span class="comment"># 执行操作(发送到服务器)，一次可以执行多个操作，可以避免多次的想服武器发送数据</span></span><br><span class="line"><span class="comment">#pipe.execute()</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 也可以进行连贯操作</span></span><br><span class="line">pipe.set(<span class="string">'name'</span>, <span class="string">'haha'</span>).set(<span class="string">'age'</span>, <span class="number">10</span>).execute()</span><br><span class="line"></span><br><span class="line">print(r.get(<span class="string">'name'</span>))</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">python操作</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/数据库//" class="article-tag-list-link color4">数据库</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/07/14/redis-python版/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+
+<!-- 目录内容 -->
+             
+        <!-- 目录内容结束 -->
+  
     <article id="post-BeautifulSoup4（BS4）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -699,15 +889,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">服务器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">定时</a>
+                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -723,7 +905,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
+                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">服务器</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">定时</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -767,11 +957,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">json</a>
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+                <a href="javascript:void(0)" class="js-tag color5">json</a>
               </li>
              
               <li class="article-tag-list-item">
