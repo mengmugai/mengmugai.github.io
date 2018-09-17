@@ -208,7 +208,7 @@
 <p>其中r.text(), 可以在括号中指定解码方式，编码方式，例如</p>
 <figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">await resp.text(<span class="attribute">encoding</span>=<span class="string">'windows-1251'</span>)</span><br></pre></td></tr></table></figure>
 <p>或者也可以选择不编码，适合读取图像等，是无法编码的</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">await</span> resp.read()</span><br></pre></td></tr></table></figure>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">await resp.<span class="built_in">read</span>()</span><br></pre></td></tr></table></figure>
 <h3 id="2-发起一个session请求"><a href="#2-发起一个session请求" class="headerlink" title="2.发起一个session请求"></a>2.发起一个session请求</h3><p>首先是导入aiohttp模块：</p>
 <figure class="highlight elm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> aiohttp</span><br></pre></td></tr></table></figure>
 <p>然后我们试着获取一个web源码，这里以GitHub的公共Time-line页面为例:</p>
@@ -247,9 +247,9 @@
 <p> 或者传递一个函数进去：</p>
 <figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="name">await</span> resp.json( <span class="name">lambda</span>(<span class="name">x</span><span class="symbol">:x</span>.replace('a','b')) ))</span><br></pre></td></tr></table></figure>
 <h3 id="6-以字节流的方式读取响应内容"><a href="#6-以字节流的方式读取响应内容" class="headerlink" title="6.以字节流的方式读取响应内容"></a>6.以字节流的方式读取响应内容</h3><p>虽然json(),text(),read()很方便的能把响应的数据读入到内存，但是我们仍然应该谨慎的使用它们，因为它们是把整个的响应体全部读入了内存。即使你只是想下载几个字节大小的文件，但这些方法却将在内存中加载所有的数据。所以我们可以通过控制字节数来控制读入内存的响应内容：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">with</span> session.get(<span class="string">'https://api.github.com/events'</span>) <span class="keyword">as</span> resp:</span><br><span class="line">    <span class="keyword">await</span> resp.content.read(<span class="number">10</span>) <span class="comment">#读取前10个字节</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> with session.<span class="keyword">get</span>(<span class="string">'https://api.github.com/events'</span>) <span class="keyword">as</span> resp:</span><br><span class="line">    <span class="keyword">await</span> resp.content.read(<span class="number">10</span>) <span class="meta">#读取前10个字节</span></span><br></pre></td></tr></table></figure>
 <p>一般地，我们应该使用以下的模式来把读取的字节流保存到文件中：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> open(filename, <span class="string">'wb'</span>) <span class="keyword">as</span> fd:</span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        chunk = <span class="keyword">await</span> resp.content.read(chunk_size)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> chunk:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        fd.write(chunk)</span><br></pre></td></tr></table></figure>
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> open(filename, <span class="string">'wb'</span>) <span class="keyword">as</span> fd:</span><br><span class="line">    <span class="keyword">while</span> True:</span><br><span class="line">        chunk = await resp.content.<span class="keyword">read</span>(chunk_size)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> chunk:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        fd.<span class="keyword">write</span>(chunk)</span><br></pre></td></tr></table></figure>
 <p>7.自定义请求头</p>
 <p>如果你想添加请求头，可以像get添加参数那样以dict的形式，作为get或者post的参数进行请求：</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="title">url</span> = 'https://api.github.com/some/endpoint'</span><br><span class="line"><span class="title">payload</span> = &#123;'some': '<span class="class"><span class="keyword">data</span>'&#125;</span></span><br><span class="line"><span class="title">headers</span> = &#123;'content-<span class="class"><span class="keyword">type</span>': 'application/json'&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="title">await</span> session.post(url,</span><br><span class="line">                   <span class="class"><span class="keyword">data</span>=json.dumps(<span class="title">payload</span>),</span></span><br><span class="line">                   headers=headers)</span><br></pre></td></tr></table></figure>
@@ -260,7 +260,7 @@
 <h3 id="9-post数据的几种方式"><a href="#9-post数据的几种方式" class="headerlink" title="9.post数据的几种方式"></a>9.post数据的几种方式</h3><ul>
 <li>（1）模拟表单post数据</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">payload = &#123;<span class="string">'key1'</span>: <span class="string">'value1'</span>, <span class="string">'key2'</span>: <span class="string">'value2'</span>&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="keyword">with</span> session.post(<span class="string">'http://httpbin.org/post'</span>,</span><br><span class="line">                        data=payload) <span class="keyword">as</span> resp:</span><br><span class="line">    print(<span class="keyword">await</span> resp.text())</span><br></pre></td></tr></table></figure>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">payload = &#123;<span class="string">'key1'</span>: <span class="string">'value1'</span>, <span class="string">'key2'</span>: <span class="string">'value2'</span>&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="keyword">with</span> session.post(<span class="string">'http://httpbin.org/post'</span>,</span><br><span class="line">                        data=payload) <span class="keyword">as</span> resp:</span><br><span class="line">    <span class="built_in">print</span>(<span class="keyword">await</span> resp.text())</span><br></pre></td></tr></table></figure>
 <p>注意：data=dict的方式post的数据将被转码，和form提交数据是一样的作用，如果你不想被转码，可以直接以字符串的形式 data=str 提交，这样就不会被转码。</p>
 <ul>
 <li>（2）post json</li>
@@ -618,10 +618,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">爬虫</a>
               </li>
              
@@ -631,6 +627,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">数据提取</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -694,6 +694,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Flask</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">web后端</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">MySql</a>
               </li>
              
@@ -702,11 +710,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
+                <a href="javascript:void(0)" class="js-tag color3">信号</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">信号</a>
+                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -248,6 +248,247 @@
              
         <!-- 目录内容结束 -->
   
+    <article id="post-00-Flask-基本入门" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/18/00-Flask-基本入门/">00-Flask-基本入门</a>
+    </h1>
+  
+
+        
+        <a href="/2018/09/18/00-Flask-基本入门/" class="archive-article-date">
+  	<time datetime="2018-09-17T16:01:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Flask-基本入门"><a href="#Flask-基本入门" class="headerlink" title="Flask-基本入门"></a>Flask-基本入门</h1><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><ul>
+<li>flask被称为微型框架，只提供了一个强健的核心，其他功能全部通过扩展库来实现；也就是说可以根据项目需要量身打造。他适合入门学习以及高手研究。</li>
+<li>组成：WSGI、模板引擎(Jinja2)</li>
+</ul>
+<h3 id="WEB工作原理"><a href="#WEB工作原理" class="headerlink" title="WEB工作原理"></a>WEB工作原理</h3><ul>
+<li>B/S和C/S架构</li>
+<li>B/S架构工作原理<ul>
+<li>客户端(浏览器) &lt;=&gt; WEB服务器(nginx) &lt;=&gt; WSGI(uWSGI) &lt;=&gt; Python(flask) &lt;=&gt; 数据库(MySQL)</li>
+<li>说明：flask框架自带了一个测试服务器，没有考虑性能部署。</li>
+</ul>
+</li>
+</ul>
+<h3 id="配置虚拟环境"><a href="#配置虚拟环境" class="headerlink" title="配置虚拟环境"></a>配置虚拟环境</h3><ul>
+<li><p>安装virtualenv：<code>pip3 install virtualenv</code></p>
+<ul>
+<li>创建虚拟环境：<code>virtualenv venv</code></li>
+<li>启动虚拟环境：<code>source venv/bin/activate</code></li>
+<li>退出虚拟环境：<code>deactivate</code></li>
+</ul>
+</li>
+<li><p>安装virtualenvwrapper：</p>
+<ul>
+<li><p>安装pip：<code>sudo apt-get install python-pip</code></p>
+</li>
+<li><p>安装virtualenvwrapper：<code>pip install virtualenvwrapper</code></p>
+</li>
+<li><p>配置：</p>
+<ul>
+<li>常见专门用于存放虚拟环境的目录：<code>~/.virtualenvs</code></li>
+<li>在文件<code>~/.bashrc</code>末尾添加如下内容：</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">export WORKON_HOME=$HOME/.virtualenvs</span><br><span class="line">source $HOME/.local/bin/virtualenvwrapper.sh</span><br><span class="line">alias mkvirtualenv='mkvirtualenv -p /usr/bin/python'</span><br><span class="line">alias mkvirtualenv3='mkvirtualenv -p /usr/bin/python3'</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>重新加载：source ~/.bashrc</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>查看虚拟环境</p>
+<ul>
+<li>lsvirtualenv 或 workon</li>
+</ul>
+</li>
+<li><p>创建虚拟环境</p>
+<ul>
+<li>python2：<code>mkvirtualenv 虚拟环境名</code></li>
+<li>python3：<code>mkvirtualenv3 虚拟环境名</code></li>
+</ul>
+</li>
+<li><p>使用虚拟环境：</p>
+<ul>
+<li><code>workon 虚拟环境名</code></li>
+</ul>
+</li>
+<li><p>退出虚拟环境</p>
+<ul>
+<li><code>deactivate</code></li>
+</ul>
+</li>
+<li><p>删除虚拟环境</p>
+<ul>
+<li><code>rmvirtualenv 虚拟环境名</code></li>
+</ul>
+</li>
+<li><p>安装flask</p>
+<ul>
+<li>创建虚拟环境：<code>mkvirtualenv3 flask</code></li>
+<li>安装flask：<code>pip install flask</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="使用测试"><a href="#使用测试" class="headerlink" title="使用测试"></a>使用测试</h3><ul>
+<li>代码：祥见《manage.py》本文最下方</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route('/')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">()</span>:</span></span><br><span class="line">	<span class="keyword">return</span> <span class="string">'&lt;h1&gt;Hello world!&lt;/h1&gt;'</span></span><br><span class="line">	</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">	app.run()</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>启动：<code>python manage.py runserver</code></p>
+</li>
+<li><p>测试：浏览器输入<code>127.0.0.1:5000</code></p>
+</li>
+<li><p>启动参数</p>
+<p>| 参数       | 说明                             |<br>| ——– | —————————— |<br>| debug    | 是否开启调试模式，默认为False，开启后代码修改会自动加载 |<br>| threaded | 是否开启多线程                        |<br>| port     | 指定端口                           |<br>|          | 指定主机，设置为’0.0.0.0’可以通过IP进行访问    |</p>
+<blockquote>
+<p>app.run(debug=True, threaded=True, port=5050, host=’0.0.0.0’)</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="请求与响应"><a href="#请求与响应" class="headerlink" title="请求与响应"></a>请求与响应</h3><ul>
+<li><p>变量或对象</p>
+<p>| 名称          | 上下文   | 说明                     |<br>| ———– | —– | ———————- |<br>| current_app | 程序上下文 | 当前运行的应用实例              |<br>| g           | 程序上下文 | 全局对象，处理请求的临时数据         |<br>| request     | 请求上下文 | 请求对象，包含了客户端所有的HTTP请求信息 |<br>| session     | 请求上下文 | 用户会话，用于保存需要’记住’的信息     |</p>
+</li>
+<li><p>请求钩子函数</p>
+<p>| 函数                   | 说明             |<br>| ——————– | ————– |<br>| before_first_request | 第一次请求之前        |<br>| before_request       | 每次请求之前         |<br>| after_request        | 每次请求之后，前提是没有异常 |<br>| teardown_request     | 每次请求之后，无论是否有异常 |</p>
+<blockquote>
+<p>所谓的钩子函数，就是框架给用户预留的后门</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="视图函数"><a href="#视图函数" class="headerlink" title="视图函数"></a>视图函数</h3><ul>
+<li><p>无参路由</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route('/test/')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">'for test yyy'</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>带参路由</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 带参路由，参数写在尖括号中</span></span><br><span class="line"><span class="meta">@app.route('/welcome/&lt;name&gt;')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">welcome</span><span class="params">(name)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">'Hello %s!'</span> % name</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 限制参数类型</span></span><br><span class="line"><span class="meta">@app.route('/user/&lt;int:uid&gt;')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">user</span><span class="params">(uid)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">'%d 号，你好'</span> % uid</span><br><span class="line"></span><br><span class="line"><span class="comment"># path类型参数</span></span><br><span class="line"><span class="meta">@app.route('/path/&lt;path:p&gt;')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">path</span><span class="params">(p)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> p</span><br><span class="line"></span><br><span class="line"><span class="comment"># 多个参数处理</span></span><br><span class="line"><span class="meta">@app.route('/username/&lt;name&gt;/uid/&lt;uid&gt;')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">userinfo</span><span class="params">(name, uid)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> name + uid</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>说明</p>
+<ul>
+<li>路由最后的’/‘加上后，在测试时(浏览器中)加不加都可以</li>
+<li>若需要参数，参数需要写在&lt;&gt;中，对应视图函数的参数要与路由参数一致</li>
+<li>若需要指定参数类型，如：int/float/path等，应该写在参数名之前，使用’:’与参数名分割</li>
+<li>若不指定参数类，默认为string，path其实也是字符串，只不过’/‘不再是分隔符</li>
+</ul>
+</li>
+</ul>
+<h3 id="请求-request"><a href="#请求-request" class="headerlink" title="请求(request)"></a>请求(request)</h3><ul>
+<li>客户端的所有的请求信息都放在了request对象中</li>
+<li>常用：url、method、args、headers等</li>
+</ul>
+<h3 id="响应-resposne"><a href="#响应-resposne" class="headerlink" title="响应(resposne)"></a>响应(resposne)</h3><ul>
+<li>直接返回一个字符串即可，默认状态码为200，表示成功</li>
+<li>返回一个元组，即在字符串后直接指定状态码</li>
+<li>也可以先创建一个响应对象，然后返回该响应对象</li>
+</ul>
+<h3 id="重定向-redirect"><a href="#重定向-redirect" class="headerlink" title="重定向(redirect)"></a>重定向(redirect)</h3><ul>
+<li>说明：当网站的URL更换时，有需要对老的地址进行支持</li>
+<li>redirect：重定向函数</li>
+<li>url_for：根据视图函数名构造路由地址，参数是视图函数名</li>
+</ul>
+<h3 id="终止-abort"><a href="#终止-abort" class="headerlink" title="终止(abort)"></a>终止(abort)</h3><ul>
+<li>abort：向系统抛出一个异常，系统会捕获并作出统一处理</li>
+<li>@app.errorhandler：定制错误显示</li>
+</ul>
+<h3 id="扩展："><a href="#扩展：" class="headerlink" title="扩展："></a>扩展：</h3><ul>
+<li>MVC：就是为了解耦<ul>
+<li>M：model，模型，即数据模型</li>
+<li>V：view，视图，负责显示逻辑</li>
+<li>C：controller，控制器，负责业务逻辑处理</li>
+</ul>
+</li>
+<li>MTV：功能同MVC<ul>
+<li>M：model，模型，即数据模型</li>
+<li>T：template：模板，负责显示逻辑</li>
+<li>V：view function，视图函数，负责处理业务逻辑</li>
+</ul>
+</li>
+</ul>
+<h2 id="详细代码"><a href="#详细代码" class="headerlink" title="详细代码"></a>详细代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># manage.py</span></span><br><span class="line"><span class="comment"># 导入类库</span></span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> request</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> make_response</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> redirect</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> url_for</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> abort</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建对象</span></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置路由</span></span><br><span class="line"><span class="meta">@app.route('/')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">'Hello world'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 无参路由</span></span><br><span class="line"><span class="meta">@app.route('/test/')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">'for test yyy'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 带参路由，参数写在尖括号中</span></span><br><span class="line"><span class="meta">@app.route('/welcome/&lt;name&gt;')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">welcome</span><span class="params">(name)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">'Hello %s!'</span> % name</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 限制参数类型</span></span><br><span class="line"><span class="meta">@app.route('/user/&lt;int:uid&gt;')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">user</span><span class="params">(uid)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">'%d 号，你好'</span> % uid</span><br><span class="line"></span><br><span class="line"><span class="comment"># path类型参数</span></span><br><span class="line"><span class="meta">@app.route('/path/&lt;path:p&gt;')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">path</span><span class="params">(p)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> p</span><br><span class="line"></span><br><span class="line"><span class="comment"># 多个参数处理</span></span><br><span class="line"><span class="meta">@app.route('/username/&lt;name&gt;/uid/&lt;uid&gt;')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">userinfo</span><span class="params">(name, uid)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> name + uid</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.before_first_request</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">first</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'first'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route('/request/')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">req</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># 完整的请求地址URL</span></span><br><span class="line">    <span class="comment"># return request.url</span></span><br><span class="line">    <span class="comment"># 不包含get参数的请求地址</span></span><br><span class="line">    <span class="comment"># return request.base_url</span></span><br><span class="line">    <span class="comment"># 只有主机和端口</span></span><br><span class="line">    <span class="comment"># return request.host_url</span></span><br><span class="line">    <span class="comment"># 只有装饰器中的路由地址</span></span><br><span class="line">    <span class="comment"># return request.path</span></span><br><span class="line">    <span class="comment"># 请求方式</span></span><br><span class="line">    <span class="comment"># return request.method</span></span><br><span class="line">    <span class="comment"># 远程客户端地址</span></span><br><span class="line">    <span class="comment"># return request.remote_addr</span></span><br><span class="line">    <span class="comment"># 获取get参数，有同名获取第一个</span></span><br><span class="line">    <span class="comment"># return request.args['name']</span></span><br><span class="line">    <span class="comment"># return request.args.get('password')</span></span><br><span class="line">    <span class="comment"># 获取一个键对应的所有值的列表</span></span><br><span class="line">    <span class="comment"># print(request.args.getlist('name'))</span></span><br><span class="line">    <span class="comment"># 获取请求头信息</span></span><br><span class="line">    <span class="keyword">return</span> request.headers[<span class="string">'User-Agent'</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 响应</span></span><br><span class="line"><span class="meta">@app.route('/response/')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">response</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># 响应，返回一个字符串即可，默认状码为200，表示ok</span></span><br><span class="line">    <span class="comment"># return 'OK'</span></span><br><span class="line">    <span class="comment"># 返回时可以直接指定状态码</span></span><br><span class="line">    <span class="comment"># return 'page not found', 404</span></span><br><span class="line">    <span class="comment"># 先用专门的函数构造一个响应对象，然后返回，可以指定状态码</span></span><br><span class="line">    resp = make_response(<span class="string">'这是通过函数构造的响应'</span>, <span class="number">404</span>)</span><br><span class="line">    <span class="keyword">return</span> resp</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route('/old/')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">old</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># return '旧内容'</span></span><br><span class="line">    <span class="comment"># return redirect('/new/')</span></span><br><span class="line">    <span class="comment"># 根据视图函数名反向的构造出路由地址</span></span><br><span class="line">    <span class="comment"># return url_for('new')</span></span><br><span class="line">    <span class="comment"># 可以构造带参的路由</span></span><br><span class="line">    <span class="comment"># return url_for('welcome', name='xiaoming', uid=250)</span></span><br><span class="line">    <span class="keyword">return</span> redirect(url_for(<span class="string">'new'</span>))</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route('/new/')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">new</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">'新内容'</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route('/abort/')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">err</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># 抛出异常给系统，参数是状态码</span></span><br><span class="line">    abort(<span class="number">404</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'abort测试'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定制404错误</span></span><br><span class="line"><span class="meta">@app.errorhandler(404)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">page_not_found</span><span class="params">(e)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">'大哥，是不是搞错了'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="comment"># 启动</span></span><br><span class="line">    app.run(debug=<span class="keyword">True</span>, threaded=<span class="keyword">True</span>, port=<span class="number">5050</span>)</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Flask</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">web后端</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Flask//" class="article-tag-list-link color1">Flask</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/09/18/00-Flask-基本入门/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+
+<!-- 目录内容 -->
+             
+        <!-- 目录内容结束 -->
+  
     <article id="post-MongoDB" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1906,142 +2147,9 @@
              
         <!-- 目录内容结束 -->
   
-    <article id="post-python的retrying模块" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/24/python的retrying模块/">python的retrying模块</a>
-    </h1>
-  
-
-        
-        <a href="/2018/08/24/python的retrying模块/" class="archive-article-date">
-  	<time datetime="2018-08-23T16:19:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-24</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>有点类似retry模块，功能都很相似</p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install retrying</span><br></pre></td></tr></table></figure>
-<h2 id="API-介绍"><a href="#API-介绍" class="headerlink" title="API 介绍"></a>API 介绍</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">def __init__(self,</span><br><span class="line">                 <span class="attribute">stop</span>=None, <span class="attribute">wait</span>=None,</span><br><span class="line">                 <span class="attribute">stop_max_attempt_number</span>=None,</span><br><span class="line">                 <span class="attribute">stop_max_delay</span>=None,</span><br><span class="line">                 <span class="attribute">wait_fixed</span>=None,</span><br><span class="line">                 <span class="attribute">wait_random_min</span>=None, <span class="attribute">wait_random_max</span>=None,</span><br><span class="line">                 <span class="attribute">wait_incrementing_start</span>=None, <span class="attribute">wait_incrementing_increment</span>=None,</span><br><span class="line">                 <span class="attribute">wait_exponential_multiplier</span>=None, <span class="attribute">wait_exponential_max</span>=None,</span><br><span class="line">                 <span class="attribute">retry_on_exception</span>=None,</span><br><span class="line">                 <span class="attribute">retry_on_result</span>=None,</span><br><span class="line">                 <span class="attribute">wrap_exception</span>=<span class="literal">False</span>,</span><br><span class="line">                 <span class="attribute">stop_func</span>=None,</span><br><span class="line">                 <span class="attribute">wait_func</span>=None,</span><br><span class="line">                 <span class="attribute">wait_jitter_max</span>=None)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>stop_max_attempt_number：用来设定最大的尝试次数，超过该次数就停止重试</li>
-<li>stop_max_delay：比如设置成10000，那么从被装饰的函数开始执行的时间点开始，到函数成功运行结束或者失败报错中止的时间点，只要这段时间超过10秒，函数就不会再执行了</li>
-<li>wait_fixed：设置在两次retrying之间的停留时间</li>
-<li>wait_random_min和wait_random_max：用随机的方式产生两次retrying之间的停留时间</li>
-<li>wait_exponential_multiplier和wait_exponential_max：以指数的形式产生两次retrying之间的停留时间，产生的值为2^previous_attempt_number * wait_exponential_multiplier，previous_attempt_number是前面已经retry的次数，如果产生的这个值超过了wait_exponential_max的大小，那么之后两个retrying之间的停留值都为wait_exponential_max</li>
-<li>我们可以指定要在出现哪些异常的时候再去retry，这个要用retry_on_exception传入一个函数对象<h2 id="列子："><a href="#列子：" class="headerlink" title="列子："></a>列子：</h2></li>
-<li>@retry装饰器，如出现异常会一直重试</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@retry</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">never_give_up_never_surrender</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"Retry forever ignoring Exceptions, don't wait between retries"</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>stop_max_attempt_number 设置最大重试次数</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@retry(stop_max_attempt_number=7)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">stop_after_7_attempts</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"Stopping after 7 attempts"</span></span><br><span class="line">    <span class="keyword">raise</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>stop_max_delay 设置失败重试的最大时间, 单位毫秒，超出时间，则停止重试</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@retry(stop_max_delay=10000)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">stop_after_10_s</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"Stopping after 10 seconds"</span></span><br><span class="line">    <span class="keyword">raise</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>wait_fixed 设置失败重试的间隔时间</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@retry(wait_fixed=2000, stop_max_delay=10000)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">wait_2_s</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"Wait 2 second between retries"</span></span><br><span class="line">    <span class="keyword">raise</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>wait_random_min, wait_random_max 设置失败重试随机性间隔时间</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@retry(wait_random_min=1000, wait_random_max=5000, stop_max_delay=10000)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">wait_random_1_to_5_s</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"Randomly wait 1 to 5 seconds between retries"</span></span><br><span class="line">    <span class="keyword">raise</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>wait_exponential_multiplier-间隔时间倍数增加，wait_exponential_max-最大间隔时间</p>
-</li>
-</ul>
-<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import <span class="built_in">time</span></span><br><span class="line"></span><br><span class="line">@retry(wait_exponential_multiplier=<span class="number">1000</span>, wait_exponential_max=<span class="number">10000</span>)</span><br><span class="line">def wait_exponential_1000():</span><br><span class="line">    print <span class="string">"Wait 2^x * 1000 milliseconds between each retry, up to 10 seconds, then 10 seconds afterwards"</span></span><br><span class="line">    print int(<span class="built_in">time</span>.<span class="built_in">time</span>())</span><br><span class="line">    raise</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">Wait <span class="number">2</span>^x * <span class="number">1000</span> <span class="built_in">milliseconds</span> between <span class="keyword">each</span> retry, up <span class="built_in">to</span> <span class="number">10</span> <span class="built_in">seconds</span>, <span class="keyword">then</span> <span class="number">10</span> <span class="built_in">seconds</span> afterwards</span><br><span class="line"><span class="number">1504110314</span></span><br><span class="line">Wait <span class="number">2</span>^x * <span class="number">1000</span> <span class="built_in">milliseconds</span> between <span class="keyword">each</span> retry, up <span class="built_in">to</span> <span class="number">10</span> <span class="built_in">seconds</span>, <span class="keyword">then</span> <span class="number">10</span> <span class="built_in">seconds</span> afterwards</span><br><span class="line"><span class="number">1504110316</span></span><br><span class="line">Wait <span class="number">2</span>^x * <span class="number">1000</span> <span class="built_in">milliseconds</span> between <span class="keyword">each</span> retry, up <span class="built_in">to</span> <span class="number">10</span> <span class="built_in">seconds</span>, <span class="keyword">then</span> <span class="number">10</span> <span class="built_in">seconds</span> afterwards</span><br><span class="line"><span class="number">1504110320</span></span><br><span class="line">Wait <span class="number">2</span>^x * <span class="number">1000</span> <span class="built_in">milliseconds</span> between <span class="keyword">each</span> retry, up <span class="built_in">to</span> <span class="number">10</span> <span class="built_in">seconds</span>, <span class="keyword">then</span> <span class="number">10</span> <span class="built_in">seconds</span> afterwards</span><br><span class="line"><span class="number">1504110328</span></span><br><span class="line">Wait <span class="number">2</span>^x * <span class="number">1000</span> <span class="built_in">milliseconds</span> between <span class="keyword">each</span> retry, up <span class="built_in">to</span> <span class="number">10</span> <span class="built_in">seconds</span>, <span class="keyword">then</span> <span class="number">10</span> <span class="built_in">seconds</span> afterwards</span><br><span class="line"><span class="number">1504110338</span></span><br><span class="line">Wait <span class="number">2</span>^x * <span class="number">1000</span> <span class="built_in">milliseconds</span> between <span class="keyword">each</span> retry, up <span class="built_in">to</span> <span class="number">10</span> <span class="built_in">seconds</span>, <span class="keyword">then</span> <span class="number">10</span> <span class="built_in">seconds</span> afterwards</span><br><span class="line"><span class="number">1504110348</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>retry_on_exception指定异常类型，指定的异常类型会重试，不指定的类型，会直接异常退出，wrap_exception参数设置为True，则其他类型异常，或包裹在RetryError中，会看到RetryError和程序抛的Exception error</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">retry_if_io_error</span><span class="params">(exception)</span>:</span></span><br><span class="line">    <span class="string">"""Return True if we should retry (in this case when it's an IOError), False otherwise"""</span></span><br><span class="line">    <span class="keyword">return</span> isinstance(exception, IOError)</span><br><span class="line"></span><br><span class="line"><span class="meta">@retry(retry_on_exception=retry_if_io_error)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">might_io_error</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"Retry forever with no wait if an IOError occurs, raise any other errors"</span></span><br><span class="line">    <span class="keyword">raise</span> Exception(<span class="string">'a'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@retry(retry_on_exception=retry_if_io_error, wrap_exception=True)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">only_raise_retry_error_when_not_io_error</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"Retry forever with no wait if an IOError occurs, raise any other errors wrapped in RetryError"</span></span><br><span class="line">    <span class="keyword">raise</span> Exception(<span class="string">'a'</span>)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>retry_on_result, 指定要在得到哪些结果的时候去retry，retry_on_result传入一个函数对象,在执行get_result成功后，会将函数的返回值通过形参result的形式传入retry_if_result_none函数中，如果返回值是None那么就进行retry，否则就结束并返回函数值</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">retry_if_result_none</span><span class="params">(result)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> result <span class="keyword">is</span> <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@retry(retry_on_result=retry_if_result_none)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_result</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">'Retry forever ignoring Exceptions with no wait if return value is None'</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">None</span></span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">扩展包</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/python语言基础//" class="article-tag-list-link color1">python语言基础</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/08/24/python的retrying模块/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-
-<!-- 目录内容 -->
-             
-        <!-- 目录内容结束 -->
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 
@@ -2137,10 +2245,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">爬虫</a>
               </li>
              
@@ -2150,6 +2254,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">数据提取</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2213,6 +2321,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Flask</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">web后端</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">MySql</a>
               </li>
              
@@ -2221,11 +2337,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
+                <a href="javascript:void(0)" class="js-tag color3">信号</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">信号</a>
+                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
               </li>
              
               <li class="article-tag-list-item">

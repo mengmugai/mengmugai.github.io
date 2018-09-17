@@ -170,6 +170,664 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-jieba分词" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/18/jieba分词/">jieba分词</a>
+    </h1>
+  
+
+        
+        <a href="/2018/07/18/jieba分词/" class="archive-article-date">
+  	<time datetime="2018-07-18T07:36:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="jiaba分词"><a href="#jiaba分词" class="headerlink" title="jiaba分词"></a>jiaba分词</h1><p>jieba（结巴）是一个强大的分词库，完美支持中文分词</p>
+<h3 id="安装jieba"><a href="#安装jieba" class="headerlink" title="安装jieba"></a>安装jieba</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install jieba</span><br></pre></td></tr></table></figure>
+<h2 id="简单用法"><a href="#简单用法" class="headerlink" title="简单用法"></a>简单用法</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> jieba</span><br><span class="line">s = <span class="string">u'我想和女朋友一起去北京故宫博物院参观和闲逛。'</span></span><br><span class="line">cut = jieba.cut(s)</span><br><span class="line"></span><br><span class="line">print(cut)</span><br><span class="line">print(<span class="string">','</span>.join(cut))</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#对象在第二行，分词在最后一行</span></span><br><span class="line">Building<span class="built_in"> prefix </span>dict <span class="keyword">from</span> the<span class="built_in"> default </span>dictionary <span class="built_in">..</span>.</span><br><span class="line">&lt;generator object Tokenizer.cut at 0x000001FFD3E09468&gt;</span><br><span class="line">Loading model <span class="keyword">from</span> cache C:\Users\grmg\AppData\Local\Temp\jieba.cache</span><br><span class="line">Loading model cost 0.960 seconds.</span><br><span class="line">Prefix dict has been built succesfully.</span><br><span class="line">我,想,和,女朋友,一起,去,北京故宫博物院,参观,和,闲逛,。</span><br></pre></td></tr></table></figure>
+<h2 id="全模式"><a href="#全模式" class="headerlink" title="全模式"></a>全模式</h2><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">print</span> <span class="string">','</span>.<span class="keyword">join</span>(jieba.cut(s,cut_all = <span class="keyword">True</span>))</span><br></pre></td></tr></table></figure>
+<p>结果：<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">我,想,和,女朋友,朋友,一起,去,北京,北京故宫,北京故宫博物院,故宫,故宫博物院,博物,博物院,参观,和,闲逛,,</span><br></pre></td></tr></table></figure></p>
+<h2 id="搜索引擎模式"><a href="#搜索引擎模式" class="headerlink" title="搜索引擎模式"></a>搜索引擎模式</h2><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">print</span> <span class="string">','</span>.<span class="keyword">join</span>(jieba.cut_for_search(s))</span><br></pre></td></tr></table></figure>
+<p>结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">我,想,和,朋友,女朋友,一起,去,北京,故宫,博物,博物院,北京故宫博物院,参观,和,闲逛,。</span><br></pre></td></tr></table></figure></p>
+<h2 id="获取词性"><a href="#获取词性" class="headerlink" title="获取词性"></a>获取词性</h2><p>每个词都有其词性，比如名词、动词、代词等，结巴分词的结果也可以带上每个词的词性，要用到jieba.posseg，举例如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import jieba.posseg as psg</span><br><span class="line"><span class="built_in">print</span> <span class="string">'【Output】'</span></span><br><span class="line"><span class="built_in">print</span> [(x.word,x.flag) <span class="keyword">for</span> x <span class="keyword">in</span> psg.cut(s)]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出：</span></span><br><span class="line"><span class="string">''</span><span class="string">'</span></span><br><span class="line"><span class="string">[(u'</span>我<span class="string">', u'</span>r<span class="string">'), (u'</span>想<span class="string">', u'</span>v<span class="string">'), (u'</span>和<span class="string">', u'</span>c<span class="string">'), (u'</span>女朋友<span class="string">', u'</span>n<span class="string">'), (u'</span>一起<span class="string">', u'</span>m<span class="string">'), </span></span><br><span class="line"><span class="string">(u'</span>去<span class="string">', u'</span>v<span class="string">'), (u'</span>北京故宫博物院<span class="string">', u'</span>ns<span class="string">'), (u'</span>参观<span class="string">', u'</span>n<span class="string">'), (u'</span>和<span class="string">', u'</span>c<span class="string">'), (u'</span>闲逛<span class="string">', u'</span>v<span class="string">'), (u'</span>。<span class="string">', u'</span>x<span class="string">')]</span></span><br><span class="line"><span class="string">'</span><span class="string">''</span></span><br></pre></td></tr></table></figure>
+<p>可以看到成功获取到每个词的词性，这对于我们对分词结果做进一步处理很有帮助，比如只想获取分词结果列表中的名词，那么就可以这样过滤：</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">print [(x.word,x.flag) for x in psg.cut(s) if x.flag.startswith(<span class="emphasis">'n'</span>)]</span><br><span class="line"></span><br><span class="line"># 输出：</span><br><span class="line">'''</span><br><span class="line"><span class="meta">[(u'女朋友', u'n'), (u'北京故宫博物院', u'ns'), (u'参观', u'n')]</span></span><br><span class="line">'''</span><br></pre></td></tr></table></figure>
+<p>至于词性的每个字母分别表示什么词性，jieba分词的结果可能有哪些词性，就要去查阅词性对照表了，本文结尾附了一份从网上搜到的词性对照表，想了解更详细的词性分类信息，可以到网上搜索”结巴分词词性对照”。</p>
+<p>并行分词<br>在文本数据量非常大的时候，为了提高分词效率，开启并行分词就很有必要了。jieba支持并行分词，基于python自带的multiprocessing模块，但要注意的是在Windows环境下不支持。</p>
+<p>用法：</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 开启并行分词模式，参数为并发执行的进程数</span></span><br><span class="line">jieba.enable_parallel(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭并行分词模式</span></span><br><span class="line">jieba.disable_parallel()</span><br><span class="line">举例：开启并行分词模式对三体全集文本进行分词</span><br><span class="line"></span><br><span class="line">santi_text = <span class="built_in">open</span>(<span class="string">'./santi.txt'</span>).<span class="built_in">read</span>()</span><br><span class="line">print <span class="built_in">len</span>(santi_text)</span><br><span class="line"><span class="number">2681968</span></span><br></pre></td></tr></table></figure>
+<p>可以看到三体全集的数据量还是非常大的，有260多万字节的长度。</p>
+<figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jieba.enable_parallel(<span class="number">100</span>)</span><br><span class="line">santi_words = [x <span class="keyword">for</span> x <span class="built_in">in</span> jieba.<span class="built_in">cut</span>(santi_text) <span class="keyword">if</span> len(x) &gt;= <span class="number">2</span>]</span><br><span class="line">jieba.disable_parallel()</span><br></pre></td></tr></table></figure>
+<p>获取出现频率Top n的词<br>还是以上面的三体全集文本为例，假如想要获取分词结果中出现频率前20的词列表，可以这样获取：</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">from collections import Counter</span><br><span class="line">c = Counter(santi_words).most_common(<span class="number">20</span>)</span><br><span class="line">print(c)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta"># 输出：</span></span><br><span class="line">'''</span><br><span class="line">[(u'\r\n', <span class="number">2180</span>5), (u'一个', <span class="number">3057</span>), (u'没有', <span class="number">2128</span>), (u'他们', <span class="number">1690</span>), (u'我们', <span class="number">1550</span>), </span><br><span class="line">(u'这个', <span class="number">1357</span>), (u'自己', <span class="number">1347</span>), (u'程心', <span class="number">1320</span>), (u'现在', <span class="number">1273</span>), (u'已经', <span class="number">1259</span>), </span><br><span class="line">(u'世界', <span class="number">1243</span>), (u'罗辑', <span class="number">1189</span>), (u'可能', <span class="number">1177</span>), (u'什么', <span class="number">1176</span>), (u'看到', <span class="number">1114</span>), </span><br><span class="line">(u'知道', <span class="number">1094</span>), (u'地球', 951), (u'人类', 935), (u'太空', 930), (u'三体', 883)]</span><br><span class="line">'''</span><br></pre></td></tr></table></figure>
+<p>可以看到结果中’\r\n’居然是出现频率最高的词，还有’一个’、’没有’、’这个’等这种我们并不想要的无实际意义的词，那么就可以根据前面说的词性来进行过滤，这个以后细讲。</p>
+<p>使用用户字典提高分词准确性<br>不使用用户字典的分词结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">txt = <span class="string">u'欧阳建国是创新办主任也是欢聚时代公司云计算方面的专家'</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">','</span>.join(jieba.cut(txt))</span><br><span class="line">欧阳,建国,是,创新,办,主任,也,是,欢聚,时代,公司,云,计算,方面,的,专家</span><br><span class="line">使用用户字典的分词结果：</span><br><span class="line"></span><br><span class="line">jieba.load_userdict(<span class="string">'user_dict.txt'</span>)</span><br><span class="line"><span class="keyword">print</span> <span class="string">','</span>.join(jieba.cut(txt))</span><br><span class="line">欧阳建国,是,创新办,主任,也,是,欢聚时代,公司,云计算,方面,的,专家</span><br></pre></td></tr></table></figure>
+<p>可以看出使用用户字典后分词准确性大大提高。</p>
+<p>注：其中user_dict.txt的内容如下：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">欧阳建国 <span class="number">5</span></span><br><span class="line"></span><br><span class="line">创新办 <span class="number">5</span> i</span><br><span class="line"></span><br><span class="line">欢聚时代 <span class="number">5</span></span><br><span class="line"></span><br><span class="line">云计算 <span class="number">5</span></span><br></pre></td></tr></table></figure>
+<p>用户字典每行一个词，格式为：</p>
+<p>词语 词频 词性</p>
+<p>其中词频是一个数字，词性为自定义的词性，要注意的是词频数字和空格都要是半角的。</p>
+<p>附：结巴分词词性对照表（按词性英文首字母排序）</p>
+<h3 id="形容词-1个一类，4个二类"><a href="#形容词-1个一类，4个二类" class="headerlink" title="形容词(1个一类，4个二类)"></a>形容词(1个一类，4个二类)</h3><table>
+<thead>
+<tr>
+<th>字母</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a</td>
+<td>形容词</td>
+</tr>
+<tr>
+<td>ad</td>
+<td>副形词</td>
+</tr>
+<tr>
+<td>an</td>
+<td>名形词</td>
+</tr>
+<tr>
+<td>ag</td>
+<td>形容词性语素</td>
+</tr>
+<tr>
+<td>al</td>
+<td>形容词性惯用语</td>
+</tr>
+</tbody>
+</table>
+<h3 id="区别词-1个一类，2个二类"><a href="#区别词-1个一类，2个二类" class="headerlink" title="区别词(1个一类，2个二类)"></a>区别词(1个一类，2个二类)</h3><table>
+<thead>
+<tr>
+<th>字母</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>b</td>
+<td>区别词</td>
+</tr>
+<tr>
+<td>bl</td>
+<td>区别词性惯用语</td>
+</tr>
+</tbody>
+</table>
+<h3 id="连词-1个一类，1个二类"><a href="#连词-1个一类，1个二类" class="headerlink" title="连词(1个一类，1个二类)"></a>连词(1个一类，1个二类)</h3><table>
+<thead>
+<tr>
+<th>字母</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>c</td>
+<td>连词</td>
+</tr>
+<tr>
+<td>cc</td>
+<td>并列连词</td>
+</tr>
+</tbody>
+</table>
+<h3 id="副词-1个一类"><a href="#副词-1个一类" class="headerlink" title="副词(1个一类)"></a>副词(1个一类)</h3><table>
+<thead>
+<tr>
+<th>字母</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>d</td>
+<td>副词</td>
+</tr>
+</tbody>
+</table>
+<h3 id="叹词-1个一类"><a href="#叹词-1个一类" class="headerlink" title="叹词(1个一类)"></a>叹词(1个一类)</h3><table>
+<thead>
+<tr>
+<th>字母</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>e</td>
+<td>叹词</td>
+</tr>
+</tbody>
+</table>
+<h3 id="方位词-1个一类"><a href="#方位词-1个一类" class="headerlink" title="方位词(1个一类)"></a>方位词(1个一类)</h3><table>
+<thead>
+<tr>
+<th>字母</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>f</td>
+<td>方位词</td>
+</tr>
+</tbody>
+</table>
+<h3 id="前缀-1个一类"><a href="#前缀-1个一类" class="headerlink" title="前缀(1个一类)"></a>前缀(1个一类)</h3><table>
+<thead>
+<tr>
+<th>字母</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>h</td>
+<td>前缀</td>
+</tr>
+</tbody>
+</table>
+<h3 id="后缀-1个一类"><a href="#后缀-1个一类" class="headerlink" title="后缀(1个一类)"></a>后缀(1个一类)</h3><table>
+<thead>
+<tr>
+<th>字母</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>k</td>
+<td>后缀</td>
+</tr>
+</tbody>
+</table>
+<h3 id="数词-1个一类，1个二类"><a href="#数词-1个一类，1个二类" class="headerlink" title="数词(1个一类，1个二类)"></a>数词(1个一类，1个二类)</h3><table>
+<thead>
+<tr>
+<th>字母</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>m</td>
+<td>数词</td>
+</tr>
+<tr>
+<td>mq</td>
+<td>数量词</td>
+</tr>
+</tbody>
+</table>
+<h3 id="名词-1个一类，7个二类，5个三类"><a href="#名词-1个一类，7个二类，5个三类" class="headerlink" title="名词 (1个一类，7个二类，5个三类)"></a>名词 (1个一类，7个二类，5个三类)</h3><p>名词分为以下子类：<br>字母 | 含义<br>—|—<br>n  |  名词<br>nr   | 人名<br>nr1   | 汉语姓氏<br>nr2   | 汉语名字<br>nrj   | 日语人名<br>nrf   | 音译人名<br>ns  |  地名<br>nsf   | 音译地名<br>nt   | 机构团体名<br>nz   | 其它专名<br>nl   | 名词性惯用语<br>ng   | 名词性语素</p>
+<h3 id="拟声词-1个一类"><a href="#拟声词-1个一类" class="headerlink" title="拟声词(1个一类)"></a>拟声词(1个一类)</h3><table>
+<thead>
+<tr>
+<th>字母</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>o</td>
+<td>拟声词</td>
+</tr>
+</tbody>
+</table>
+<h3 id="介词-1个一类，2个二类"><a href="#介词-1个一类，2个二类" class="headerlink" title="介词(1个一类，2个二类)"></a>介词(1个一类，2个二类)</h3><table>
+<thead>
+<tr>
+<th>字母</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>p</td>
+<td>介词</td>
+</tr>
+<tr>
+<td>pba</td>
+<td>介词“把”</td>
+</tr>
+<tr>
+<td>pbei</td>
+<td>介词“被”</td>
+</tr>
+</tbody>
+</table>
+<h3 id="量词-1个一类，2个二类"><a href="#量词-1个一类，2个二类" class="headerlink" title="量词(1个一类，2个二类)"></a>量词(1个一类，2个二类)</h3><table>
+<thead>
+<tr>
+<th>字母</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>q</td>
+<td>量词</td>
+</tr>
+<tr>
+<td>qv</td>
+<td>动量词</td>
+</tr>
+<tr>
+<td>qt</td>
+<td>时量词</td>
+</tr>
+</tbody>
+</table>
+<h3 id="代词-1个一类，4个二类，6个三类"><a href="#代词-1个一类，4个二类，6个三类" class="headerlink" title="代词(1个一类，4个二类，6个三类)"></a>代词(1个一类，4个二类，6个三类)</h3><table>
+<thead>
+<tr>
+<th>字母</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>r</td>
+<td>代词</td>
+</tr>
+<tr>
+<td>rr</td>
+<td>人称代词</td>
+</tr>
+<tr>
+<td>rz</td>
+<td>指示代词</td>
+</tr>
+<tr>
+<td>rzt</td>
+<td>时间指示代词</td>
+</tr>
+<tr>
+<td>rzs</td>
+<td>处所指示代词</td>
+</tr>
+<tr>
+<td>rzv</td>
+<td>谓词性指示代词</td>
+</tr>
+<tr>
+<td>ry</td>
+<td>疑问代词</td>
+</tr>
+<tr>
+<td>ryt</td>
+<td>时间疑问代词</td>
+</tr>
+<tr>
+<td>rys</td>
+<td>处所疑问代词</td>
+</tr>
+<tr>
+<td>ryv</td>
+<td>谓词性疑问代词</td>
+</tr>
+<tr>
+<td>rg</td>
+<td>代词性语素</td>
+</tr>
+</tbody>
+</table>
+<h3 id="处所词-1个一类"><a href="#处所词-1个一类" class="headerlink" title="处所词(1个一类)"></a>处所词(1个一类)</h3><table>
+<thead>
+<tr>
+<th>字母</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>s</td>
+<td>处所词</td>
+</tr>
+</tbody>
+</table>
+<h3 id="时间词-1个一类，1个二类"><a href="#时间词-1个一类，1个二类" class="headerlink" title="时间词(1个一类，1个二类)"></a>时间词(1个一类，1个二类)</h3><table>
+<thead>
+<tr>
+<th>字母</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>t</td>
+<td>时间词</td>
+</tr>
+<tr>
+<td>tg</td>
+<td>时间词性语素</td>
+</tr>
+</tbody>
+</table>
+<h3 id="助词-1个一类，15个二类"><a href="#助词-1个一类，15个二类" class="headerlink" title="助词(1个一类，15个二类)"></a>助词(1个一类，15个二类)</h3><table>
+<thead>
+<tr>
+<th>字母</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>u</td>
+<td>助词</td>
+</tr>
+<tr>
+<td>uzhe</td>
+<td>着</td>
+</tr>
+<tr>
+<td>ule</td>
+<td>了 喽</td>
+</tr>
+<tr>
+<td>uguo</td>
+<td>过</td>
+</tr>
+<tr>
+<td>ude1</td>
+<td>的 底</td>
+</tr>
+<tr>
+<td>ude2</td>
+<td>地</td>
+</tr>
+<tr>
+<td>ude3</td>
+<td>得</td>
+</tr>
+<tr>
+<td>usuo</td>
+<td>所</td>
+</tr>
+<tr>
+<td>udeng</td>
+<td>等 等等 云云</td>
+</tr>
+<tr>
+<td>uyy</td>
+<td>一样 一般 似的 般</td>
+</tr>
+<tr>
+<td>udh</td>
+<td>的话</td>
+</tr>
+<tr>
+<td>uls</td>
+<td>来讲 来说 而言 说来</td>
+</tr>
+<tr>
+<td>uzhi</td>
+<td>之</td>
+</tr>
+<tr>
+<td>ulian</td>
+<td>连 （“连小学生都会”）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="动词-1个一类，9个二类"><a href="#动词-1个一类，9个二类" class="headerlink" title="动词(1个一类，9个二类)"></a>动词(1个一类，9个二类)</h3><table>
+<thead>
+<tr>
+<th>字母</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v</td>
+<td>动词</td>
+</tr>
+<tr>
+<td>vd</td>
+<td>副动词</td>
+</tr>
+<tr>
+<td>vn</td>
+<td>名动词</td>
+</tr>
+<tr>
+<td>vshi</td>
+<td>动词“是”</td>
+</tr>
+<tr>
+<td>vyou</td>
+<td>动词“有”</td>
+</tr>
+<tr>
+<td>vf</td>
+<td>趋向动词</td>
+</tr>
+<tr>
+<td>vx</td>
+<td>形式动词</td>
+</tr>
+<tr>
+<td>vi</td>
+<td>不及物动词（内动词）</td>
+</tr>
+<tr>
+<td>vl</td>
+<td>动词性惯用语</td>
+</tr>
+<tr>
+<td>vg</td>
+<td>动词性语素</td>
+</tr>
+</tbody>
+</table>
+<h3 id="标点符号-1个一类，16个二类"><a href="#标点符号-1个一类，16个二类" class="headerlink" title="标点符号(1个一类，16个二类)"></a>标点符号(1个一类，16个二类)</h3><table>
+<thead>
+<tr>
+<th>字母</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>w</td>
+<td>标点符号</td>
+</tr>
+<tr>
+<td>wkz</td>
+<td>左括号，全角：（ 〔 ［ ｛ 《 【 〖 〈 半角：( [ { &lt;</td>
+</tr>
+<tr>
+<td>wky</td>
+<td>右括号，全角：） 〕 ］ ｝ 》 】 〗 〉 半角： ) ] { &gt;</td>
+</tr>
+<tr>
+<td>wyz</td>
+<td>左引号，全角：“ ‘ 『</td>
+</tr>
+<tr>
+<td>wyy</td>
+<td>右引号，全角：” ’ 』</td>
+</tr>
+<tr>
+<td>wj</td>
+<td>句号，全角：。</td>
+</tr>
+<tr>
+<td>ww</td>
+<td>问号，全角：？ 半角：?</td>
+</tr>
+<tr>
+<td>wt</td>
+<td>叹号，全角：！ 半角：!</td>
+</tr>
+<tr>
+<td>wd</td>
+<td>逗号，全角：， 半角：,</td>
+</tr>
+<tr>
+<td>wf</td>
+<td>分号，全角：； 半角： ;</td>
+</tr>
+<tr>
+<td>wn</td>
+<td>顿号，全角：、</td>
+</tr>
+<tr>
+<td>wm</td>
+<td>冒号，全角：： 半角： :</td>
+</tr>
+<tr>
+<td>ws</td>
+<td>省略号，全角：…… …</td>
+</tr>
+<tr>
+<td>wp</td>
+<td>破折号，全角：—— －－ ——－ 半角：— —-</td>
+</tr>
+<tr>
+<td>wb</td>
+<td>百分号千分号，全角：％ ‰ 半角：%</td>
+</tr>
+<tr>
+<td>wh</td>
+<td>单位符号，全角：￥ ＄ ￡ ° ℃ 半角：$</td>
+</tr>
+</tbody>
+</table>
+<h3 id="字符串-1个一类，2个二类"><a href="#字符串-1个一类，2个二类" class="headerlink" title="字符串(1个一类，2个二类)"></a>字符串(1个一类，2个二类)</h3><table>
+<thead>
+<tr>
+<th>字母</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x</td>
+<td>字符串</td>
+</tr>
+<tr>
+<td>xx</td>
+<td>非语素字</td>
+</tr>
+<tr>
+<td>xu</td>
+<td>网址URL</td>
+</tr>
+</tbody>
+</table>
+<h3 id="语气词-1个一类"><a href="#语气词-1个一类" class="headerlink" title="语气词(1个一类)"></a>语气词(1个一类)</h3><table>
+<thead>
+<tr>
+<th>字母</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>y</td>
+<td>语气词(delete yg)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="状态词-1个一类"><a href="#状态词-1个一类" class="headerlink" title="状态词(1个一类)"></a>状态词(1个一类)</h3><table>
+<thead>
+<tr>
+<th>字母</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>z</td>
+<td>状态词</td>
+</tr>
+</tbody>
+</table>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">jieba</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/python语言基础//" class="article-tag-list-link color1">python语言基础</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/07/18/jieba分词/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+
+<!-- 目录内容 -->
+             
+        <!-- 目录内容结束 -->
+  
     <article id="post-Celery任务调度" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -207,7 +865,7 @@
 <figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">celery</span> -A tasks worker -l <span class="literal">info</span></span><br></pre></td></tr></table></figure>
 <p>worker便启动了</p>
 <p>此时在文件目录下打开新窗口进入python或者ipython都可以：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> tasks <span class="keyword">import</span> add</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>add.delay(<span class="number">2</span>,<span class="number">34</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;</span>&gt; from tasks import add</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; add.delay(<span class="number">2</span>,<span class="number">34</span>)</span><br></pre></td></tr></table></figure>
 <p>这时你在第一个窗口就能看到效果了。</p>
 <h2 id="flower监控"><a href="#flower监控" class="headerlink" title="flower监控"></a>flower监控</h2><p>这玩意是干啥的呢？</p>
 <p>就是消息队列啥的都让他在浏览器上显示</p>
@@ -823,7 +1481,7 @@
 <figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">import</span> logging</span><br><span class="line">import core</span><br><span class="line"></span><br><span class="line">logger = logging.getLogger(<span class="string">'main'</span>)</span><br><span class="line">logger.setLevel(level=logging.DEBUG)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Handler</span></span><br><span class="line">handler = logging.FileHandler(<span class="string">'result.log'</span>)</span><br><span class="line">handler.setLevel(logging.INFO)</span><br><span class="line">formatter = logging.Formatter(<span class="string">'%(asctime)s - %(name)s - %(levelname)s - %(message)s'</span>)</span><br><span class="line">handler.setFormatter(formatter)</span><br><span class="line">logger.addHandler(handler)</span><br><span class="line"></span><br><span class="line">logger.<span class="literal">info</span>(<span class="string">'Main Info'</span>)</span><br><span class="line">logger.<span class="literal">debug</span>(<span class="string">'Main Debug'</span>)</span><br><span class="line">logger.<span class="literal">error</span>(<span class="string">'Main Error'</span>)</span><br><span class="line">core.run()</span><br></pre></td></tr></table></figure>
 <p>这里我们配置了日志的输出格式和文件路径，同时定义了 <code>Logger</code> 的名称为 <code>main</code>，然后引入了另外一个模块 <code>core</code>，最后调用了 <code>core</code> 的 <code>run()</code> 方法。</p>
 <p>接下来我们定义 <code>core.py</code>，内容如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"></span><br><span class="line">logger = logging.getLogger(<span class="string">'main.core'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">()</span>:</span></span><br><span class="line">    logger.info(<span class="string">'Core Info'</span>)</span><br><span class="line">    logger.debug(<span class="string">'Core Debug'</span>)</span><br><span class="line">    logger.error(<span class="string">'Core Error'</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">import</span> logging</span><br><span class="line"></span><br><span class="line">logger = logging.getLogger(<span class="string">'main.core'</span>)</span><br><span class="line"></span><br><span class="line">def run():</span><br><span class="line">    logger.<span class="literal">info</span>(<span class="string">'Core Info'</span>)</span><br><span class="line">    logger.<span class="literal">debug</span>(<span class="string">'Core Debug'</span>)</span><br><span class="line">    logger.<span class="literal">error</span>(<span class="string">'Core Error'</span>)</span><br></pre></td></tr></table></figure>
 <p>这里我们定义了 <code>Logger</code> 的名称为 <code>main.core</code>，注意这里开头是 <code>main</code>，即刚才我们在 <code>main.py</code> 里面的 <code>Logger</code> 的名称，这样 <code>core.py</code> 里面的 <code>Logger</code> 就会复用 <code>main.py</code> 里面的<code>Logger</code> 配置，而不用再去配置一次了。</p>
 <p>运行之后会生成一个 <code>result.log</code> 文件，内容如下：</p>
 <figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">2018-06-03 16:55:56,259 - main - <span class="builtin-name">INFO</span> - Main Info</span><br><span class="line">2018-06-03 16:55:56,259 - main - <span class="builtin-name">ERROR</span> - Main Error</span><br><span class="line">2018-06-03 16:55:56,259 - main.core - <span class="builtin-name">INFO</span> - Core Info</span><br><span class="line">2018-06-03 16:55:56,259 - main.core - <span class="builtin-name">ERROR</span> - Core Error</span><br></pre></td></tr></table></figure>
@@ -836,7 +1494,7 @@
 <figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="keyword">import</span> core</span><br><span class="line"><span class="keyword">import</span> yaml</span><br><span class="line"><span class="keyword">import</span> logging.config</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def setup_logging(default_path=<span class="string">'config.yaml'</span>, default_level=logging.INFO):</span><br><span class="line">    <span class="built_in">path</span> = default_path</span><br><span class="line">    <span class="keyword">if</span> os.<span class="built_in">path</span>.exists(<span class="built_in">path</span>):</span><br><span class="line">        <span class="keyword">with</span> open(<span class="built_in">path</span>, <span class="string">'r'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> f:</span><br><span class="line">            config = yaml.load(f)</span><br><span class="line">            logging.config.dictConfig(config)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        logging.basicConfig(level=default_level)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def <span class="built_in">log</span>():</span><br><span class="line">    logging.debug(<span class="string">'Start'</span>)</span><br><span class="line">    logging.info(<span class="string">'Exec'</span>)</span><br><span class="line">    logging.info(<span class="string">'Finished'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    yaml_path = <span class="string">'config.yaml'</span></span><br><span class="line">    setup_logging(yaml_path)</span><br><span class="line">    <span class="built_in">log</span>()</span><br><span class="line">    core.run()</span><br></pre></td></tr></table></figure>
 <p>这里我们定义了一个 <code>setup_logging()</code> 方法，里面读取了 <code>yaml</code> 文件的配置，然后通过 <code>dictConfig()</code>方法将配置项传给了 <code>logging</code> 模块进行全局初始化。</p>
 <p>另外这个模块还引入了另外一个模块 <code>core</code>，所以我们定义 <code>core.py</code> 如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"></span><br><span class="line">logger = logging.getLogger(<span class="string">'main.core'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">()</span>:</span></span><br><span class="line">    logger.info(<span class="string">'Core Info'</span>)</span><br><span class="line">    logger.debug(<span class="string">'Core Debug'</span>)</span><br><span class="line">    logger.error(<span class="string">'Core Error'</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">import</span> logging</span><br><span class="line"></span><br><span class="line">logger = logging.getLogger(<span class="string">'main.core'</span>)</span><br><span class="line"></span><br><span class="line">def run():</span><br><span class="line">    logger.<span class="literal">info</span>(<span class="string">'Core Info'</span>)</span><br><span class="line">    logger.<span class="literal">debug</span>(<span class="string">'Core Debug'</span>)</span><br><span class="line">    logger.<span class="literal">error</span>(<span class="string">'Core Error'</span>)</span><br></pre></td></tr></table></figure>
 <p>这个文件的内容和上文是没有什么变化的。</p>
 <p>观察配置文件，主入口文件 <code>main.py</code> 实际上对应的是 <code>root</code> 一项配置，它指定了 <code>handlers</code> 是 <code>console</code>，即只输出到控制台。另外在 <code>loggers</code> 一项配置里面，我们定义了 <code>main.core</code> 模块，<code>handlers</code> 是 <code>console</code>、<code>file</code>、<code>error</code> 三项，即输出到控制台、输出到普通文件和回滚文件。</p>
 <p>这样运行之后，我们便可以看到所有的运行结果输出到了控制台：</p>
@@ -852,7 +1510,7 @@
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2018<span class="selector-tag">-06-03</span> 22<span class="selector-pseudo">:27</span><span class="selector-pseudo">:51</span>,220 <span class="selector-tag">-</span> <span class="selector-tag">root</span> <span class="selector-tag">-</span> <span class="selector-tag">DEBUG</span> <span class="selector-tag">-</span> <span class="selector-tag">Hello</span> <span class="selector-tag">World</span>, <span class="selector-tag">Congratulations</span>!</span><br><span class="line">2018<span class="selector-tag">-06-03</span> 22<span class="selector-pseudo">:27</span><span class="selector-pseudo">:51</span>,220 <span class="selector-tag">-</span> <span class="selector-tag">root</span> <span class="selector-tag">-</span> <span class="selector-tag">DEBUG</span> <span class="selector-tag">-</span> <span class="selector-tag">Hello</span> <span class="selector-tag">World</span>, <span class="selector-tag">Congratulations</span>!</span><br></pre></td></tr></table></figure>
 <p><img src="https://user-gold-cdn.xitu.io/2018/6/3/163c618ce73174a9?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="image"></p>
 <p>另外在进行异常处理的时候，通常我们会直接将异常进行字符串格式化，但其实可以直接指定一个参数将 <code>traceback</code> 打印出来，示例如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"></span><br><span class="line">logging.basicConfig(level=logging.DEBUG, format=<span class="string">'%(asctime)s - %(name)s - %(levelname)s - %(message)s'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    result = <span class="number">5</span> / <span class="number">0</span></span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    <span class="comment"># bad</span></span><br><span class="line">    logging.error(<span class="string">'Error: %s'</span>, e)</span><br><span class="line">    <span class="comment"># good</span></span><br><span class="line">    logging.error(<span class="string">'Error'</span>, exc_info=<span class="keyword">True</span>)</span><br><span class="line">    <span class="comment"># good</span></span><br><span class="line">    logging.exception(<span class="string">'Error'</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">import logging</span><br><span class="line"></span><br><span class="line">logging.basicConfig(level=logging.DEBUG, format=<span class="string">'%(asctime)s - %(name)s - %(levelname)s - %(message)s'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    result = <span class="number">5</span> / <span class="number">0</span></span><br><span class="line">except <span class="keyword">Exception</span> <span class="keyword">as</span> e:</span><br><span class="line">    <span class="comment"># bad</span></span><br><span class="line">    logging.error(<span class="string">'Error: %s'</span>, e)</span><br><span class="line">    <span class="comment"># good</span></span><br><span class="line">    logging.error(<span class="string">'Error'</span>, exc_info=<span class="keyword">True</span>)</span><br><span class="line">    <span class="comment"># good</span></span><br><span class="line">    logging.<span class="keyword">exception</span>(<span class="string">'Error'</span>)</span><br></pre></td></tr></table></figure>
 <p>如果我们直接使用字符串格式化的方法将错误输出的话，是不会包含 <code>Traceback</code> 信息的，但如果我们加上 <code>exc_info</code> 参数或者直接使用 <code>exception()</code> 方法打印的话，那就会输出 <code>Traceback</code> 信息了。</p>
 <p>运行结果如下：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">2018-06-03 22:24:31,927 - root - ERROR - Error: division by zero</span><br><span class="line">2018-06-03 22:24:31,927 - root - ERROR - Error</span><br><span class="line">Traceback (most recent <span class="keyword">call</span> <span class="keyword">last</span>):</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"/private/var/books/aicodes/loggingtest/demo9.py"</span>, line <span class="number">6</span>, <span class="keyword">in</span> &lt;<span class="keyword">module</span>&gt;</span><br><span class="line">    <span class="keyword">result</span> = <span class="number">5</span> / <span class="number">0</span></span><br><span class="line">ZeroDivisionError: division <span class="keyword">by</span> zero</span><br><span class="line"><span class="number">2018</span><span class="number">-06</span><span class="number">-03</span> <span class="number">22</span>:<span class="number">24</span>:<span class="number">31</span>,<span class="number">928</span> - root - <span class="keyword">ERROR</span> - <span class="keyword">Error</span></span><br><span class="line">Traceback (most recent <span class="keyword">call</span> <span class="keyword">last</span>):</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"/private/var/books/aicodes/loggingtest/demo9.py"</span>, line <span class="number">6</span>, <span class="keyword">in</span> &lt;<span class="keyword">module</span>&gt;</span><br><span class="line">    <span class="keyword">result</span> = <span class="number">5</span> / <span class="number">0</span></span><br><span class="line">ZeroDivisionError: division <span class="keyword">by</span> zero</span><br></pre></td></tr></table></figure>
@@ -1455,7 +2113,7 @@
 <p>说道这里，其实都是太多的理论性语法，BS4不同于正则和Xpath，没有什么基础语法结构，它封装的对象以及对象的属性操作，才是BS4不同凡响的核心价值<br>let’s 上干货</p>
 <h2 id="python操作BeautifulSoup4"><a href="#python操作BeautifulSoup4" class="headerlink" title="python操作BeautifulSoup4"></a>python操作BeautifulSoup4</h2><p>python中对于BeautifulSoup的支持，通过安装第三方模块来发挥它最好的操作<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> pip install beautifulsoup4</span></span><br></pre></td></tr></table></figure></p>
 <h4 id="1-入门第一弹：了解BeautifulSoup4"><a href="#1-入门第一弹：了解BeautifulSoup4" class="headerlink" title="1.入门第一弹：了解BeautifulSoup4"></a>1.入门第一弹：了解BeautifulSoup4</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"><span class="comment"># 引入解析模块BS4</span></span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 从文件中加载html网页，指定HTML解析器使用lxml</span></span><br><span class="line"><span class="comment"># 默认不指定的情况下，BS4会自动匹配当前系统中最优先的解析器</span></span><br><span class="line">soup = BeautifulSoup(open(<span class="string">"index.html"</span>), <span class="string">"lxml"</span>)</span><br><span class="line"><span class="comment"># 如果是爬虫获取到的字符数据，直接交给BS4就OK拉</span></span><br><span class="line"><span class="comment"># soup = BeatufulSoup(spider_content, "lxml")</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 打印BeautifulSoup文档对象，得到的是文档树内容</span></span><br><span class="line">print(soup)</span><br><span class="line"><span class="comment"># 打印类型：&lt;class 'bs4.BeautifulSoup'&gt;</span></span><br><span class="line">print(type(soup))</span><br></pre></td></tr></table></figure>
-<h4 id="2-入门第二弹-操作标签、属性、内容"><a href="#2-入门第二弹-操作标签、属性、内容" class="headerlink" title="2.入门第二弹:操作标签、属性、内容"></a>2.入门第二弹:操作标签、属性、内容</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 得到构建的文档对象</span></span><br><span class="line">soup = BeautifulSoup(open(<span class="string">"index.html"</span>), <span class="string">"lxml"</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Tag操作</span></span><br><span class="line"><span class="comment"># 1. 获取标签</span></span><br><span class="line">print(soup.title) <span class="comment"># &lt;title&gt;文章标题&lt;/title&gt;</span></span><br><span class="line">print(soup.p) <span class="comment"># &lt;p&gt;姓名：&lt;span id="name"&gt;大牧&lt;/span&gt;&lt;/p&gt; # 只返回第一个匹配到的标签对象</span></span><br><span class="line">print(soup.span) <span class="comment"># &lt;span id="name"&gt;大牧&lt;/span&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2.获取标签的属性</span></span><br><span class="line">print(soup.p.attrs) <span class="comment"># &#123;&#125;：得到属性和值的字典</span></span><br><span class="line">print(soup.span.attrs) <span class="comment"># &#123;'id': 'name'&#125;：得到属性和值的字典</span></span><br><span class="line">print(soup.span[<span class="string">'id'</span>]) <span class="comment"># name：得到指定属性的值</span></span><br><span class="line">soup.span[<span class="string">'id'</span>] = <span class="string">"real_name"</span></span><br><span class="line">print(soup.span[<span class="string">'id'</span>]) <span class="comment"># real_name : 可以方便的在BS4中直接对文档进行修改</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 获取标签的内容</span></span><br><span class="line">print(soup.head.string) <span class="comment"># 文章标题：如果标签中只有一个子标签~返回子标签中的文本内容</span></span><br><span class="line">print(soup.p.string) <span class="comment"># None：如果标签中有多个子标签，返回None</span></span><br><span class="line">print(soup.span.string) <span class="comment"># 大牧：直接返回包含的文本内容</span></span><br></pre></td></tr></table></figure>
+<h4 id="2-入门第二弹-操作标签、属性、内容"><a href="#2-入门第二弹-操作标签、属性、内容" class="headerlink" title="2.入门第二弹:操作标签、属性、内容"></a>2.入门第二弹:操作标签、属性、内容</h4><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 得到构建的文档对象</span></span><br><span class="line">soup = BeautifulSoup(open(<span class="string">"index.html"</span>), <span class="string">"lxml"</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Tag操作</span></span><br><span class="line"><span class="comment"># 1. 获取标签</span></span><br><span class="line"><span class="built_in">print</span>(soup.title) <span class="comment"># &lt;title&gt;文章标题&lt;/title&gt;</span></span><br><span class="line"><span class="built_in">print</span>(soup.p) <span class="comment"># &lt;p&gt;姓名：&lt;span id="name"&gt;大牧&lt;/span&gt;&lt;/p&gt; # 只返回第一个匹配到的标签对象</span></span><br><span class="line"><span class="built_in">print</span>(soup.span) <span class="comment"># &lt;span id="name"&gt;大牧&lt;/span&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2.获取标签的属性</span></span><br><span class="line"><span class="built_in">print</span>(soup.p.attrs) <span class="comment"># &#123;&#125;：得到属性和值的字典</span></span><br><span class="line"><span class="built_in">print</span>(soup.span.attrs) <span class="comment"># &#123;'id': 'name'&#125;：得到属性和值的字典</span></span><br><span class="line"><span class="built_in">print</span>(soup.span[<span class="string">'id'</span>]) <span class="comment"># name：得到指定属性的值</span></span><br><span class="line">soup.span[<span class="string">'id'</span>] = <span class="string">"real_name"</span></span><br><span class="line"><span class="built_in">print</span>(soup.span[<span class="string">'id'</span>]) <span class="comment"># real_name : 可以方便的在BS4中直接对文档进行修改</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 获取标签的内容</span></span><br><span class="line"><span class="built_in">print</span>(soup.head.string) <span class="comment"># 文章标题：如果标签中只有一个子标签~返回子标签中的文本内容</span></span><br><span class="line"><span class="built_in">print</span>(soup.p.string) <span class="comment"># None：如果标签中有多个子标签，返回None</span></span><br><span class="line"><span class="built_in">print</span>(soup.span.string) <span class="comment"># 大牧：直接返回包含的文本内容</span></span><br></pre></td></tr></table></figure>
 <p>3.入门第三弹：操作子节点<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># coding:utf-<span class="number">8</span></span><br><span class="line"># 引入BS4操作模块</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line"># 加载网页文档，构建文档对象</span><br><span class="line">soup = BeautifulSoup(open(<span class="string">"index.html"</span>), <span class="string">"lxml"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span>(dir(soup))</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span>(soup.contents)# 得到文档对象中所有子节点</span><br><span class="line"><span class="keyword">print</span>(soup.<span class="keyword">div</span>.contents)# 得到匹配到的第一个<span class="keyword">div</span>的子节点列表</span><br><span class="line"><span class="keyword">print</span>(soup.<span class="keyword">div</span>.children)# 得到匹配到的第一个<span class="keyword">div</span>的子节点列表迭代器</span><br><span class="line"># <span class="keyword">for</span> e1 in soup.<span class="keyword">div</span>.children:</span><br><span class="line">#     <span class="keyword">print</span>(<span class="string">"--&gt;"</span>, e1)</span><br><span class="line"><span class="keyword">print</span>(soup.<span class="keyword">div</span>.descendants)# 得到匹配到的第一个<span class="keyword">div</span>的子节点迭代器,所有后代节点单独一个一个列出</span><br><span class="line"># <span class="keyword">for</span> e2 in soup.<span class="keyword">div</span>.descendants:</span><br><span class="line">#     <span class="keyword">print</span>(<span class="string">"==&gt;"</span>, e2)</span><br></pre></td></tr></table></figure></p>
 <p>4.入门第四弹: 面向对象的DOM匹配<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"><span class="comment"># 引入BS4模块</span></span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载文档对象</span></span><br><span class="line">soup = BeautifulSoup(open(<span class="string">"../index.html"</span>), <span class="string">"lxml"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># DOM文档树查询</span></span><br><span class="line"><span class="comment"># 核心函数~请对比javasript dom结构了解它的方法</span></span><br><span class="line"><span class="comment"># 如:findAllPrevious()/findAllNext()/findAll()/findPrevious()/findNext()等等</span></span><br><span class="line"><span class="comment"># findAll()为例</span></span><br><span class="line"><span class="comment"># 1. 查询指定的字符串</span></span><br><span class="line">res1 = soup.findAll(<span class="string">"p"</span>)<span class="comment"># 查询所有包含p字符的标签</span></span><br><span class="line">print(res1)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 正则表达式</span></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line">res2 = soup.findAll(re.compile(<span class="string">r"d+"</span>))<span class="comment"># 查询所有包含d字符的标签</span></span><br><span class="line">print(res2)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 列表：选择</span></span><br><span class="line">res3 = soup.findAll([<span class="string">"div"</span>, <span class="string">"h1"</span>])<span class="comment"># 查询所有的div或者h1标签</span></span><br><span class="line">print(res3)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 关键字参数</span></span><br><span class="line">res4 = soup.findAll(id=<span class="string">"name"</span>)<span class="comment"># 查询属性为id="name"的标签</span></span><br><span class="line">print(res4)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 内容匹配</span></span><br><span class="line">res5 = soup.findAll(text=<span class="string">u"男"</span>)<span class="comment"># 直接匹配内容中的字符，必须保证精确匹配</span></span><br><span class="line">print(res5)</span><br><span class="line">res6 = soup.findAll(text=[<span class="string">u"文章标题"</span>, <span class="string">u"大牧"</span>])<span class="comment"># 查询包含精确内容的所有的标签</span></span><br><span class="line">print(res6)</span><br><span class="line">res7 = soup.findAll(text=re.compile(<span class="string">u"大+"</span>))<span class="comment"># 通过正则表达式进行模糊匹配</span></span><br><span class="line">print(res7)</span><br></pre></td></tr></table></figure></p>
 <p>5.入门第五弹: 又见CSS<br><figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># coding:utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="meta"># 引入BS模块</span></span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line"></span><br><span class="line"><span class="meta"># 加载网页构建文档对象</span></span><br><span class="line">soup = BeautifulSoup(<span class="keyword">open</span>(<span class="string">"index.html"</span>), <span class="string">"lxml"</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta"># 1. CSS 标签选择器：根据标签名称查询标签对象</span></span><br><span class="line">res1 = soup.<span class="built_in">select</span>(<span class="string">"span"</span>)</span><br><span class="line"><span class="keyword">print</span>(res1)</span><br><span class="line"></span><br><span class="line"><span class="meta"># 2. CSS ID选择器：根据ID查询标签对象</span></span><br><span class="line">res2 = soup.<span class="built_in">select</span>(<span class="string">"#gender"</span>)</span><br><span class="line"><span class="keyword">print</span>(res2)</span><br><span class="line"></span><br><span class="line"><span class="meta"># 3. CSS 类选择器：根据class属性查询标签对象</span></span><br><span class="line">res3 = soup.<span class="built_in">select</span>(<span class="string">".intro"</span>)</span><br><span class="line"><span class="keyword">print</span>(res3)</span><br><span class="line"></span><br><span class="line"><span class="meta"># 4. CSS 属性选择器</span></span><br><span class="line">res41 = soup.<span class="built_in">select</span>(<span class="string">"span[id]"</span>)</span><br><span class="line"><span class="keyword">print</span>(res41)</span><br><span class="line">res42 = soup.<span class="built_in">select</span>(<span class="string">"span[id='gender']"</span>)</span><br><span class="line"><span class="keyword">print</span>(res42)</span><br><span class="line"></span><br><span class="line"><span class="meta"># 5. CSS 包含选择器</span></span><br><span class="line">res5 = soup.<span class="built_in">select</span>(<span class="string">"p span#name"</span>)</span><br><span class="line"><span class="keyword">print</span>(res5)</span><br><span class="line"></span><br><span class="line"><span class="meta"># 6. 得到标签内容</span></span><br><span class="line">res6 = soup.<span class="built_in">select</span>(<span class="string">"p &gt; span.intro"</span>)</span><br><span class="line"><span class="keyword">print</span>(res6[<span class="number">0</span>].<span class="keyword">string</span>)</span><br><span class="line"><span class="keyword">print</span>(res6[<span class="number">0</span>].getText())</span><br></pre></td></tr></table></figure></p>
@@ -1778,84 +2436,9 @@
              
         <!-- 目录内容结束 -->
   
-    <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/13/hello-world/">Hello World</a>
-    </h1>
-  
-
-        
-        <a href="/2018/07/13/hello-world/" class="archive-article-date">
-  	<time datetime="2018-07-13T09:13:40.733Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/07/13/hello-world/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-
-<!-- 目录内容 -->
-             
-        <!-- 目录内容结束 -->
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
     </nav>
   
 
@@ -1951,10 +2534,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">爬虫</a>
               </li>
              
@@ -1964,6 +2543,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">数据提取</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2027,6 +2610,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Flask</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">web后端</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">MySql</a>
               </li>
              
@@ -2035,11 +2626,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
+                <a href="javascript:void(0)" class="js-tag color3">信号</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">信号</a>
+                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
               </li>
              
               <li class="article-tag-list-item">

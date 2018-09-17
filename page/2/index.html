@@ -170,6 +170,139 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-python的retrying模块" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/24/python的retrying模块/">python的retrying模块</a>
+    </h1>
+  
+
+        
+        <a href="/2018/08/24/python的retrying模块/" class="archive-article-date">
+  	<time datetime="2018-08-23T16:19:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-24</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>有点类似retry模块，功能都很相似</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install retrying</span><br></pre></td></tr></table></figure>
+<h2 id="API-介绍"><a href="#API-介绍" class="headerlink" title="API 介绍"></a>API 介绍</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">def __init__(self,</span><br><span class="line">                 <span class="attribute">stop</span>=None, <span class="attribute">wait</span>=None,</span><br><span class="line">                 <span class="attribute">stop_max_attempt_number</span>=None,</span><br><span class="line">                 <span class="attribute">stop_max_delay</span>=None,</span><br><span class="line">                 <span class="attribute">wait_fixed</span>=None,</span><br><span class="line">                 <span class="attribute">wait_random_min</span>=None, <span class="attribute">wait_random_max</span>=None,</span><br><span class="line">                 <span class="attribute">wait_incrementing_start</span>=None, <span class="attribute">wait_incrementing_increment</span>=None,</span><br><span class="line">                 <span class="attribute">wait_exponential_multiplier</span>=None, <span class="attribute">wait_exponential_max</span>=None,</span><br><span class="line">                 <span class="attribute">retry_on_exception</span>=None,</span><br><span class="line">                 <span class="attribute">retry_on_result</span>=None,</span><br><span class="line">                 <span class="attribute">wrap_exception</span>=<span class="literal">False</span>,</span><br><span class="line">                 <span class="attribute">stop_func</span>=None,</span><br><span class="line">                 <span class="attribute">wait_func</span>=None,</span><br><span class="line">                 <span class="attribute">wait_jitter_max</span>=None)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>stop_max_attempt_number：用来设定最大的尝试次数，超过该次数就停止重试</li>
+<li>stop_max_delay：比如设置成10000，那么从被装饰的函数开始执行的时间点开始，到函数成功运行结束或者失败报错中止的时间点，只要这段时间超过10秒，函数就不会再执行了</li>
+<li>wait_fixed：设置在两次retrying之间的停留时间</li>
+<li>wait_random_min和wait_random_max：用随机的方式产生两次retrying之间的停留时间</li>
+<li>wait_exponential_multiplier和wait_exponential_max：以指数的形式产生两次retrying之间的停留时间，产生的值为2^previous_attempt_number * wait_exponential_multiplier，previous_attempt_number是前面已经retry的次数，如果产生的这个值超过了wait_exponential_max的大小，那么之后两个retrying之间的停留值都为wait_exponential_max</li>
+<li>我们可以指定要在出现哪些异常的时候再去retry，这个要用retry_on_exception传入一个函数对象<h2 id="列子："><a href="#列子：" class="headerlink" title="列子："></a>列子：</h2></li>
+<li>@retry装饰器，如出现异常会一直重试</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@retry</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">never_give_up_never_surrender</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"Retry forever ignoring Exceptions, don't wait between retries"</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>stop_max_attempt_number 设置最大重试次数</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@retry(stop_max_attempt_number=7)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">stop_after_7_attempts</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"Stopping after 7 attempts"</span></span><br><span class="line">    <span class="keyword">raise</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>stop_max_delay 设置失败重试的最大时间, 单位毫秒，超出时间，则停止重试</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@retry(stop_max_delay=10000)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">stop_after_10_s</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"Stopping after 10 seconds"</span></span><br><span class="line">    <span class="keyword">raise</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>wait_fixed 设置失败重试的间隔时间</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@retry(wait_fixed=2000, stop_max_delay=10000)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">wait_2_s</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"Wait 2 second between retries"</span></span><br><span class="line">    <span class="keyword">raise</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>wait_random_min, wait_random_max 设置失败重试随机性间隔时间</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@retry(wait_random_min=1000, wait_random_max=5000, stop_max_delay=10000)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">wait_random_1_to_5_s</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"Randomly wait 1 to 5 seconds between retries"</span></span><br><span class="line">    <span class="keyword">raise</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>wait_exponential_multiplier-间隔时间倍数增加，wait_exponential_max-最大间隔时间</p>
+</li>
+</ul>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import <span class="built_in">time</span></span><br><span class="line"></span><br><span class="line">@retry(wait_exponential_multiplier=<span class="number">1000</span>, wait_exponential_max=<span class="number">10000</span>)</span><br><span class="line">def wait_exponential_1000():</span><br><span class="line">    print <span class="string">"Wait 2^x * 1000 milliseconds between each retry, up to 10 seconds, then 10 seconds afterwards"</span></span><br><span class="line">    print int(<span class="built_in">time</span>.<span class="built_in">time</span>())</span><br><span class="line">    raise</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">Wait <span class="number">2</span>^x * <span class="number">1000</span> <span class="built_in">milliseconds</span> between <span class="keyword">each</span> retry, up <span class="built_in">to</span> <span class="number">10</span> <span class="built_in">seconds</span>, <span class="keyword">then</span> <span class="number">10</span> <span class="built_in">seconds</span> afterwards</span><br><span class="line"><span class="number">1504110314</span></span><br><span class="line">Wait <span class="number">2</span>^x * <span class="number">1000</span> <span class="built_in">milliseconds</span> between <span class="keyword">each</span> retry, up <span class="built_in">to</span> <span class="number">10</span> <span class="built_in">seconds</span>, <span class="keyword">then</span> <span class="number">10</span> <span class="built_in">seconds</span> afterwards</span><br><span class="line"><span class="number">1504110316</span></span><br><span class="line">Wait <span class="number">2</span>^x * <span class="number">1000</span> <span class="built_in">milliseconds</span> between <span class="keyword">each</span> retry, up <span class="built_in">to</span> <span class="number">10</span> <span class="built_in">seconds</span>, <span class="keyword">then</span> <span class="number">10</span> <span class="built_in">seconds</span> afterwards</span><br><span class="line"><span class="number">1504110320</span></span><br><span class="line">Wait <span class="number">2</span>^x * <span class="number">1000</span> <span class="built_in">milliseconds</span> between <span class="keyword">each</span> retry, up <span class="built_in">to</span> <span class="number">10</span> <span class="built_in">seconds</span>, <span class="keyword">then</span> <span class="number">10</span> <span class="built_in">seconds</span> afterwards</span><br><span class="line"><span class="number">1504110328</span></span><br><span class="line">Wait <span class="number">2</span>^x * <span class="number">1000</span> <span class="built_in">milliseconds</span> between <span class="keyword">each</span> retry, up <span class="built_in">to</span> <span class="number">10</span> <span class="built_in">seconds</span>, <span class="keyword">then</span> <span class="number">10</span> <span class="built_in">seconds</span> afterwards</span><br><span class="line"><span class="number">1504110338</span></span><br><span class="line">Wait <span class="number">2</span>^x * <span class="number">1000</span> <span class="built_in">milliseconds</span> between <span class="keyword">each</span> retry, up <span class="built_in">to</span> <span class="number">10</span> <span class="built_in">seconds</span>, <span class="keyword">then</span> <span class="number">10</span> <span class="built_in">seconds</span> afterwards</span><br><span class="line"><span class="number">1504110348</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>retry_on_exception指定异常类型，指定的异常类型会重试，不指定的类型，会直接异常退出，wrap_exception参数设置为True，则其他类型异常，或包裹在RetryError中，会看到RetryError和程序抛的Exception error</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">retry_if_io_error</span><span class="params">(exception)</span>:</span></span><br><span class="line">    <span class="string">"""Return True if we should retry (in this case when it's an IOError), False otherwise"""</span></span><br><span class="line">    <span class="keyword">return</span> isinstance(exception, IOError)</span><br><span class="line"></span><br><span class="line"><span class="meta">@retry(retry_on_exception=retry_if_io_error)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">might_io_error</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"Retry forever with no wait if an IOError occurs, raise any other errors"</span></span><br><span class="line">    <span class="keyword">raise</span> Exception(<span class="string">'a'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@retry(retry_on_exception=retry_if_io_error, wrap_exception=True)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">only_raise_retry_error_when_not_io_error</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"Retry forever with no wait if an IOError occurs, raise any other errors wrapped in RetryError"</span></span><br><span class="line">    <span class="keyword">raise</span> Exception(<span class="string">'a'</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>retry_on_result, 指定要在得到哪些结果的时候去retry，retry_on_result传入一个函数对象,在执行get_result成功后，会将函数的返回值通过形参result的形式传入retry_if_result_none函数中，如果返回值是None那么就进行retry，否则就结束并返回函数值</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">retry_if_result_none</span><span class="params">(result)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> result <span class="keyword">is</span> <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@retry(retry_on_result=retry_if_result_none)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_result</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">'Retry forever ignoring Exceptions with no wait if return value is None'</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">None</span></span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">扩展包</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/python语言基础//" class="article-tag-list-link color1">python语言基础</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/24/python的retrying模块/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+
+<!-- 目录内容 -->
+             
+        <!-- 目录内容结束 -->
+  
     <article id="post-python简单的retry模块" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -217,7 +350,7 @@
 <p>“”” </p>
 <p>调用函数并在失败时重新执行</p>
 <figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">:param f:</span> the function to execute.</span><br><span class="line"><span class="meta">:param fargs:</span> the positional arguments of the function to execute.</span><br><span class="line"><span class="meta">:param fkwargs:</span> the named arguments of the function to execute.</span><br><span class="line"><span class="meta">:param exceptions:</span> an exception or a tuple of exceptions to catch. default: Exception.</span><br><span class="line"><span class="meta">:param tries:</span> the maximum number of attempts. default: -1 (infinite).</span><br><span class="line"><span class="meta">:param delay:</span> initial delay between attempts. default: 0.</span><br><span class="line"><span class="meta">:param max_delay:</span> the maximum value of delay. default: None (no limit).</span><br><span class="line"><span class="meta">:param backoff:</span> multiplier applied to delay between attempts. default: 1 (no backoff).</span><br><span class="line"><span class="meta">:param jitter:</span> extra seconds added to delay between attempts. default: 0.</span><br><span class="line"><span class="code">               fixed if a number, random if a range tuple (min, max)</span></span><br><span class="line"><span class="meta">:param logger:</span> logger.warning(fmt, error, delay) will be called on failed attempts.</span><br><span class="line"><span class="code">               default: retry.logging_logger. if None, logging is disabled.</span></span><br><span class="line"><span class="meta">:returns:</span> the result of the f function.</span><br><span class="line">"""</span><br></pre></td></tr></table></figure>
-<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> retry.api <span class="keyword">import</span> retry_call</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_trouble</span><span class="params">(service, info=None)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> info:</span><br><span class="line">        info = <span class="string">''</span></span><br><span class="line">    <span class="keyword">print</span> (<span class="string">'retry..., service: &#123;&#125;,  info: &#123;&#125;'</span>.format(service, info))</span><br><span class="line">    r = requests.get(service + info)</span><br><span class="line">    <span class="keyword">print</span> r.text</span><br><span class="line">    <span class="keyword">raise</span> Exception(<span class="string">'info'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">what_is_my_ip</span><span class="params">(approach=None)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> approach == <span class="string">"optimistic"</span>:</span><br><span class="line">        tries = <span class="number">1</span></span><br><span class="line">    <span class="keyword">elif</span> approach == <span class="string">"conservative"</span>:</span><br><span class="line">        tries = <span class="number">3</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># skeptical</span></span><br><span class="line">        tries = <span class="number">-1</span></span><br><span class="line">    result = retry_call(make_trouble, fargs=[<span class="string">"http://ipinfo.io/"</span>], fkwargs=&#123;<span class="string">"info"</span>: <span class="string">"ip"</span>&#125;, tries=tries)</span><br><span class="line">    print(result)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="keyword">import</span> logging</span><br><span class="line">    logging.basicConfig()</span><br><span class="line">    what_is_my_ip(<span class="string">"conservative"</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">输出:</span><br><span class="line">retry..., service: http://ipinfo.io/,  info: ip</span><br><span class="line"><span class="number">118.113</span><span class="number">.1</span><span class="number">.255</span></span><br><span class="line"></span><br><span class="line">retry..., service: http://ipinfo.io/,  info: ip</span><br><span class="line">WARNING:retry.api:info, retrying <span class="keyword">in</span> <span class="number">0</span> seconds...</span><br><span class="line">WARNING:retry.api:info, retrying <span class="keyword">in</span> <span class="number">0</span> seconds...</span><br><span class="line"><span class="number">118.113</span><span class="number">.1</span><span class="number">.255</span></span><br><span class="line"></span><br><span class="line">retry..., service: http://ipinfo.io/,  info: ip</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"E:/WORKSPACE/document/document/test/1.py"</span>, line <span class="number">74</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    what_is_my_ip(<span class="string">"conservative"</span>)</span><br><span class="line">  File <span class="string">"E:/WORKSPACE/document/document/test/1.py"</span>, line <span class="number">66</span>, <span class="keyword">in</span> what_is_my_ip</span><br><span class="line">    result = retry_call(make_trouble, fargs=[<span class="string">"http://ipinfo.io/"</span>], fkwargs=&#123;<span class="string">"info"</span>: <span class="string">"ip"</span>&#125;, tries=tries)</span><br><span class="line">  File <span class="string">"D:\python27\WinPython-64bit-2.7.10.3\python-2.7.10.amd64\lib\site-packages\retry\api.py"</span>, line <span class="number">101</span>, <span class="keyword">in</span> retry_call</span><br><span class="line">    <span class="keyword">return</span> __retry_internal(partial(f, *args, **kwargs), exceptions, tries, delay, max_delay, backoff, jitter, logger)</span><br><span class="line">  File <span class="string">"D:\python27\WinPython-64bit-2.7.10.3\python-2.7.10.amd64\lib\site-packages\retry\api.py"</span>, line <span class="number">33</span>, <span class="keyword">in</span> __retry_internal</span><br><span class="line">    <span class="keyword">return</span> f()</span><br><span class="line">  File <span class="string">"E:/WORKSPACE/document/document/test/1.py"</span>, line <span class="number">54</span>, <span class="keyword">in</span> make_trouble</span><br><span class="line">    <span class="keyword">raise</span> Exception(<span class="string">'info'</span>)</span><br><span class="line">Exception: info</span><br><span class="line"><span class="number">118.113</span><span class="number">.1</span><span class="number">.255</span></span><br></pre></td></tr></table></figure>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">from retry.api <span class="keyword">import</span> retry_call</span><br><span class="line"></span><br><span class="line">def make_trouble(service, info=None):</span><br><span class="line">    <span class="built_in">if</span> <span class="keyword">not</span> info:</span><br><span class="line">        info = <span class="string">''</span></span><br><span class="line">    <span class="built_in">print</span> (<span class="string">'retry..., service: &#123;&#125;,  info: &#123;&#125;'</span>.format(service, info))</span><br><span class="line">    r = requests.<span class="built_in">get</span>(service + info)</span><br><span class="line">    <span class="built_in">print</span> r.<span class="built_in">text</span></span><br><span class="line">    raise Exception(<span class="string">'info'</span>)</span><br><span class="line"></span><br><span class="line">def what_is_my_ip(approach=None):</span><br><span class="line">    <span class="built_in">if</span> approach == <span class="string">"optimistic"</span>:</span><br><span class="line">        tries = <span class="number">1</span></span><br><span class="line">    elif approach == <span class="string">"conservative"</span>:</span><br><span class="line">        tries = <span class="number">3</span></span><br><span class="line">    <span class="built_in">else</span>:</span><br><span class="line">        <span class="meta"># skeptical</span></span><br><span class="line">        tries = <span class="number">-1</span></span><br><span class="line">    result = retry_call(make_trouble, fargs=[<span class="string">"http://ipinfo.io/"</span>], fkwargs=&#123;<span class="string">"info"</span>: <span class="string">"ip"</span>&#125;, tries=tries)</span><br><span class="line">    <span class="built_in">print</span>(result)</span><br><span class="line"></span><br><span class="line"><span class="built_in">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="keyword">import</span> logging</span><br><span class="line">    logging.basicConfig()</span><br><span class="line">    what_is_my_ip(<span class="string">"conservative"</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">输出:</span><br><span class="line">retry..., service: http:<span class="comment">//ipinfo.io/,  info: ip</span></span><br><span class="line"><span class="number">118.113</span><span class="number">.1</span><span class="number">.255</span></span><br><span class="line"></span><br><span class="line">retry..., service: http:<span class="comment">//ipinfo.io/,  info: ip</span></span><br><span class="line">WARNING:retry.api:info, retrying in <span class="number">0</span> seconds...</span><br><span class="line">WARNING:retry.api:info, retrying in <span class="number">0</span> seconds...</span><br><span class="line"><span class="number">118.113</span><span class="number">.1</span><span class="number">.255</span></span><br><span class="line"></span><br><span class="line">retry..., service: http:<span class="comment">//ipinfo.io/,  info: ip</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  <span class="built_in">File</span> <span class="string">"E:/WORKSPACE/document/document/test/1.py"</span>, <span class="built_in">line</span> <span class="number">74</span>, in &lt;<span class="keyword">module</span>&gt;</span><br><span class="line">    what_is_my_ip(<span class="string">"conservative"</span>)</span><br><span class="line">  <span class="built_in">File</span> <span class="string">"E:/WORKSPACE/document/document/test/1.py"</span>, <span class="built_in">line</span> <span class="number">66</span>, in what_is_my_ip</span><br><span class="line">    result = retry_call(make_trouble, fargs=[<span class="string">"http://ipinfo.io/"</span>], fkwargs=&#123;<span class="string">"info"</span>: <span class="string">"ip"</span>&#125;, tries=tries)</span><br><span class="line">  <span class="built_in">File</span> <span class="string">"D:\python27\WinPython-64bit-2.7.10.3\python-2.7.10.amd64\lib\site-packages\retry\api.py"</span>, <span class="built_in">line</span> <span class="number">101</span>, in retry_call</span><br><span class="line">    <span class="built_in">return</span> __retry_internal(partial(f, *args, **kwargs), exceptions, tries, <span class="built_in">delay</span>, max_delay, backoff, jitter, logger)</span><br><span class="line">  <span class="built_in">File</span> <span class="string">"D:\python27\WinPython-64bit-2.7.10.3\python-2.7.10.amd64\lib\site-packages\retry\api.py"</span>, <span class="built_in">line</span> <span class="number">33</span>, in __retry_internal</span><br><span class="line">    <span class="built_in">return</span> f()</span><br><span class="line">  <span class="built_in">File</span> <span class="string">"E:/WORKSPACE/document/document/test/1.py"</span>, <span class="built_in">line</span> <span class="number">54</span>, in make_trouble</span><br><span class="line">    raise Exception(<span class="string">'info'</span>)</span><br><span class="line">Exception: info</span><br><span class="line"><span class="number">118.113</span><span class="number">.1</span><span class="number">.255</span></span><br></pre></td></tr></table></figure>
 <p>其他参数同retry decorator<br><a href="https://pypi.python.org/pypi/retry" target="_blank" rel="noopener">官网</a></p>
 
       
@@ -1038,7 +1171,7 @@
 results = ahttp.map(tasks, pool = 100) #将连接池改为100
 </code></pre><h3 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h3><p>如果任务进行过程中出现错误，协程将不会终止，并且当前任务将会返回 None</p>
 <figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt;results</span><br><span class="line"><span class="meta">[&lt;ahttp [200]&gt;, None, &lt;ahttp [200]&gt;]</span></span><br></pre></td></tr></table></figure>
-<p>三个任务中，有一个出现了错误。 由于results不是按照任务的顺序返回的结果，所以为了捕捉究竟是哪个请求出现了错误，你可以传递一个错误处理函数<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">exception_handle</span><span class="params">(task, e)</span>:</span> <span class="comment">#出现错误时，将会把当前任务作为参数传递给错误处理函数, 第二个参数是错误对象</span></span><br><span class="line">    print(<span class="string">"在使用 "</span> + task.method +<span class="string">" 方式向连接 "</span> + task.url + <span class="string">" 进行请求时，出现了错误"</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">results = ahttp.run(tasks, exception_handle = exception_handle)</span><br></pre></td></tr></table></figure></p>
+<p>三个任务中，有一个出现了错误。 由于results不是按照任务的顺序返回的结果，所以为了捕捉究竟是哪个请求出现了错误，你可以传递一个错误处理函数<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> exception_handle(<span class="keyword">task</span>, e): #出现错误时，将会把当前任务作为参数传递给错误处理函数, 第二个参数是错误对象</span><br><span class="line">    <span class="keyword">print</span>(<span class="string">"在使用 "</span> + <span class="keyword">task</span>.method +<span class="string">" 方式向连接 "</span> + <span class="keyword">task</span>.url + <span class="string">" 进行请求时，出现了错误"</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">results = ahttp.run(tasks, exception_handle = exception_handle)</span><br></pre></td></tr></table></figure></p>
 <p>这样即使出错，我们也可以知道是谁出了问题</p>
 <figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt;results = ahttp.map(tasks, exception_handle = exception_handle)</span><br><span class="line">在使用 POST 方式向连接 www.baidu.com 进行请求时，出现了错误</span><br><span class="line"><span class="meta">[&lt;ahttp [200]&gt;, None, &lt;ahttp [200]&gt;]</span></span><br></pre></td></tr></table></figure>
 <p>或者，可以把请求过程中出错的请求收集起来，以便再次重试</p>
@@ -1047,7 +1180,7 @@ results = ahttp.map(tasks, pool = 100) #将连接池改为100
 <figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">results1</span> = ahttp.run(gather_err)</span><br></pre></td></tr></table></figure>
 <p>因为 gather_err 和 tasks 一样，都是 ahttp 任务对象的集合</p>
 <h3 id="回调函数"><a href="#回调函数" class="headerlink" title="回调函数"></a>回调函数</h3><p>你可以通过给任务对象添加回调函数的方式以指定当前任务完成执行的函数</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">callback</span><span class="params">(ahttp_response)</span>:</span></span><br><span class="line">    ahttp_response <span class="comment"># &lt;AhttpResponse [status 200]&gt;</span></span><br><span class="line">    ahttp_response.status <span class="comment"># 200</span></span><br><span class="line">...</span><br><span class="line">tasks=[ahttp.get(url, callback = callback), ...]</span><br></pre></td></tr></table></figure>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">callback</span><span class="params">(ahttp_response)</span></span><span class="symbol">:</span></span><br><span class="line">    ahttp_response <span class="comment"># &lt;AhttpResponse [status 200]&gt;</span></span><br><span class="line">    ahttp_response.status <span class="comment"># 200</span></span><br><span class="line">...</span><br><span class="line">tasks=[ahttp.get(url, callback = callback), ...]</span><br></pre></td></tr></table></figure>
 <h3 id="设置超时"><a href="#设置超时" class="headerlink" title="设置超时"></a>设置超时</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">task = ahttp.<span class="builtin-name">get</span>(url,<span class="built_in">..</span>., <span class="attribute">timeout</span>=300)</span><br><span class="line"><span class="comment"># timeout 默认300s</span></span><br></pre></td></tr></table></figure>
 <h3 id="Linux上使用效果要好于windows"><a href="#Linux上使用效果要好于windows" class="headerlink" title="Linux上使用效果要好于windows"></a>Linux上使用效果要好于windows</h3><p>windows上的事件循环使用的是asyncio，而linux上使用的是速度上更快的asyncio的替代方案uvloop</p>
 <h3 id="ahttp-致力于集合python中最快的网络请求方案，使其简单化、易用化"><a href="#ahttp-致力于集合python中最快的网络请求方案，使其简单化、易用化" class="headerlink" title="ahttp 致力于集合python中最快的网络请求方案，使其简单化、易用化"></a>ahttp 致力于集合python中最快的网络请求方案，使其简单化、易用化</h3><p>这将导致ahttp的版本可能会频繁更新</p>
@@ -1169,7 +1302,7 @@ results = ahttp.map(tasks, pool = 100) #将连接池改为100
 <p>其中r.text(), 可以在括号中指定解码方式，编码方式，例如</p>
 <figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">await resp.text(<span class="attribute">encoding</span>=<span class="string">'windows-1251'</span>)</span><br></pre></td></tr></table></figure>
 <p>或者也可以选择不编码，适合读取图像等，是无法编码的</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">await</span> resp.read()</span><br></pre></td></tr></table></figure>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">await resp.<span class="built_in">read</span>()</span><br></pre></td></tr></table></figure>
 <h3 id="2-发起一个session请求"><a href="#2-发起一个session请求" class="headerlink" title="2.发起一个session请求"></a>2.发起一个session请求</h3><p>首先是导入aiohttp模块：</p>
 <figure class="highlight elm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> aiohttp</span><br></pre></td></tr></table></figure>
 <p>然后我们试着获取一个web源码，这里以GitHub的公共Time-line页面为例:</p>
@@ -1208,9 +1341,9 @@ results = ahttp.map(tasks, pool = 100) #将连接池改为100
 <p> 或者传递一个函数进去：</p>
 <figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="name">await</span> resp.json( <span class="name">lambda</span>(<span class="name">x</span><span class="symbol">:x</span>.replace('a','b')) ))</span><br></pre></td></tr></table></figure>
 <h3 id="6-以字节流的方式读取响应内容"><a href="#6-以字节流的方式读取响应内容" class="headerlink" title="6.以字节流的方式读取响应内容"></a>6.以字节流的方式读取响应内容</h3><p>虽然json(),text(),read()很方便的能把响应的数据读入到内存，但是我们仍然应该谨慎的使用它们，因为它们是把整个的响应体全部读入了内存。即使你只是想下载几个字节大小的文件，但这些方法却将在内存中加载所有的数据。所以我们可以通过控制字节数来控制读入内存的响应内容：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">with</span> session.get(<span class="string">'https://api.github.com/events'</span>) <span class="keyword">as</span> resp:</span><br><span class="line">    <span class="keyword">await</span> resp.content.read(<span class="number">10</span>) <span class="comment">#读取前10个字节</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> with session.<span class="keyword">get</span>(<span class="string">'https://api.github.com/events'</span>) <span class="keyword">as</span> resp:</span><br><span class="line">    <span class="keyword">await</span> resp.content.read(<span class="number">10</span>) <span class="meta">#读取前10个字节</span></span><br></pre></td></tr></table></figure>
 <p>一般地，我们应该使用以下的模式来把读取的字节流保存到文件中：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> open(filename, <span class="string">'wb'</span>) <span class="keyword">as</span> fd:</span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        chunk = <span class="keyword">await</span> resp.content.read(chunk_size)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> chunk:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        fd.write(chunk)</span><br></pre></td></tr></table></figure>
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> open(filename, <span class="string">'wb'</span>) <span class="keyword">as</span> fd:</span><br><span class="line">    <span class="keyword">while</span> True:</span><br><span class="line">        chunk = await resp.content.<span class="keyword">read</span>(chunk_size)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> chunk:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        fd.<span class="keyword">write</span>(chunk)</span><br></pre></td></tr></table></figure>
 <p>7.自定义请求头</p>
 <p>如果你想添加请求头，可以像get添加参数那样以dict的形式，作为get或者post的参数进行请求：</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="title">url</span> = 'https://api.github.com/some/endpoint'</span><br><span class="line"><span class="title">payload</span> = &#123;'some': '<span class="class"><span class="keyword">data</span>'&#125;</span></span><br><span class="line"><span class="title">headers</span> = &#123;'content-<span class="class"><span class="keyword">type</span>': 'application/json'&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="title">await</span> session.post(url,</span><br><span class="line">                   <span class="class"><span class="keyword">data</span>=json.dumps(<span class="title">payload</span>),</span></span><br><span class="line">                   headers=headers)</span><br></pre></td></tr></table></figure>
@@ -1221,7 +1354,7 @@ results = ahttp.map(tasks, pool = 100) #将连接池改为100
 <h3 id="9-post数据的几种方式"><a href="#9-post数据的几种方式" class="headerlink" title="9.post数据的几种方式"></a>9.post数据的几种方式</h3><ul>
 <li>（1）模拟表单post数据</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">payload = &#123;<span class="string">'key1'</span>: <span class="string">'value1'</span>, <span class="string">'key2'</span>: <span class="string">'value2'</span>&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="keyword">with</span> session.post(<span class="string">'http://httpbin.org/post'</span>,</span><br><span class="line">                        data=payload) <span class="keyword">as</span> resp:</span><br><span class="line">    print(<span class="keyword">await</span> resp.text())</span><br></pre></td></tr></table></figure>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">payload = &#123;<span class="string">'key1'</span>: <span class="string">'value1'</span>, <span class="string">'key2'</span>: <span class="string">'value2'</span>&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="keyword">with</span> session.post(<span class="string">'http://httpbin.org/post'</span>,</span><br><span class="line">                        data=payload) <span class="keyword">as</span> resp:</span><br><span class="line">    <span class="built_in">print</span>(<span class="keyword">await</span> resp.text())</span><br></pre></td></tr></table></figure>
 <p>注意：data=dict的方式post的数据将被转码，和form提交数据是一样的作用，如果你不想被转码，可以直接以字符串的形式 data=str 提交，这样就不会被转码。</p>
 <ul>
 <li>（2）post json</li>
@@ -1385,7 +1518,7 @@ results = ahttp.map(tasks, pool = 100) #将连接池改为100
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding=utf8</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> concurrent</span><br><span class="line"><span class="keyword">from</span> concurrent.futures <span class="keyword">import</span> ThreadPoolExecutor</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span><span class="params">()</span>:</span></span><br><span class="line">    url = <span class="string">"https://www.baidu.com"</span></span><br><span class="line">    res = requests.get(url)</span><br><span class="line">    <span class="keyword">if</span> res.status_code == <span class="number">200</span>:</span><br><span class="line">        <span class="keyword">print</span> <span class="string">"yes!"</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">print</span> <span class="string">"no!"</span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    t1 = threading.Thread(target=task)  <span class="comment"># 用法和Process类很相似</span></span><br><span class="line">    t2 = threading.Thread(target=task)</span><br><span class="line"> </span><br><span class="line">    t1.start()</span><br><span class="line">    t2.start()</span><br><span class="line">    t1.join()</span><br><span class="line">    t2.join()</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
 <h2 id="多线程的同步"><a href="#多线程的同步" class="headerlink" title="多线程的同步"></a>多线程的同步</h2><p>多线程的可以共享主线程的数据，在操作的时候可能会存在数据不同的问题解决办法是，对于一些代码加锁规定某段时间内只能一个线程访问，直到所被释放！</p>
 <p>例子：这个会造成数据不同步</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">balance = <span class="number">0</span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">data_operator</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">global</span> balance  <span class="comment"># 表明在这个函数中，balance 是使用的全局的</span></span><br><span class="line">    balance += n</span><br><span class="line">    balance -= n</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">change_it</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> xrange(<span class="number">0</span>, <span class="number">10</span> ** <span class="number">6</span>):</span><br><span class="line">        data_operator(n)</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">thread_synchronization</span><span class="params">()</span>:</span></span><br><span class="line">    t1 = threading.Thread(target=change_it, args=(<span class="number">5</span>,))</span><br><span class="line">    t2 = threading.Thread(target=change_it, args=(<span class="number">8</span>,))</span><br><span class="line"> </span><br><span class="line">    t1.start()</span><br><span class="line">    t2.start()</span><br><span class="line">    t1.join()</span><br><span class="line">    t2.join()</span><br><span class="line">    <span class="keyword">global</span> balance</span><br><span class="line">    <span class="keyword">print</span> balance</span><br><span class="line">    <span class="comment"># 因为存在变量操作时存在临时变量的使用，在多次执行的时候，操作的数据内容可能存在不同步的情况</span></span><br><span class="line">    <span class="comment"># 所以此处打印出的值，不一定是0</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">balance </span>= <span class="number">0</span></span><br><span class="line"> </span><br><span class="line">def data_operator(n):</span><br><span class="line">    global <span class="keyword">balance </span> <span class="comment"># 表明在这个函数中，balance 是使用的全局的</span></span><br><span class="line">    <span class="keyword">balance </span>+= n</span><br><span class="line">    <span class="keyword">balance </span>-= n</span><br><span class="line"> </span><br><span class="line">def change_it(n):</span><br><span class="line">    for item in xrange(<span class="number">0</span>, <span class="number">10</span> ** <span class="number">6</span>):</span><br><span class="line">        data_operator(n)</span><br><span class="line"> </span><br><span class="line">def thread_synchronization():</span><br><span class="line">    <span class="built_in">t1</span> = threading.Thread(target=change_it, args=(<span class="number">5</span>,))</span><br><span class="line">    <span class="built_in">t2</span> = threading.Thread(target=change_it, args=(<span class="number">8</span>,))</span><br><span class="line"> </span><br><span class="line">    <span class="built_in">t1</span>.start()</span><br><span class="line">    <span class="built_in">t2</span>.start()</span><br><span class="line">    <span class="built_in">t1</span>.<span class="keyword">join()</span></span><br><span class="line"><span class="keyword"> </span>   <span class="built_in">t2</span>.<span class="keyword">join()</span></span><br><span class="line"><span class="keyword"> </span>   global <span class="keyword">balance</span></span><br><span class="line"><span class="keyword"> </span>   print <span class="keyword">balance</span></span><br><span class="line"><span class="keyword"> </span>   <span class="comment"># 因为存在变量操作时存在临时变量的使用，在多次执行的时候，操作的数据内容可能存在不同步的情况</span></span><br><span class="line">    <span class="comment"># 所以此处打印出的值，不一定是0</span></span><br></pre></td></tr></table></figure>
 <h3 id="加锁实现数据同步，确保操作关键数据时只有一个线程"><a href="#加锁实现数据同步，确保操作关键数据时只有一个线程" class="headerlink" title="加锁实现数据同步，确保操作关键数据时只有一个线程"></a>加锁实现数据同步，确保操作关键数据时只有一个线程</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">balance = <span class="number">0</span></span><br><span class="line">main_thread_lock = threading.Lock()  <span class="comment"># 这里是在主线程中设置的一把线程锁</span></span><br><span class="line"><span class="comment"># 获得锁 main_thread_lock.acquire() 这个方法或阻塞当前线程，直到获得一把锁。但是不会阻塞主线程</span></span><br><span class="line"><span class="comment"># 释放锁 main_thread_lock.release() 此时其他的方法可以去申请锁的使用</span></span><br><span class="line"><span class="comment"># 一般使用try_catch_finally 来确保锁被释放</span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">data_operator</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">global</span> balance  <span class="comment"># 表明在这个函数中，balance 是使用的全局的</span></span><br><span class="line">    balance += n</span><br><span class="line">    balance -= n</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">change_it</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> xrange(<span class="number">0</span>, <span class="number">10</span> ** <span class="number">6</span>):</span><br><span class="line">        <span class="keyword">with</span> main_thread_lock:  <span class="comment"># 这里是在操作主要数据的时候，获得锁，在执行完操作之后将锁释放，这里使用with 语句更加简洁的实现，一定要注意锁的释放</span></span><br><span class="line">            data_operator(n)</span><br></pre></td></tr></table></figure>
 <h2 id="使用ThreadPoolExecutor"><a href="#使用ThreadPoolExecutor" class="headerlink" title="使用ThreadPoolExecutor"></a>使用ThreadPoolExecutor</h2><p>使用ThreadPoolExecutor的时候，对于python2.x 需要先安装 pip install futures ，这是在python3中自带的包</p>
 <p>基本使用：</p>
@@ -1494,7 +1627,7 @@ results = ahttp.map(tasks, pool = 100) #将连接池改为100
 <p>该模块还包括Verhoeff，Luhn和ISO / IEC 7064校验位算法系列的实现。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> stdnum <span class="keyword">import</span> isbn</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>isbn.validate(<span class="string">'978-9024538270'</span>)</span><br><span class="line"><span class="string">'9789024538270'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>isbn.validate(<span class="string">'978-9024538271'</span>)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">    ...</span><br><span class="line">InvalidChecksum: ...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>isbn.format(<span class="string">'9780471117094'</span>)</span><br><span class="line"><span class="string">'978-0-471-11709-4'</span></span><br></pre></td></tr></table></figure>
 <p>简单的代码例子：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> stdnum <span class="keyword">import</span> luhn</span><br><span class="line"><span class="keyword">from</span> stdnum.cn <span class="keyword">import</span> ric</span><br><span class="line"><span class="comment"># 验证银行卡号，号来源百度</span></span><br><span class="line">print(luhn.is_valid(<span class="string">"6217995200015424051"</span>))</span><br><span class="line"><span class="comment"># 验证身份证号，号来源百度</span></span><br><span class="line">print(ric.is_valid(<span class="string">"360822198112069337"</span>))</span><br></pre></td></tr></table></figure>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> stdnum <span class="keyword">import</span> luhn</span><br><span class="line"><span class="keyword">from</span> stdnum.cn <span class="keyword">import</span> ric</span><br><span class="line"><span class="comment"># 验证银行卡号，号来源百度</span></span><br><span class="line"><span class="built_in">print</span>(luhn.is_valid(<span class="string">"6217995200015424051"</span>))</span><br><span class="line"><span class="comment"># 验证身份证号，号来源百度</span></span><br><span class="line"><span class="built_in">print</span>(ric.is_valid(<span class="string">"360822198112069337"</span>))</span><br></pre></td></tr></table></figure>
 <h3 id="支持的格式"><a href="#支持的格式" class="headerlink" title="支持的格式"></a>支持的格式</h3><p>目前python-stdnum模块支持以下格式：</p>
 <ul>
 <li>NIPT（增值税识别号码，阿尔巴尼亚增值税号码）</li>
@@ -1913,667 +2046,9 @@ results = ahttp.map(tasks, pool = 100) #将连接池改为100
              
         <!-- 目录内容结束 -->
   
-    <article id="post-jieba分词" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/18/jieba分词/">jieba分词</a>
-    </h1>
-  
-
-        
-        <a href="/2018/07/18/jieba分词/" class="archive-article-date">
-  	<time datetime="2018-07-18T07:36:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="jiaba分词"><a href="#jiaba分词" class="headerlink" title="jiaba分词"></a>jiaba分词</h1><p>jieba（结巴）是一个强大的分词库，完美支持中文分词</p>
-<h3 id="安装jieba"><a href="#安装jieba" class="headerlink" title="安装jieba"></a>安装jieba</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install jieba</span><br></pre></td></tr></table></figure>
-<h2 id="简单用法"><a href="#简单用法" class="headerlink" title="简单用法"></a>简单用法</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> jieba</span><br><span class="line">s = <span class="string">u'我想和女朋友一起去北京故宫博物院参观和闲逛。'</span></span><br><span class="line">cut = jieba.cut(s)</span><br><span class="line"></span><br><span class="line">print(cut)</span><br><span class="line">print(<span class="string">','</span>.join(cut))</span><br></pre></td></tr></table></figure>
-<p>结果：</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#对象在第二行，分词在最后一行</span></span><br><span class="line">Building<span class="built_in"> prefix </span>dict <span class="keyword">from</span> the<span class="built_in"> default </span>dictionary <span class="built_in">..</span>.</span><br><span class="line">&lt;generator object Tokenizer.cut at 0x000001FFD3E09468&gt;</span><br><span class="line">Loading model <span class="keyword">from</span> cache C:\Users\grmg\AppData\Local\Temp\jieba.cache</span><br><span class="line">Loading model cost 0.960 seconds.</span><br><span class="line">Prefix dict has been built succesfully.</span><br><span class="line">我,想,和,女朋友,一起,去,北京故宫博物院,参观,和,闲逛,。</span><br></pre></td></tr></table></figure>
-<h2 id="全模式"><a href="#全模式" class="headerlink" title="全模式"></a>全模式</h2><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">print</span> <span class="string">','</span>.<span class="keyword">join</span>(jieba.cut(s,cut_all = <span class="keyword">True</span>))</span><br></pre></td></tr></table></figure>
-<p>结果：<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">我,想,和,女朋友,朋友,一起,去,北京,北京故宫,北京故宫博物院,故宫,故宫博物院,博物,博物院,参观,和,闲逛,,</span><br></pre></td></tr></table></figure></p>
-<h2 id="搜索引擎模式"><a href="#搜索引擎模式" class="headerlink" title="搜索引擎模式"></a>搜索引擎模式</h2><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">print</span> <span class="string">','</span>.<span class="keyword">join</span>(jieba.cut_for_search(s))</span><br></pre></td></tr></table></figure>
-<p>结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">我,想,和,朋友,女朋友,一起,去,北京,故宫,博物,博物院,北京故宫博物院,参观,和,闲逛,。</span><br></pre></td></tr></table></figure></p>
-<h2 id="获取词性"><a href="#获取词性" class="headerlink" title="获取词性"></a>获取词性</h2><p>每个词都有其词性，比如名词、动词、代词等，结巴分词的结果也可以带上每个词的词性，要用到jieba.posseg，举例如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import jieba.posseg as psg</span><br><span class="line"><span class="built_in">print</span> <span class="string">'【Output】'</span></span><br><span class="line"><span class="built_in">print</span> [(x.word,x.flag) <span class="keyword">for</span> x <span class="keyword">in</span> psg.cut(s)]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出：</span></span><br><span class="line"><span class="string">''</span><span class="string">'</span></span><br><span class="line"><span class="string">[(u'</span>我<span class="string">', u'</span>r<span class="string">'), (u'</span>想<span class="string">', u'</span>v<span class="string">'), (u'</span>和<span class="string">', u'</span>c<span class="string">'), (u'</span>女朋友<span class="string">', u'</span>n<span class="string">'), (u'</span>一起<span class="string">', u'</span>m<span class="string">'), </span></span><br><span class="line"><span class="string">(u'</span>去<span class="string">', u'</span>v<span class="string">'), (u'</span>北京故宫博物院<span class="string">', u'</span>ns<span class="string">'), (u'</span>参观<span class="string">', u'</span>n<span class="string">'), (u'</span>和<span class="string">', u'</span>c<span class="string">'), (u'</span>闲逛<span class="string">', u'</span>v<span class="string">'), (u'</span>。<span class="string">', u'</span>x<span class="string">')]</span></span><br><span class="line"><span class="string">'</span><span class="string">''</span></span><br></pre></td></tr></table></figure>
-<p>可以看到成功获取到每个词的词性，这对于我们对分词结果做进一步处理很有帮助，比如只想获取分词结果列表中的名词，那么就可以这样过滤：</p>
-<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">print [(x.word,x.flag) for x in psg.cut(s) if x.flag.startswith(<span class="emphasis">'n'</span>)]</span><br><span class="line"></span><br><span class="line"># 输出：</span><br><span class="line">'''</span><br><span class="line"><span class="meta">[(u'女朋友', u'n'), (u'北京故宫博物院', u'ns'), (u'参观', u'n')]</span></span><br><span class="line">'''</span><br></pre></td></tr></table></figure>
-<p>至于词性的每个字母分别表示什么词性，jieba分词的结果可能有哪些词性，就要去查阅词性对照表了，本文结尾附了一份从网上搜到的词性对照表，想了解更详细的词性分类信息，可以到网上搜索”结巴分词词性对照”。</p>
-<p>并行分词<br>在文本数据量非常大的时候，为了提高分词效率，开启并行分词就很有必要了。jieba支持并行分词，基于python自带的multiprocessing模块，但要注意的是在Windows环境下不支持。</p>
-<p>用法：</p>
-<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 开启并行分词模式，参数为并发执行的进程数</span></span><br><span class="line">jieba.enable_parallel(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭并行分词模式</span></span><br><span class="line">jieba.disable_parallel()</span><br><span class="line">举例：开启并行分词模式对三体全集文本进行分词</span><br><span class="line"></span><br><span class="line">santi_text = <span class="built_in">open</span>(<span class="string">'./santi.txt'</span>).<span class="built_in">read</span>()</span><br><span class="line">print <span class="built_in">len</span>(santi_text)</span><br><span class="line"><span class="number">2681968</span></span><br></pre></td></tr></table></figure>
-<p>可以看到三体全集的数据量还是非常大的，有260多万字节的长度。</p>
-<figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jieba.enable_parallel(<span class="number">100</span>)</span><br><span class="line">santi_words = [x <span class="keyword">for</span> x <span class="built_in">in</span> jieba.<span class="built_in">cut</span>(santi_text) <span class="keyword">if</span> len(x) &gt;= <span class="number">2</span>]</span><br><span class="line">jieba.disable_parallel()</span><br></pre></td></tr></table></figure>
-<p>获取出现频率Top n的词<br>还是以上面的三体全集文本为例，假如想要获取分词结果中出现频率前20的词列表，可以这样获取：</p>
-<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">from collections import Counter</span><br><span class="line">c = Counter(santi_words).most_common(<span class="number">20</span>)</span><br><span class="line">print(c)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta"># 输出：</span></span><br><span class="line">'''</span><br><span class="line">[(u'\r\n', <span class="number">2180</span>5), (u'一个', <span class="number">3057</span>), (u'没有', <span class="number">2128</span>), (u'他们', <span class="number">1690</span>), (u'我们', <span class="number">1550</span>), </span><br><span class="line">(u'这个', <span class="number">1357</span>), (u'自己', <span class="number">1347</span>), (u'程心', <span class="number">1320</span>), (u'现在', <span class="number">1273</span>), (u'已经', <span class="number">1259</span>), </span><br><span class="line">(u'世界', <span class="number">1243</span>), (u'罗辑', <span class="number">1189</span>), (u'可能', <span class="number">1177</span>), (u'什么', <span class="number">1176</span>), (u'看到', <span class="number">1114</span>), </span><br><span class="line">(u'知道', <span class="number">1094</span>), (u'地球', 951), (u'人类', 935), (u'太空', 930), (u'三体', 883)]</span><br><span class="line">'''</span><br></pre></td></tr></table></figure>
-<p>可以看到结果中’\r\n’居然是出现频率最高的词，还有’一个’、’没有’、’这个’等这种我们并不想要的无实际意义的词，那么就可以根据前面说的词性来进行过滤，这个以后细讲。</p>
-<p>使用用户字典提高分词准确性<br>不使用用户字典的分词结果：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">txt = <span class="string">u'欧阳建国是创新办主任也是欢聚时代公司云计算方面的专家'</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">','</span>.join(jieba.cut(txt))</span><br><span class="line">欧阳,建国,是,创新,办,主任,也,是,欢聚,时代,公司,云,计算,方面,的,专家</span><br><span class="line">使用用户字典的分词结果：</span><br><span class="line"></span><br><span class="line">jieba.load_userdict(<span class="string">'user_dict.txt'</span>)</span><br><span class="line"><span class="keyword">print</span> <span class="string">','</span>.join(jieba.cut(txt))</span><br><span class="line">欧阳建国,是,创新办,主任,也,是,欢聚时代,公司,云计算,方面,的,专家</span><br></pre></td></tr></table></figure>
-<p>可以看出使用用户字典后分词准确性大大提高。</p>
-<p>注：其中user_dict.txt的内容如下：</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">欧阳建国 <span class="number">5</span></span><br><span class="line"></span><br><span class="line">创新办 <span class="number">5</span> i</span><br><span class="line"></span><br><span class="line">欢聚时代 <span class="number">5</span></span><br><span class="line"></span><br><span class="line">云计算 <span class="number">5</span></span><br></pre></td></tr></table></figure>
-<p>用户字典每行一个词，格式为：</p>
-<p>词语 词频 词性</p>
-<p>其中词频是一个数字，词性为自定义的词性，要注意的是词频数字和空格都要是半角的。</p>
-<p>附：结巴分词词性对照表（按词性英文首字母排序）</p>
-<h3 id="形容词-1个一类，4个二类"><a href="#形容词-1个一类，4个二类" class="headerlink" title="形容词(1个一类，4个二类)"></a>形容词(1个一类，4个二类)</h3><table>
-<thead>
-<tr>
-<th>字母</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>a</td>
-<td>形容词</td>
-</tr>
-<tr>
-<td>ad</td>
-<td>副形词</td>
-</tr>
-<tr>
-<td>an</td>
-<td>名形词</td>
-</tr>
-<tr>
-<td>ag</td>
-<td>形容词性语素</td>
-</tr>
-<tr>
-<td>al</td>
-<td>形容词性惯用语</td>
-</tr>
-</tbody>
-</table>
-<h3 id="区别词-1个一类，2个二类"><a href="#区别词-1个一类，2个二类" class="headerlink" title="区别词(1个一类，2个二类)"></a>区别词(1个一类，2个二类)</h3><table>
-<thead>
-<tr>
-<th>字母</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>b</td>
-<td>区别词</td>
-</tr>
-<tr>
-<td>bl</td>
-<td>区别词性惯用语</td>
-</tr>
-</tbody>
-</table>
-<h3 id="连词-1个一类，1个二类"><a href="#连词-1个一类，1个二类" class="headerlink" title="连词(1个一类，1个二类)"></a>连词(1个一类，1个二类)</h3><table>
-<thead>
-<tr>
-<th>字母</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>c</td>
-<td>连词</td>
-</tr>
-<tr>
-<td>cc</td>
-<td>并列连词</td>
-</tr>
-</tbody>
-</table>
-<h3 id="副词-1个一类"><a href="#副词-1个一类" class="headerlink" title="副词(1个一类)"></a>副词(1个一类)</h3><table>
-<thead>
-<tr>
-<th>字母</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>d</td>
-<td>副词</td>
-</tr>
-</tbody>
-</table>
-<h3 id="叹词-1个一类"><a href="#叹词-1个一类" class="headerlink" title="叹词(1个一类)"></a>叹词(1个一类)</h3><table>
-<thead>
-<tr>
-<th>字母</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>e</td>
-<td>叹词</td>
-</tr>
-</tbody>
-</table>
-<h3 id="方位词-1个一类"><a href="#方位词-1个一类" class="headerlink" title="方位词(1个一类)"></a>方位词(1个一类)</h3><table>
-<thead>
-<tr>
-<th>字母</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>f</td>
-<td>方位词</td>
-</tr>
-</tbody>
-</table>
-<h3 id="前缀-1个一类"><a href="#前缀-1个一类" class="headerlink" title="前缀(1个一类)"></a>前缀(1个一类)</h3><table>
-<thead>
-<tr>
-<th>字母</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>h</td>
-<td>前缀</td>
-</tr>
-</tbody>
-</table>
-<h3 id="后缀-1个一类"><a href="#后缀-1个一类" class="headerlink" title="后缀(1个一类)"></a>后缀(1个一类)</h3><table>
-<thead>
-<tr>
-<th>字母</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>k</td>
-<td>后缀</td>
-</tr>
-</tbody>
-</table>
-<h3 id="数词-1个一类，1个二类"><a href="#数词-1个一类，1个二类" class="headerlink" title="数词(1个一类，1个二类)"></a>数词(1个一类，1个二类)</h3><table>
-<thead>
-<tr>
-<th>字母</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>m</td>
-<td>数词</td>
-</tr>
-<tr>
-<td>mq</td>
-<td>数量词</td>
-</tr>
-</tbody>
-</table>
-<h3 id="名词-1个一类，7个二类，5个三类"><a href="#名词-1个一类，7个二类，5个三类" class="headerlink" title="名词 (1个一类，7个二类，5个三类)"></a>名词 (1个一类，7个二类，5个三类)</h3><p>名词分为以下子类：<br>字母 | 含义<br>—|—<br>n  |  名词<br>nr   | 人名<br>nr1   | 汉语姓氏<br>nr2   | 汉语名字<br>nrj   | 日语人名<br>nrf   | 音译人名<br>ns  |  地名<br>nsf   | 音译地名<br>nt   | 机构团体名<br>nz   | 其它专名<br>nl   | 名词性惯用语<br>ng   | 名词性语素</p>
-<h3 id="拟声词-1个一类"><a href="#拟声词-1个一类" class="headerlink" title="拟声词(1个一类)"></a>拟声词(1个一类)</h3><table>
-<thead>
-<tr>
-<th>字母</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>o</td>
-<td>拟声词</td>
-</tr>
-</tbody>
-</table>
-<h3 id="介词-1个一类，2个二类"><a href="#介词-1个一类，2个二类" class="headerlink" title="介词(1个一类，2个二类)"></a>介词(1个一类，2个二类)</h3><table>
-<thead>
-<tr>
-<th>字母</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>p</td>
-<td>介词</td>
-</tr>
-<tr>
-<td>pba</td>
-<td>介词“把”</td>
-</tr>
-<tr>
-<td>pbei</td>
-<td>介词“被”</td>
-</tr>
-</tbody>
-</table>
-<h3 id="量词-1个一类，2个二类"><a href="#量词-1个一类，2个二类" class="headerlink" title="量词(1个一类，2个二类)"></a>量词(1个一类，2个二类)</h3><table>
-<thead>
-<tr>
-<th>字母</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>q</td>
-<td>量词</td>
-</tr>
-<tr>
-<td>qv</td>
-<td>动量词</td>
-</tr>
-<tr>
-<td>qt</td>
-<td>时量词</td>
-</tr>
-</tbody>
-</table>
-<h3 id="代词-1个一类，4个二类，6个三类"><a href="#代词-1个一类，4个二类，6个三类" class="headerlink" title="代词(1个一类，4个二类，6个三类)"></a>代词(1个一类，4个二类，6个三类)</h3><table>
-<thead>
-<tr>
-<th>字母</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>r</td>
-<td>代词</td>
-</tr>
-<tr>
-<td>rr</td>
-<td>人称代词</td>
-</tr>
-<tr>
-<td>rz</td>
-<td>指示代词</td>
-</tr>
-<tr>
-<td>rzt</td>
-<td>时间指示代词</td>
-</tr>
-<tr>
-<td>rzs</td>
-<td>处所指示代词</td>
-</tr>
-<tr>
-<td>rzv</td>
-<td>谓词性指示代词</td>
-</tr>
-<tr>
-<td>ry</td>
-<td>疑问代词</td>
-</tr>
-<tr>
-<td>ryt</td>
-<td>时间疑问代词</td>
-</tr>
-<tr>
-<td>rys</td>
-<td>处所疑问代词</td>
-</tr>
-<tr>
-<td>ryv</td>
-<td>谓词性疑问代词</td>
-</tr>
-<tr>
-<td>rg</td>
-<td>代词性语素</td>
-</tr>
-</tbody>
-</table>
-<h3 id="处所词-1个一类"><a href="#处所词-1个一类" class="headerlink" title="处所词(1个一类)"></a>处所词(1个一类)</h3><table>
-<thead>
-<tr>
-<th>字母</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>s</td>
-<td>处所词</td>
-</tr>
-</tbody>
-</table>
-<h3 id="时间词-1个一类，1个二类"><a href="#时间词-1个一类，1个二类" class="headerlink" title="时间词(1个一类，1个二类)"></a>时间词(1个一类，1个二类)</h3><table>
-<thead>
-<tr>
-<th>字母</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>t</td>
-<td>时间词</td>
-</tr>
-<tr>
-<td>tg</td>
-<td>时间词性语素</td>
-</tr>
-</tbody>
-</table>
-<h3 id="助词-1个一类，15个二类"><a href="#助词-1个一类，15个二类" class="headerlink" title="助词(1个一类，15个二类)"></a>助词(1个一类，15个二类)</h3><table>
-<thead>
-<tr>
-<th>字母</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>u</td>
-<td>助词</td>
-</tr>
-<tr>
-<td>uzhe</td>
-<td>着</td>
-</tr>
-<tr>
-<td>ule</td>
-<td>了 喽</td>
-</tr>
-<tr>
-<td>uguo</td>
-<td>过</td>
-</tr>
-<tr>
-<td>ude1</td>
-<td>的 底</td>
-</tr>
-<tr>
-<td>ude2</td>
-<td>地</td>
-</tr>
-<tr>
-<td>ude3</td>
-<td>得</td>
-</tr>
-<tr>
-<td>usuo</td>
-<td>所</td>
-</tr>
-<tr>
-<td>udeng</td>
-<td>等 等等 云云</td>
-</tr>
-<tr>
-<td>uyy</td>
-<td>一样 一般 似的 般</td>
-</tr>
-<tr>
-<td>udh</td>
-<td>的话</td>
-</tr>
-<tr>
-<td>uls</td>
-<td>来讲 来说 而言 说来</td>
-</tr>
-<tr>
-<td>uzhi</td>
-<td>之</td>
-</tr>
-<tr>
-<td>ulian</td>
-<td>连 （“连小学生都会”）</td>
-</tr>
-</tbody>
-</table>
-<h3 id="动词-1个一类，9个二类"><a href="#动词-1个一类，9个二类" class="headerlink" title="动词(1个一类，9个二类)"></a>动词(1个一类，9个二类)</h3><table>
-<thead>
-<tr>
-<th>字母</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>v</td>
-<td>动词</td>
-</tr>
-<tr>
-<td>vd</td>
-<td>副动词</td>
-</tr>
-<tr>
-<td>vn</td>
-<td>名动词</td>
-</tr>
-<tr>
-<td>vshi</td>
-<td>动词“是”</td>
-</tr>
-<tr>
-<td>vyou</td>
-<td>动词“有”</td>
-</tr>
-<tr>
-<td>vf</td>
-<td>趋向动词</td>
-</tr>
-<tr>
-<td>vx</td>
-<td>形式动词</td>
-</tr>
-<tr>
-<td>vi</td>
-<td>不及物动词（内动词）</td>
-</tr>
-<tr>
-<td>vl</td>
-<td>动词性惯用语</td>
-</tr>
-<tr>
-<td>vg</td>
-<td>动词性语素</td>
-</tr>
-</tbody>
-</table>
-<h3 id="标点符号-1个一类，16个二类"><a href="#标点符号-1个一类，16个二类" class="headerlink" title="标点符号(1个一类，16个二类)"></a>标点符号(1个一类，16个二类)</h3><table>
-<thead>
-<tr>
-<th>字母</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>w</td>
-<td>标点符号</td>
-</tr>
-<tr>
-<td>wkz</td>
-<td>左括号，全角：（ 〔 ［ ｛ 《 【 〖 〈 半角：( [ { &lt;</td>
-</tr>
-<tr>
-<td>wky</td>
-<td>右括号，全角：） 〕 ］ ｝ 》 】 〗 〉 半角： ) ] { &gt;</td>
-</tr>
-<tr>
-<td>wyz</td>
-<td>左引号，全角：“ ‘ 『</td>
-</tr>
-<tr>
-<td>wyy</td>
-<td>右引号，全角：” ’ 』</td>
-</tr>
-<tr>
-<td>wj</td>
-<td>句号，全角：。</td>
-</tr>
-<tr>
-<td>ww</td>
-<td>问号，全角：？ 半角：?</td>
-</tr>
-<tr>
-<td>wt</td>
-<td>叹号，全角：！ 半角：!</td>
-</tr>
-<tr>
-<td>wd</td>
-<td>逗号，全角：， 半角：,</td>
-</tr>
-<tr>
-<td>wf</td>
-<td>分号，全角：； 半角： ;</td>
-</tr>
-<tr>
-<td>wn</td>
-<td>顿号，全角：、</td>
-</tr>
-<tr>
-<td>wm</td>
-<td>冒号，全角：： 半角： :</td>
-</tr>
-<tr>
-<td>ws</td>
-<td>省略号，全角：…… …</td>
-</tr>
-<tr>
-<td>wp</td>
-<td>破折号，全角：—— －－ ——－ 半角：— —-</td>
-</tr>
-<tr>
-<td>wb</td>
-<td>百分号千分号，全角：％ ‰ 半角：%</td>
-</tr>
-<tr>
-<td>wh</td>
-<td>单位符号，全角：￥ ＄ ￡ ° ℃ 半角：$</td>
-</tr>
-</tbody>
-</table>
-<h3 id="字符串-1个一类，2个二类"><a href="#字符串-1个一类，2个二类" class="headerlink" title="字符串(1个一类，2个二类)"></a>字符串(1个一类，2个二类)</h3><table>
-<thead>
-<tr>
-<th>字母</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>x</td>
-<td>字符串</td>
-</tr>
-<tr>
-<td>xx</td>
-<td>非语素字</td>
-</tr>
-<tr>
-<td>xu</td>
-<td>网址URL</td>
-</tr>
-</tbody>
-</table>
-<h3 id="语气词-1个一类"><a href="#语气词-1个一类" class="headerlink" title="语气词(1个一类)"></a>语气词(1个一类)</h3><table>
-<thead>
-<tr>
-<th>字母</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>y</td>
-<td>语气词(delete yg)</td>
-</tr>
-</tbody>
-</table>
-<h3 id="状态词-1个一类"><a href="#状态词-1个一类" class="headerlink" title="状态词(1个一类)"></a>状态词(1个一类)</h3><table>
-<thead>
-<tr>
-<th>字母</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>z</td>
-<td>状态词</td>
-</tr>
-</tbody>
-</table>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">jieba</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/python语言基础//" class="article-tag-list-link color1">python语言基础</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/07/18/jieba分词/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-
-<!-- 目录内容 -->
-             
-        <!-- 目录内容结束 -->
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
     </nav>
   
 
@@ -2669,10 +2144,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">爬虫</a>
               </li>
              
@@ -2682,6 +2153,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">数据提取</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2745,6 +2220,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Flask</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">web后端</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">MySql</a>
               </li>
              
@@ -2753,11 +2236,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
+                <a href="javascript:void(0)" class="js-tag color3">信号</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">信号</a>
+                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
               </li>
              
               <li class="article-tag-list-item">
