@@ -489,6 +489,427 @@
              
         <!-- 目录内容结束 -->
   
+    <article id="post-linux文件操作" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/17/linux文件操作/">linux文件操作</a>
+    </h1>
+  
+
+        
+        <a href="/2018/09/17/linux文件操作/" class="archive-article-date">
+  	<time datetime="2018-09-17T15:42:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h1><h3 id="使用命令"><a href="#使用命令" class="headerlink" title="使用命令"></a>使用命令</h3><ul>
+<li><p>命令格式：</p>
+<figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">命令 <span class="string">[选项]</span> <span class="string">[参数]</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>[] 表示可选的</p>
+</blockquote>
+</li>
+<li><p>示例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -a /etc</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="常识命令"><a href="#常识命令" class="headerlink" title="常识命令"></a>常识命令</h3><ul>
+<li><p>ls：查看指定目录的内容，不指定目录时查看当前工作目录</p>
+<p>| 选项   | 说明               |<br>| —- | —————- |<br>| -a   | 显示所有文件，包括隐藏文件    |<br>| -l   | 列表显示，详细信息        |<br>| -h   | 人性化的显示大小，如：K/M/G |</p>
+<p>-l选项显示的结果：类型及权限 | 引用数 | 用户 | 用户组 | 大小 | 月 | 日| 年/时间 | 名称 </p>
+<p>文件类型：(-l显示结果中的第一部分的第一列)</p>
+<p>| 符号   | 类型     |<br>| —- | —— |<br>| -    | 普通文件   |<br>| d    | 目录文件   |<br>| l    | 链接文件   |<br>| c    | 字符设备文件 |<br>| b    | 块设备文件  |<br>| s    | 套接字文件  |<br>| p    | 管道文件   |</p>
+</li>
+<li><p>cd：切换工作目录</p>
+<p>| 符号   | 说明          |<br>| —- | ———– |<br>| .    | 当前目录        |<br>| ..   | 上一级目录       |<br>| ~    | 当前用户的家目录    |<br>| -    | 表示上次切换之前的目录 |<br>| /    | 表示根目录       |</p>
+<blockquote>
+<ol>
+<li>使用cd时，不指定目标地址，会切换到家目录</li>
+<li>凡是以/开头的目录都是绝对目录</li>
+<li>凡是以.或..开头的目录都是相当目录</li>
+</ol>
+</blockquote>
+</li>
+<li><p>pwd：查看当前工作目录</p>
+</li>
+<li><p>alias：给命令起别名</p>
+<ul>
+<li>l、la、ll等</li>
+</ul>
+</li>
+</ul>
+<h3 id="查看文件"><a href="#查看文件" class="headerlink" title="查看文件"></a>查看文件</h3><ul>
+<li><p>相关命令</p>
+<p>| 命令   | 说明                                       |<br>| —- | —————————————- |<br>| cat  | 从上到下，显示文件全部内容                            |<br>| tac  | 从下到上，显示文件全部内容                            |<br>| head | 查看开头指定行数的内容，不指定时默认10行，如：head -20 filename |<br>| tail | 查看文件末尾指定行数的内容，不指定时默认10行，如：tail -5 filename |<br>| nl   | 功能与cat相同，但是多显示了行号                        |<br>| wc   | 统计显示，内容：行数 单词数 字符数 文件名                   |<br>| more | 一点一点查看内容                                 |<br>| less | 一点一点查看内容                                 |</p>
+</li>
+<li><p>more/less使用说明</p>
+<ul>
+<li>显示一屏就停止</li>
+<li>q退出查看</li>
+<li>enter下翻一行</li>
+<li>空格下翻一屏</li>
+<li>more查看完毕会自动退出，less不会</li>
+<li>less可以使用上下按钮上下翻看，more不可以</li>
+<li>经常结合管道使用：ls /etc | more</li>
+</ul>
+</li>
+</ul>
+<h3 id="文件及目录"><a href="#文件及目录" class="headerlink" title="文件及目录"></a>文件及目录</h3><ul>
+<li><p>相关命令</p>
+<p>| 命令    | 说明                      |<br>| —– | ———————– |<br>| touch | 新建文件，可以是多个              |<br>| rm    | 删除文件或目录(删除目录时要传递’-r’选项) |<br>| cp    | 拷贝文件或目录(拷贝目录是要传递’-r’选项) |<br>| mv    | 移动文件或目录                 |<br>| mkdir | 创建目录，可以是多个              |<br>| rmdir | 删除空目录                   |</p>
+</li>
+<li><p>选项说明</p>
+<ul>
+<li>-r：删除或拷贝目录时需要添加，表示递归操作</li>
+<li>-f：表示强制操作，没有提示信息</li>
+<li><em>：表示模糊匹配，如：`rm </em>.py`，表示删除所有的py文件</li>
+<li>-p：创建目录时若需要创建中间目录，可以添加此选项</li>
+</ul>
+</li>
+</ul>
+<h3 id="用户及用户组"><a href="#用户及用户组" class="headerlink" title="用户及用户组"></a>用户及用户组</h3><ul>
+<li><p>相关命令</p>
+<p>| 命令       | 说明                                       |<br>| ——– | —————————————- |<br>| whoami   | 查看当前登录的用户名                               |<br>| useradd  | 新建用户，-d指定家目录，-m不存在，-s指定shell             |<br>| userdel  | 删除用户，-r会删除用户家目录                          |<br>| passwd   | 设置指定用户的密码，没有指定用户时设置时当前用户的密码              |<br>| su -     | 切换用户，一定要加上’-‘，否则只会切换家目录，但是环境没有切换，不指定用户时默认切换到root用户(记得先给root用户设置密码) |<br>| sudo     | 以指定用户(root)身份执行命令                        |<br>| visudo   | 专门用于编辑/etc/sudoers文件的命令，需要将指定用户添加进去才可以使用sudo命令，如：test ALL=(ALL:ALL) ALL；使用sudo update-alternatives –config editor可以修改系统默认编辑器(nano) |<br>| groupadd | 新建用户组                                    |<br>| groupdel | 删除用户组                                    |<br>| gpasswd  | 向指定组添加/删除指定的用户，如：gpasswd -a/-d  user group |<br>| groups   | 查看指定用户的组信息                               |<br>| chsh     | 修改指定用户的shell解析器，如：sudo chsh test -s /usr/sbin/nologin (禁止登陆) |<br>| chown    | 修改文件所属用户[及用户组]，如： sudo chown test[:test] 1.py，递归操作需要加’-R’选项 |<br>| chgrp    | 修改文件所属用户组，如：sudo chgrp test 1.py         |</p>
+</li>
+<li><p>涉及文件</p>
+<ul>
+<li>/etc/passwd：系统中的用户信息</li>
+<li>/etc/group：系统中的用户组信息</li>
+<li>/etc/shadow：系统中的用户密码信息</li>
+</ul>
+</li>
+<li><p>相关名词</p>
+<ul>
+<li>uid：用户唯一标识</li>
+<li>gid：用户组唯一标识</li>
+</ul>
+</li>
+</ul>
+<h3 id="文件权限"><a href="#文件权限" class="headerlink" title="文件权限"></a>文件权限</h3><ul>
+<li><p>说明：在linux下，所有的文件都涉及权限，分为三组：所有者、所属组、其他</p>
+</li>
+<li><p>权限：所有文件的权限可以分为：可读(r)、可写(w)、可执行(x)，’-‘表示没有改权限</p>
+</li>
+<li><p>原理：ls -l的结果，三位一组，分为三组，刚好对应：所有者、所属组、其他</p>
+</li>
+<li><p>修改权限：chmod，格式：<code>chmod [身份] [操作] [权限] 文件</code></p>
+<p>| 选项   | 说明         |<br>| —- | ———- |<br>| 身份   |            |<br>| u    | 所有者(user)  |<br>| g    | 所属组(group) |<br>| o    | 其他(other)  |<br>| 操作   |            |<br>| +    | 添加         |<br>| -    | 去掉         |<br>| =    | 设置         |<br>| 权限   |            |<br>| r    | 可读         |<br>|      | 可写         |<br>|      | 可执行        |</p>
+<blockquote>
+<p>sudo chmod o+w 1.py，给其他用户添加可写的权限</p>
+</blockquote>
+</li>
+<li><p>本质：使用一组(3位)八进制的数据来表示权限，如：0755，展开如下：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">转换为二进制：<span class="number">0755</span> =&gt; <span class="number">111</span> <span class="number">101</span> <span class="number">101</span></span><br><span class="line">对应三组身份：     所有者 所属组 其他</span><br><span class="line">每一组的权限：都包括 可读、可写、可执行</span><br><span class="line">示例解析：所有者可读可写可执行，所属组可读可执行，其他可读可执行</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>简化操作：sudo chmod 0755 1.py</p>
+<blockquote>
+<p>若要进行递归操作，则需要添加’-R’操作</p>
+</blockquote>
+</li>
+<li><p>umask</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">作用：用来限定新建文件的默认权限，权限与该值相反</span><br><span class="line">命令：umask [value]，查看或设置掩码</span><br><span class="line">分析：</span><br><span class="line">	掩码：<span class="number">0002</span> =&gt; <span class="number">000</span> <span class="number">000</span> <span class="number">010</span></span><br><span class="line">	新建目录：	 <span class="number">111</span> <span class="number">111</span> <span class="number">101</span></span><br><span class="line">	新建文件：	 <span class="number">110</span> <span class="number">110</span> <span class="number">100</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="文件搜索"><a href="#文件搜索" class="headerlink" title="文件搜索"></a>文件搜索</h3><ul>
+<li><p>find</p>
+<ul>
+<li><p>作用：用于任意文件的搜索，功能非常强大</p>
+</li>
+<li><p>格式：find [目录] 条件选项</p>
+</li>
+<li><p>选项：</p>
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-<span class="ruby">name：指定名字    sudo find / -name passwd</span></span><br><span class="line"><span class="ruby">-maxdepth：指定最大层级深度		sudo find / -maxdepth <span class="number">2</span> -name passwd</span></span><br><span class="line"><span class="ruby">-type：指定类型（d/l/s/p/c/b）</span></span><br><span class="line"><span class="ruby">-size：指定大小，单位：k/m/g，+表示大于，-表示小于，如：find -size +<span class="number">5</span>k，查找大于<span class="number">5</span>k的文件</span></span><br><span class="line"><span class="ruby">-mtime/-atime/-ctime：指定修改/访问/创建时间，单位是天，+表示几天前，-表示几天内</span></span><br><span class="line"><span class="ruby">-mmin/-amin/-cmin：功能同上，单位是分</span></span><br><span class="line"><span class="ruby">-user：指定用户</span></span><br><span class="line"><span class="ruby">-group：指定用户组</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>whereis</p>
+<ul>
+<li><p>作用：显示命令的详细信息，如：whereis ls，结果如下：</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">ls:</span> <span class="meta-keyword">/bin/</span>ls <span class="meta-keyword">/usr/</span>share<span class="meta-keyword">/man/</span>man1/ls<span class="number">.1</span>.gz</span><br><span class="line">命令名  命令位置  帮助文档</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>grep</p>
+<ul>
+<li><p>作用：正则表达式搜索(文件内容)</p>
+</li>
+<li><p>选项：</p>
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-<span class="ruby">i：忽略大小写</span></span><br><span class="line"><span class="ruby">-n：显示行号</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>示例：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">grep</span> -n /bin/bash /etc/passwd		查找/etc/passwd文件中包含/bin/bash的行，并显示行号</span><br><span class="line"><span class="keyword">grep</span> -i <span class="keyword">abc</span> <span class="number">2</span>.<span class="keyword">py</span>					在<span class="number">2</span>.<span class="keyword">py</span>中查找包含<span class="keyword">abc</span>的行，不考虑大小写</span><br><span class="line"><span class="keyword">ls</span> /bin | <span class="keyword">grep</span> <span class="string">'^m'</span>					查看/bin下以<span class="string">'m'</span>开头的命令</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="链接文件"><a href="#链接文件" class="headerlink" title="链接文件"></a>链接文件</h3><ul>
+<li><p>命令：ln</p>
+</li>
+<li><p>作用：创建一个文件或目录的链接</p>
+</li>
+<li><p>格式：<code>ln [-s] 原文件 新文件</code></p>
+</li>
+<li><p>查看：ls -l结果集中的第一列就是文件类型，为’l’的就是链接文件</p>
+</li>
+<li><p>软链接与硬链接</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">硬链接：使用ln时不加-s选项创建的链接，相当于一个文件多起了一个名字而已，极少用到</span><br><span class="line">	<span class="number">1.</span>不能给目录创建</span><br><span class="line">	<span class="number">2.</span>不能跨文件系统</span><br><span class="line">软链接：使用ln是添加-s选项创建的链接，相当于windows中的快捷方式，比较常用</span><br><span class="line">	<span class="number">1.</span>可以给目录创建</span><br><span class="line">	<span class="number">2.</span>可以跨文件系统</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>硬链接</p>
+</li>
+</ul>
+<p><img src="https://s3.51cto.com/wyfs02/M01/9C/5C/wKioL1lvUGjQ8TirAAAnGNq3aDs576.png" alt="image"></p>
+<ul>
+<li>软链接</li>
+</ul>
+<p><img src="https://s5.51cto.com/wyfs02/M01/9C/5C/wKiom1lvUGjTXRJMAAAtjT6GldQ692.png" alt="image"></p>
+<p>  ​</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">服务器</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/linux//" class="article-tag-list-link color1">linux</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/09/17/linux文件操作/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+
+<!-- 目录内容 -->
+             
+        <!-- 目录内容结束 -->
+  
+    <article id="post-linux目录结构及VIM" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/17/linux目录结构及VIM/">linux目录结构及VIM</a>
+    </h1>
+  
+
+        
+        <a href="/2018/09/17/linux目录结构及VIM/" class="archive-article-date">
+  	<time datetime="2018-09-17T15:38:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="目录结构及VIM"><a href="#目录结构及VIM" class="headerlink" title="目录结构及VIM"></a>目录结构及VIM</h1><h3 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h3><ul>
+<li>说明：<ul>
+<li>文件系统就是操作管理存储设备或分区上的文件的方法和数据结构，也就是存储设备上组织文件的方式。</li>
+<li>操作系统中负责管理和存储文件信息的软件机构叫文件管理系统，简称为文件系统。</li>
+</ul>
+</li>
+<li>常见文件系统<ul>
+<li>fat16(MS-DOS 6.X)，分区最大2G</li>
+<li>fat32(windows 95)，单个文件最大4G，性能较弱，容易产生碎片</li>
+<li>ntfs(window nt)，提升了fat32文件系统的稳定性</li>
+<li>ext4(Linux)，扩展型日志文件系统</li>
+<li>hfs[+] (Mac)，苹果设备的文件系统</li>
+<li>exfat(win/mac)，可以支持4G以上的单个文件，适合于闪存</li>
+</ul>
+</li>
+</ul>
+<h3 id="根目录结构"><a href="#根目录结构" class="headerlink" title="根目录结构"></a>根目录结构</h3><ul>
+<li><p>Linux和windows文件系统的差异很大，没有顶层的C/D/E盘符，是从’/‘开始的，只有他没有上一级目录，他处于目录结构的最顶层。如果把整个的目录结构倒过来看像一棵树，’/‘处于根部，因此’/‘也叫根目录。</p>
+</li>
+<li><p>根目录结构介绍</p>
+<p>| 目录          | 说明                                       |<br>| ———– | —————————————- |<br>| /           | 根目录                                      |<br>| /bin        | 大多数的操作命令                                 |<br>| /boot       | 系统启动相关文件                                 |<br>| /cdrom      | 挂在光盘                                     |<br>| /dev        | 设备文件(linux下有一切设备皆文件之称)                   |<br>| /etc        | 配置文件目录(经常使用)                             |<br>| /home       | 所有普通用户的家目录，一个用户对应该目录下的一个文件夹              |<br>| /lib        | 库文件                                      |<br>| /lib64      | 64位库文件                                   |<br>| /lost+found | 系统出现异常时保存信息以便恢复，平时是空的                    |<br>| /media      | 自动识别设备的挂载点                               |<br>| /mnt        | mount，专门用于挂载的目录                          |<br>| /opt        | option，用于安装可选软件                          |<br>| /proc       | 虚拟的文件系统，可以映射硬件信息                         |<br>| /root       | 超级用户(root)的家目录                           |<br>| /run        | 存放系统运行时的文件，如：进程文件                        |<br>| /sbin       | 超级用户使用的命令存放目录                            |<br>| /snap       | Ubuntu自己搞的一个包管理系统                        |<br>| /srv        | service，存储本机提供的数据或服务                     |<br>| /sys        | 类似于proc，可以映射内核信息                         |<br>| /tmp        | 保存随时可能销毁的临时文件                            |<br>| /usr        | 之前的功能同home，现在是unix system resource，用户安装软件的目录 |<br>| /var        | 系统产生的不会自动销毁的文件，如：日志文件                    |</p>
+<p>常识：</p>
+<ol>
+<li>隐藏文件：以’.’开头的文件就是隐藏文件</li>
+<li>‘.’ 表示当前目录</li>
+<li>‘..’ 表示上一级目录</li>
+<li>‘~’ 表示当前用户的家目录</li>
+</ol>
+</li>
+</ul>
+<h3 id="VIM编辑器"><a href="#VIM编辑器" class="headerlink" title="VIM编辑器"></a>VIM编辑器</h3><ul>
+<li><p>简介：vi是默认的自带的终端编辑器，后来有了vi的加强版vim。被誉为”终端编辑器之神”</p>
+</li>
+<li><p>安装：<code>sudo apt-get install vim</code></p>
+</li>
+<li><p>说明：所有操作都是在终端完成的，可以通过不同的模式切换来完成不同的功能。</p>
+</li>
+<li><p>工作模式：</p>
+<ul>
+<li><p>正常模式(命令模式)：使用vim打开的默认模式</p>
+<p>| 命令/操作           | 说明             |<br>| ————— | ————– |<br>| vim filename    | 打开/新建一个文件      |<br>| ESC             | 切换到正常模式        |<br>| ZZ（shift + zz）  | 保存退出           |<br>| !v              | 打开最后使用vim打开的文件 |<br>| 光标定位            |                |<br>| vim filename +n | 打开文件，将光标定位到第n行 |<br>| vim filename +  | 打开文件，将光标定位到尾行  |<br>| gg              | 定位到首行          |<br>| G               | 定位到尾行          |<br>| ngg             | 定位到第n行         |<br>| ^/0             | 定位到行首          |<br>| $               | 定位到行尾          |<br>| k               | ↑              |<br>| j               | ↓              |<br>| h               | ←              |<br>| l               | →              |<br>| ctrl + f        | 下翻一页           |<br>| ctrl + b        | 上翻一页           |<br>| ctrl + d        | 下翻半页           |<br>| ctrl + u        | 上翻半页           |<br>| 内容处理            |                |<br>| x               | 向右删除一个字符       |<br>| nx              | 向右删除n个字符，n表示个数 |<br>| X               | 向左删除一个字符       |<br>| nX              | 向左删除n个字符，n表示个数 |<br>| dd              | 删除光标所在行        |<br>| ndd             | 删除光标开始的n行      |<br>| p               | 粘贴剪切板中的内容      |<br>| yy              | 复制光标所在行        |<br>| nyy             | 复制光标开始的n行      |<br>| u               | 撤销             |<br>| ctrl + r        | 反撤销            |</p>
+</li>
+<li><p>插入模式(输入模式)：可以完成文件内容的输入编辑等，输入一下字符可以进入该模式：</p>
+<p>| 命令   | 说明               |<br>| —- | —————- |<br>| i    | 在光标位置插入          |<br>| I    | 在第一个非空字符插入       |<br>| a    | 在光标的下一个字符输入      |<br>| A    | 在行尾插入            |<br>| o    | 在光标所在的行下面插入空行    |<br>| O    | 在光标所在的行上面插入空行    |<br>| s    | 删除光标所在字符，并进入输入模式 |<br>| S    | 删除光标所在行，并进入输入模式  |</p>
+</li>
+<li><p>单行模式(编辑模式)：可以完成文件的整体编辑保存等操作，输入’:’即可进入</p>
+<p>| 命令                | 说明                          |<br>| —————– | ————————— |<br>| :w                | 保存                          |<br>| :q                | 退出                          |<br>| :wq               | 保存退出                        |<br>| :x                | 保存退出                        |<br>| :w!               | 强制保存                        |<br>| :q!               | 强制退出，不保存修改                  |<br>| :e!               | 放弃修改，恢复到修改之前的状态             |<br>| :w newfile        | 文件另存为                       |<br>|                   |                             |<br>| :set nu[mber]     | 显示行号                        |<br>| :set nonu[mber]   | 隐藏行号                        |<br>| :set tabstop=4    | 设置一个tab缩进4个字符               |<br>| :set mouse=a      | 启用鼠标的点击功能                   |<br>|                   |                             |<br>| [:]/内容            | 查找指定内容，n下翻，N上翻              |<br>| [:]?内容            | 查找指定内容，N下翻，n上翻              |<br>| :%s/原内容/新内容/[g]   | 所有行内容替换，g表示全局(默认只能替换一行中第一处) |<br>| :m,ns/原内容/新内容/[g] | m到n行内容替换，g用法同上              |<br>| 光标定位              |                             |<br>| :n                | 将光标定位到第n行，n表示行号             |</p>
+</li>
+</ul>
+</li>
+<li><p>总结</p>
+<ul>
+<li>若非正常关闭了vim，可能会产生临时的交换文件，再次打开时会出现特定的界面，可以根据提示进行内容的恢复以及交换文件的删除，也可以手动将交换文件删除，下次就OK了。交换文件时隐藏的(ls -a)</li>
+<li>vim配置文件：打开文件后的配置是临时的，关闭后就失效了<ul>
+<li>在用户家目录创建一个文件.vimrc</li>
+<li>将vim相关的配置写在文件中</li>
+<li>若文件没有生效，需要重新加载一次<code>source ~/.vimrc</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="help使用"><a href="#help使用" class="headerlink" title="help使用"></a>help使用</h3><ul>
+<li>说明：查看命令的帮助文档</li>
+<li>示例：ls –help</li>
+</ul>
+<p>###man使用</p>
+<ul>
+<li><p>简介：是manul的缩写，是一个命令，可以查询系统中标准的帮助文档</p>
+</li>
+<li><p>使用：</p>
+<p>| 命令             | 说明                 |<br>| ————– | —————— |<br>| man name       | 查看指定内容(命令/函数)的帮助文档 |<br>| q              | 退出查询               |<br>| ↓ 或 enter      | 向下翻一行              |<br>| ↑              | 向上翻一行              |<br>| pageup         | 向上翻一页              |<br>| pagedown 或 空格键 | 向下翻一页              |<br>| ?内容            | 在帮助文档进行查找指定内容      |</p>
+</li>
+<li><p>总结：有问题，找男人。</p>
+</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">服务器</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/linux//" class="article-tag-list-link color1">linux</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/09/17/linux目录结构及VIM/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+
+<!-- 目录内容 -->
+             
+        <!-- 目录内容结束 -->
+  
     <article id="post-MongoDB" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1812,341 +2233,6 @@
              
         <!-- 目录内容结束 -->
   
-    <article id="post-pip常用命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/17/pip常用命令/">pip常用命令</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/17/pip常用命令/" class="archive-article-date">
-  	<time datetime="2018-09-16T17:05:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>列出已安装的包</p>
-<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip freeze <span class="keyword">or</span> pip <span class="built_in">list</span></span><br></pre></td></tr></table></figure>
-<p>导出 requirements.txt</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip freeze &gt; <span class="tag">&lt;<span class="name">目录</span>&gt;</span>/requirements.txt</span><br></pre></td></tr></table></figure>
-<h3 id="安装包"><a href="#安装包" class="headerlink" title="安装包"></a>安装包</h3><h4 id="在线安装"><a href="#在线安装" class="headerlink" title="在线安装"></a>在线安装</h4><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip <span class="keyword">install</span> &lt;包名&gt; 或 pip <span class="keyword">install</span> -r requirements.txt</span><br></pre></td></tr></table></figure>
-<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装1.9版本的django</span></span><br><span class="line">pip <span class="keyword">install</span> django==<span class="number">1.9</span></span><br><span class="line"><span class="comment"># 安装版本号大于1.9的django，注意有引号</span></span><br><span class="line">pip <span class="keyword">install</span> <span class="string">"django&gt;1.9"</span></span><br><span class="line">pip <span class="keyword">install</span> <span class="string">"django&gt;=1.9"</span></span><br><span class="line">pip <span class="keyword">install</span> <span class="string">"django&lt;1.9"</span></span><br><span class="line">pip <span class="keyword">install</span> <span class="string">"django&lt;=1.9"</span></span><br><span class="line">pip <span class="keyword">install</span> <span class="string">"django&gt;&lt;1.9"</span></span><br><span class="line">requirements.txt 内容格式为：</span><br></pre></td></tr></table></figure>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">APScheduler</span>==<span class="number">2.1</span>.<span class="number">2</span></span><br><span class="line"><span class="attr">Django</span>==<span class="number">1.5</span>.<span class="number">4</span></span><br><span class="line"><span class="attr">MySQL-Connector-Python</span>==<span class="number">2.0</span>.<span class="number">1</span></span><br><span class="line"><span class="attr">MySQL-python</span>==<span class="number">1.2</span>.<span class="number">3</span></span><br><span class="line"><span class="attr">PIL</span>==<span class="number">1.1</span>.<span class="number">7</span></span><br><span class="line"><span class="attr">South</span>==<span class="number">1.0</span>.<span class="number">2</span></span><br><span class="line"><span class="attr">django-grappelli</span>==<span class="number">2.6</span>.<span class="number">3</span></span><br><span class="line"><span class="attr">django-pagination</span>==<span class="number">1.0</span>.<span class="number">7</span></span><br></pre></td></tr></table></figure>
-<h4 id="安装本地安装包"><a href="#安装本地安装包" class="headerlink" title="安装本地安装包"></a>安装本地安装包</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip install <span class="tag">&lt;<span class="name">目录</span>&gt;</span>/<span class="tag">&lt;<span class="name">文件名</span>&gt;</span> 或 pip install --use-wheel --no-index --find-links=wheelhouse/ <span class="tag">&lt;<span class="name">包名</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">包名</span>&gt;</span> 前有空格</span><br></pre></td></tr></table></figure>
-<p>可简写为</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install --no-index -f=<span class="tag">&lt;<span class="name">目录</span>&gt;</span>/ <span class="tag">&lt;<span class="name">包名</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h4 id="卸载包"><a href="#卸载包" class="headerlink" title="卸载包"></a>卸载包</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip <span class="keyword">uninstall</span> &lt;包名&gt; 或 pip <span class="keyword">uninstall</span> -r requirements.txt</span><br></pre></td></tr></table></figure>
-<h4 id="升级包"><a href="#升级包" class="headerlink" title="升级包"></a>升级包</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -U <span class="tag">&lt;<span class="name">包名</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h4 id="升级-pip"><a href="#升级-pip" class="headerlink" title="升级 pip"></a>升级 pip</h4><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip <span class="keyword">install</span> -U pip</span><br></pre></td></tr></table></figure>
-<h4 id="显示包所在的目录"><a href="#显示包所在的目录" class="headerlink" title="显示包所在的目录"></a>显示包所在的目录</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip show -f <span class="tag">&lt;<span class="name">包名</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h4 id="搜索包"><a href="#搜索包" class="headerlink" title="搜索包"></a>搜索包</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip search <span class="tag">&lt;<span class="name">搜索关键字</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h4 id="查询可升级的包"><a href="#查询可升级的包" class="headerlink" title="查询可升级的包"></a>查询可升级的包</h4><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip <span class="built_in">list</span> -o</span><br></pre></td></tr></table></figure>
-<h4 id="下载包而不安装"><a href="#下载包而不安装" class="headerlink" title="下载包而不安装"></a>下载包而不安装</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install <span class="tag">&lt;<span class="name">包名</span>&gt;</span> -d <span class="tag">&lt;<span class="name">目录</span>&gt;</span> 或 pip install -d <span class="tag">&lt;<span class="name">目录</span>&gt;</span> -r requirements.txt</span><br></pre></td></tr></table></figure>
-<h4 id="打包"><a href="#打包" class="headerlink" title="打包"></a>打包</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip wheel <span class="tag">&lt;<span class="name">包名</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h4 id="更换国内-pypi-镜像"><a href="#更换国内-pypi-镜像" class="headerlink" title="更换国内 pypi 镜像"></a>更换国内 pypi 镜像</h4><ul>
-<li>国内 pypi 镜像</li>
-<li>豆瓣：<a href="https://pypi.douban.com/simple" target="_blank" rel="noopener">https://pypi.douban.com/simple</a></li>
-<li>中国科学技术大学：<a href="https://mirrors.ustc.edu.cn/pypi/web/simple/" target="_blank" rel="noopener">https://mirrors.ustc.edu.cn/pypi/web/simple/</a></li>
-<li>清华大学 TUNA：<a href="https://pypi.tuna.tsinghua.edu.cn/simple" target="_blank" rel="noopener">https://pypi.tuna.tsinghua.edu.cn/simple</a></li>
-<li><a href="https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/" target="_blank" rel="noopener">https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/</a><h4 id="指定单次安装源"><a href="#指定单次安装源" class="headerlink" title="指定单次安装源"></a>指定单次安装源</h4></li>
-</ul>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install &lt;包名&gt; -<span class="selector-tag">i</span> http:<span class="comment">//pypi.v2ex.com/simple</span></span><br></pre></td></tr></table></figure>
-<h4 id="指定全局安装源"><a href="#指定全局安装源" class="headerlink" title="指定全局安装源"></a>指定全局安装源</h4><p>在 unix 和 macos，配置文件为：$HOME/.pip/pip.conf<br>在 windows 上，配置文件为：%HOME%\pip\pip.ini</p>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[global]</span></span><br><span class="line"><span class="attr">timeout</span> = <span class="number">6000</span></span><br><span class="line"><span class="attr">index-url</span> = http://pypi.douban.com/simple</span><br></pre></td></tr></table></figure>
-<p><a href="https://me.iblogc.com/2015/01/01/pip%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" target="_blank" rel="noopener">抄袭此博客</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/python语言基础//" class="article-tag-list-link color1">python语言基础</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/17/pip常用命令/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-
-<!-- 目录内容 -->
-             
-        <!-- 目录内容结束 -->
-  
-    <article id="post-数据提取之JSON与JsonPATH" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/17/数据提取之JSON与JsonPATH/">数据提取之JSON与JsonPATH</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/17/数据提取之JSON与JsonPATH/" class="archive-article-date">
-  	<time datetime="2018-09-16T17:02:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="数据提取之JSON与JsonPATH"><a href="#数据提取之JSON与JsonPATH" class="headerlink" title="数据提取之JSON与JsonPATH"></a>数据提取之JSON与JsonPATH</h1><p>JSON(JavaScript Object Notation)是一种轻量级的数据交换格式，它是的人们很容易的进行阅读和编写。同时也方便了机器进行解析和生成。适用于进行数据交互的场景，比如网站前台与后台之间的数据交互。</p>
-<p>JSON和XML的比较可谓不相上下。</p>
-<p>Python2.7中自带了JSON模块，直接import json就可以使用了。<br>官方博客：<a href="http://docs.python.org/library/json.html" target="_blank" rel="noopener">http://docs.python.org/library/json.html</a></p>
-<p>Json在线解析网站：<a href="http://www.json.cn/" target="_blank" rel="noopener">http://www.json.cn/</a></p>
-<h2 id="JSON"><a href="#JSON" class="headerlink" title="JSON"></a>JSON</h2><p>json简单说就是javascript中的对象和数组，所以这两种结构就是对象和数据两种结构，通过这两种结构可以表示各种复杂的结构。</p>
-<ul>
-<li>对象：对象在js中表示为{}括起来的内容，数据结构为{key:value,key:value,…}的键值对的结构，在面向对象的语言中，key为对象的属性，value为对应的属性值，所以很容易理解，取值方法为对象.key获取属性值，这个属性值的类型可以是数字、字符串、数组、对象这几种。</li>
-<li><p>数组：数组在js中是中括号[]括起来的内容，数据结构为[“Python”, “javascript”, “C++”,..]，取值方式和所有语言中一样，使用索引获取，字段值的类型可以是数字、字符串、数组、对象几种。</p>
-<h5 id="import-json"><a href="#import-json" class="headerlink" title="import json"></a>import json</h5><p>json模块提供了四个功能：<code>dumps</code>、<code>dump</code>、<code>loads</code>、<code>load</code>,用于字符串和python数据类型键进行转换。</p>
-</li>
-<li><p>json.loads()<br>把json格式字符串解码转换成Python对象从json到Python的类型转化对照如下：</p>
-</li>
-</ul>
-<p><img src="https://s1.ax1x.com/2018/09/14/iE1Lmd.png" alt="从json到python的转化关系"></p>
-<figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#json_loads.py</span></span><br><span class="line"></span><br><span class="line">import json</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">strList = <span class="string">'[1, 2, 3, 4]'</span></span><br><span class="line"></span><br><span class="line">strDict = <span class="string">'&#123;"city":"北京", "name":"大猫"&#125;'</span></span><br><span class="line"></span><br><span class="line">json.loads(strList)</span><br><span class="line"><span class="keyword">for</span> str <span class="keyword">in</span> strList:</span><br><span class="line">    print(str)</span><br><span class="line"><span class="meta">#[1, 2, 3, 4]</span></span><br><span class="line"></span><br><span class="line">json.loads(strDict)  <span class="meta">#json数据自动按Unicode存储</span></span><br><span class="line"><span class="meta">#&#123;u<span class="string">'city'</span>: u<span class="string">'\u5317\u4eac'</span>, u<span class="string">'name'</span>: u<span class="string">'\u5927\u732b'</span>&#125;</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>json.dumps()<br>实现python类型转化为json字符串，返回一个str对象。把一个Python对象编码转换成Json字符串，从python原始类型向json类型转化对照表如下：</li>
-</ul>
-<p><img src="https://i.loli.net/2018/09/14/5b9b4de50489b.png" alt="python向json转化"></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#json_dumps.py</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#-*- coding:utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> chardet</span><br><span class="line"></span><br><span class="line">listStr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line">tupleStr = (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line">dictStr  = &#123;<span class="string">"city"</span>:<span class="string">"北京"</span>, <span class="string">"name"</span>:<span class="string">"大猫"</span>&#125;</span><br><span class="line"></span><br><span class="line">print(type(json.dumps(listStr)))</span><br><span class="line"><span class="comment"># '[1, 2, 3, 4]'</span></span><br><span class="line"></span><br><span class="line">print(type(json.dumps(tupleStr)))</span><br><span class="line"><span class="comment"># '[1, 2, 3, 4]'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#注意，json.dumps()序列化时默认使用ascii编码</span></span><br><span class="line"><span class="comment">#添加参数 ensure_ascii = False,禁用ascii编码，按utf-8编码</span></span><br><span class="line"><span class="comment">#chardet.detect()返回字典，其中confidence是检测精确度。</span></span><br><span class="line"></span><br><span class="line">print(json.dumps(dictStr))</span><br><span class="line"><span class="comment">#'&#123;"city":"\\u5317\\u4eac", "name":"\\u5927\\u5218"&#125;'</span></span><br><span class="line"></span><br><span class="line">print(chardet.detect(json.dumps(dictStr)))</span><br><span class="line"></span><br><span class="line">print(json.dumps(dictStr, ensure_ascii=<span class="keyword">False</span>))</span><br><span class="line"></span><br><span class="line">print(chardet.detect(json.dumps(dictStr, ensure_ascii=<span class="keyword">False</span>)))</span><br></pre></td></tr></table></figure>
-<p><code>chardet</code>是一个非常优秀的编码识别模块，可通过pip安装</p>
-<ul>
-<li>json.dump()<br>将Python内置类型序列化为json对象后写入文件</li>
-</ul>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#json_dump.py</span></span><br><span class="line"></span><br><span class="line">import json</span><br><span class="line"></span><br><span class="line">listStr = [&#123;<span class="string">"city"</span>:<span class="string">"北京"</span>&#125;, &#123;<span class="string">"name"</span>:<span class="string">"大刘"</span>&#125;]</span><br><span class="line"></span><br><span class="line">json.dump(listStr, open(<span class="string">"listStr.json"</span>, <span class="string">"w"</span>), <span class="attribute">ensure_ascii</span>=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">dictStr = &#123;<span class="string">"city"</span>:<span class="string">"北京"</span>, <span class="string">"name"</span>:<span class="string">"大刘"</span>&#125;</span><br><span class="line">json.dump(dictStr.open(<span class="string">"dictStr.json"</span>, <span class="string">"w"</span>), <span class="attribute">ensure_ascii</span>=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>json.load()<br>读取文件中json形式的字符串元素转化成python类型</li>
-</ul>
-<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#-*- coding:utf<span class="number">-8</span> -*-</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">import json</span><br><span class="line"></span><br><span class="line">strList = json.<span class="built_in">load</span>(<span class="built_in">open</span>(<span class="string">"listStr.json"</span>))</span><br><span class="line"><span class="built_in">print</span> strList</span><br><span class="line"># [&#123;u<span class="string">'city'</span>: u<span class="string">'\u5317\u4eac'</span>&#125;, &#123;u<span class="string">'name'</span>: u<span class="string">'\u5927\u5218'</span>&#125;]</span><br><span class="line"></span><br><span class="line">strDict = json.<span class="built_in">load</span>(<span class="built_in">open</span>(<span class="string">"dictStr.json"</span>))</span><br><span class="line"><span class="built_in">print</span> strDict</span><br><span class="line"># &#123;u<span class="string">'city'</span>: u<span class="string">'\u5317\u4eac'</span>, u<span class="string">'name'</span>: u<span class="string">'\u5927\u5218'</span>&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="JsonPath"><a href="#JsonPath" class="headerlink" title="JsonPath"></a>JsonPath</h2><p>JsonPath是一种信息抽取类库，是从JSON文档中抽取指定信息的工具，提供多种原因实现保本：JavaScript/Python/PHP和Java</p>
-<p>JsonPath对于JSON来说，相当于XPATH对于XML</p>
-<ul>
-<li>下载地址：<a href="https://pypi.python.org/pypi/jsonpath" target="_blank" rel="noopener">https://pypi.python.org/pypi/jsonpath</a></li>
-<li>安装方法：pip install jsonpath</li>
-<li>官方文档：<a href="http://goessner.net/articles/JsonPath" target="_blank" rel="noopener">http://goessner.net/articles/JsonPath</a></li>
-</ul>
-<h6 id="JsonPath与XPath语法对比："><a href="#JsonPath与XPath语法对比：" class="headerlink" title="JsonPath与XPath语法对比："></a>JsonPath与XPath语法对比：</h6><p>Json结构清晰，可读性高，复杂度低，非常容易匹配，下表中对应了XPath的用法。</p>
-<p>###### </p>
-<table>
-<thead>
-<tr>
-<th>Xpath</th>
-<th>JSONPath</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>/</td>
-<td>$</td>
-<td>跟节点</td>
-</tr>
-<tr>
-<td>.</td>
-<td>@</td>
-<td>现行节点</td>
-</tr>
-<tr>
-<td>/</td>
-<td>. or []</td>
-<td>取子节点</td>
-</tr>
-<tr>
-<td>..</td>
-<td>n/a</td>
-<td>就是不管位置，选择所有符合条件的条件</td>
-</tr>
-<tr>
-<td>*</td>
-<td>*</td>
-<td>匹配所有元素节点</td>
-</tr>
-<tr>
-<td>[]</td>
-<td>[]</td>
-<td>迭代器标示(可以在里面做简单的迭代操作，如数组下标，根据内容选值等)</td>
-</tr>
-<tr>
-<td>&amp;#124</td>
-<td>[,]</td>
-<td>支持迭代器中做多选</td>
-</tr>
-<tr>
-<td>[]</td>
-<td>?()</td>
-<td>支持过滤操作</td>
-</tr>
-<tr>
-<td>n/a</td>
-<td>()</td>
-<td>支持表达式计算</td>
-</tr>
-<tr>
-<td>()</td>
-<td>n/a</td>
-<td>分组，JsonPath不支持</td>
-</tr>
-</tbody>
-</table>
-<h6 id="实例："><a href="#实例：" class="headerlink" title="实例："></a>实例：</h6><p>我们以拉勾网城市JSON文件<a href="http://www.lagou.com/lbs/getAllCitySearchLabels.json为例，获取所有城市。" target="_blank" rel="noopener">http://www.lagou.com/lbs/getAllCitySearchLabels.json为例，获取所有城市。</a></p>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#-*- coding:utf-8 -*-</span></span><br><span class="line"></span><br><span class="line">import urllib2</span><br><span class="line">import json</span><br><span class="line">import jsonpath</span><br><span class="line">import chardet</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">url = <span class="string">"http://www.lagou.com/lbs/getAllCitySearchLabels.json"</span></span><br><span class="line">request = urllib2.Request(url)</span><br><span class="line"></span><br><span class="line">response  = urllib2.urlopen(request)</span><br><span class="line"></span><br><span class="line">html = response.read()</span><br><span class="line"></span><br><span class="line"><span class="comment">#把json格式字符串转换成python对象</span></span><br><span class="line">jsonobj = json.loads(html)</span><br><span class="line"></span><br><span class="line"><span class="comment">#从根节点开始，匹配name节点</span></span><br><span class="line">citylist = jsonpath.jsonpath(jsonobj, '$..name')</span><br><span class="line"></span><br><span class="line">print citylist</span><br><span class="line">print(type(citylist))</span><br><span class="line"></span><br><span class="line">fp = open('city.json', 'w')</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">content = json.dumps(citylist, ensure_ascii=False)</span><br><span class="line">print content</span><br><span class="line">fp.write(content.encode('utf-8'))</span><br><span class="line"></span><br><span class="line">fp.close()</span><br></pre></td></tr></table></figure>
-<h5 id="注意事项："><a href="#注意事项：" class="headerlink" title="注意事项："></a>注意事项：</h5><p>json.loads()是把Json格式字符串解码转换成Python对象，如果在json.loads的时候出错，要注意被解码的Json字符的编码。</p>
-<ul>
-<li>如果传入的字符串的编码不是UTF-8的话，需要制定字符编码的参数:<code>encoding</code></li>
-</ul>
-<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">dataDict</span> = json.loads(jsonStrGBK)<span class="comment">;</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>dataJsonStr是JSON字符串，假设其编码本身是非UTF-8的话而是GBK的，那么上述代码会导致出错，改为对应的。</li>
-</ul>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">dataDict</span> = json.loads(jsonStrGBK, encoding=<span class="string">"GBK"</span>)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>如果dataJsonStr通过encoding指定了合适的编码，但是其中又包含了其它编码的字符，则需要先去将dataJsonStr转换为Unicode,然后再指定编码格式调用json.loads()</li>
-</ul>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">dataJsonStrUni</span> = data.JsonStr.decode(<span class="string">"GB2312"</span>)</span><br><span class="line"><span class="attr">dataDict</span> = json.loads(dataJsontrUni, encoding=<span class="string">"GB2312"</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="字符串编码转换"><a href="#字符串编码转换" class="headerlink" title="字符串编码转换"></a>字符串编码转换</h2><p>这是程序员最苦逼的地方，什么乱码之类的几乎都是由汉字引起的。<br>其实编码问题很好搞定，只要记住一点：</p>
-<figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">任何平台的任何编码，都能和<span class="built_in">Unicode</span>互相转换。</span><br></pre></td></tr></table></figure>
-<p>UTF-8与GBK互相转换，那就先把UTF-8转换成Unicode，再从Unicode转换成GBK，反之同理。</p>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 这是一个 UTF-8 编码的字符串</span></span><br><span class="line"><span class="attr">utf8Str</span> = <span class="string">"你好地球"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 将 UTF-8 编码的字符串 转换成 Unicode 编码</span></span><br><span class="line"><span class="attr">unicodeStr</span> = utf8Str.decode(<span class="string">"UTF-8"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 再将 Unicode 编码格式字符串 转换成 GBK 编码</span></span><br><span class="line"><span class="attr">gbkData</span> = unicodeStr.encode(<span class="string">"GBK"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 再将 GBK 编码格式字符串 转化成 Unicode</span></span><br><span class="line"><span class="attr">unicodeStr</span> = gbkData.decode(<span class="string">"gbk"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 再将 Unicode 编码格式字符串转换成 UTF-8</span></span><br><span class="line"><span class="attr">utf8Str</span> = unicodeStr.encode(<span class="string">"UTF-8"</span>)</span><br></pre></td></tr></table></figure>
-<p><code>decode</code>的作用是将其它编码的字符串转换成Unicode编码</p>
-<p><code>encode</code>的作用是将Unicode编码转换成其他编码的字符串</p>
-<p>一句话：<code>UTF-8</code>是对Unicode字符集记性编码的一种编码格式</p>
-<p><a href="https://www.cnblogs.com/miqi1992/p/8081244.html" target="_blank" rel="noopener">抄袭此博文</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">爬虫</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据提取</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">json</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/爬虫//" class="article-tag-list-link color3">爬虫</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/17/数据提取之JSON与JsonPATH/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-
-<!-- 目录内容 -->
-             
-        <!-- 目录内容结束 -->
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -2245,6 +2331,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">服务器</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">定时</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">爬虫</a>
               </li>
              
@@ -2258,18 +2356,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Celery</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">服务器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">定时</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2313,11 +2399,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+                <a href="javascript:void(0)" class="js-tag color5">json</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">json</a>
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -170,6 +170,450 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-python-stdnum" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/21/python-stdnum/">python-stdnum</a>
+    </h1>
+  
+
+        
+        <a href="/2018/08/21/python-stdnum/" class="archive-article-date">
+  	<time datetime="2018-08-21T14:55:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="python-stdnum"><a href="#python-stdnum" class="headerlink" title="python-stdnum"></a>python-stdnum</h2><p>这是一个Python库 ，旨在提供处理，解析和验证标准数字的函数。</p>
+<p>该模块支持100多种不同的数字格式 ，其中包括大量增值税和其他税号，个人身份和公司识别码，国际标准号（ISBN，IBAN，EAN等）和各种其他格式。 </p>
+<p>该模块还包括Verhoeff，Luhn和ISO / IEC 7064校验位算法系列的实现。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> stdnum <span class="keyword">import</span> isbn</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>isbn.validate(<span class="string">'978-9024538270'</span>)</span><br><span class="line"><span class="string">'9789024538270'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>isbn.validate(<span class="string">'978-9024538271'</span>)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">    ...</span><br><span class="line">InvalidChecksum: ...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>isbn.format(<span class="string">'9780471117094'</span>)</span><br><span class="line"><span class="string">'978-0-471-11709-4'</span></span><br></pre></td></tr></table></figure>
+<p>简单的代码例子：</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> stdnum <span class="keyword">import</span> luhn</span><br><span class="line"><span class="keyword">from</span> stdnum.cn <span class="keyword">import</span> ric</span><br><span class="line"><span class="comment"># 验证银行卡号，号来源百度</span></span><br><span class="line"><span class="built_in">print</span>(luhn.is_valid(<span class="string">"6217995200015424051"</span>))</span><br><span class="line"><span class="comment"># 验证身份证号，号来源百度</span></span><br><span class="line"><span class="built_in">print</span>(ric.is_valid(<span class="string">"360822198112069337"</span>))</span><br></pre></td></tr></table></figure>
+<h3 id="支持的格式"><a href="#支持的格式" class="headerlink" title="支持的格式"></a>支持的格式</h3><p>目前python-stdnum模块支持以下格式：</p>
+<ul>
+<li>NIPT（增值税识别号码，阿尔巴尼亚增值税号码）</li>
+<li>CBU（统一银行代码，阿根廷银行帐号）</li>
+<li>CUIT（独特税务识别代码，阿根廷税号）</li>
+<li>奥地利公司注册号码</li>
+<li>邮政编码（奥地利邮政编码）</li>
+<li>税号（奥地利税号）</li>
+<li>UID（增值税识别号，奥地利增值税号）</li>
+<li>ABN（澳大利亚商业号码）</li>
+<li>ACN（澳大利亚公司编号）</li>
+<li>TFN（澳大利亚税务档案号码）</li>
+<li>比利时IBAN（国际银行账号）</li>
+<li>VAT，TVA，NWSt，企业编号（比利时企业编号）</li>
+<li>EGN（个人识别号码，保加利亚个人识别码）</li>
+<li>PNF（PNH，外国人的个人号码，外国人的保加利亚号码）</li>
+<li>增值税（保加利亚增值税号）</li>
+<li>BIC（ISO 9362商业识别码）</li>
+<li>CNPJ（国家商业注册，巴西公司标识符）</li>
+<li>个人纳税人的身份证（CPF）（巴西国家标识符）</li>
+<li>BN（加拿大商业号码）</li>
+<li>SIN（加拿大社会保险号码）</li>
+<li>CAS RN（化学文摘服务注册号）</li>
+<li>瑞士社会安全号码（“Sozialversicherungsnummer”）</li>
+<li>UID（公司标识号，瑞士商业标识符）</li>
+<li>增值税，增值税，TVA，IVA，TPV（增值税号，瑞士增值税号）</li>
+<li>RUT（RolÚnicoTributario，智利国家税号）</li>
+<li>RIC号（中国居民身份证号码）</li>
+<li>NIT（税号，哥伦比亚身份证）</li>
+<li>CUSIP号码（财务安全识别号码）</li>
+<li>增值税登记号码 （塞浦路斯增值税号）</li>
+<li>税号（捷克增值税号）</li>
+<li>RČ（出生人数，捷克出生人数）</li>
+<li>Handelsregisternummer（德国公司注册号）</li>
+<li>IdNr（税号，德国个人税号）</li>
+<li>St.-Nr. （税号，德国税号）</li>
+<li>增值税号码（销售税识别号码，德国增值税号码）</li>
+<li>Wertpapierkennnummer（德国证券识别码）</li>
+<li>CPR（personnummer，丹麦公民号码）</li>
+<li>CVR（增值税登记号码）</li>
+<li>Cedula（多米尼加共和国国民身份证号码）</li>
+<li>NCF（财政证明号码，多米尼加共和国收据号码）</li>
+<li>RNC（National Taxpayer Registry，多米尼加共和国税号）</li>
+<li>EAN（国际商品编号）</li>
+<li>CI（身份证，厄瓜多尔个人身份代码）</li>
+<li>RUC（独特纳税人登记处，厄瓜多尔公司税号）</li>
+<li>个人识别码（爱沙尼亚个人识别号码）</li>
+<li>KMKR（增值税号，爱沙尼亚增值税号）</li>
+<li>爱沙尼亚组织注册码</li>
+<li>CCC（经常账户代码，西班牙银行账户代码）</li>
+<li>CIF（税务证明书，西班牙公司税号）</li>
+<li>CUPS（统一供应点代码，供应点统一代码）</li>
+<li>DNI（国家身份证件，西班牙个人身份证）</li>
+<li>西班牙IBAN（国际银行账号）</li>
+<li>NIE（外国人身份证号码，西班牙外国人号码）</li>
+<li>NIF（税号，西班牙增值税号）</li>
+<li>Referencia Catastral（西班牙房地产物业ID）</li>
+<li>SEPA的债权人标识符（AT-02）</li>
+<li>欧元钞票序列号</li>
+<li>EIC（欧洲能源识别代码）</li>
+<li>NACE（欧盟企业分类）</li>
+<li>增值税（欧盟增值税号）</li>
+<li>增值税号（芬兰增值税号）</li>
+<li>芬兰协会标识符</li>
+<li>HETU（个人身份号码）</li>
+<li>Veronumero（芬兰个人税号）</li>
+<li>业务ID（芬兰业务标识符）</li>
+<li>FIGI（金融工具全球标识符）</li>
+<li>NIF（法国税务识别号码）</li>
+<li>NIR（法国个人识别号码）</li>
+<li>SIREN（法国公司识别号码）</li>
+<li>SIRET（法国公司设立识别号码）</li>
+<li>增值税号（增值税，法国增值税号）</li>
+<li>NHS（英国国民健康服务患者标识符）</li>
+<li>SEDOL号码（证券交易所每日官方列表编号）</li>
+<li>UPN（英文独特的学生编号）</li>
+<li>增值税（英国（和马恩岛）增值税登记号码）</li>
+<li>FPA，增值税，增值税（希腊增值税号）</li>
+<li>GRid（全球发布标识符）</li>
+<li>OIB（个人识别号码，克罗地亚身份证号码）</li>
+<li>ANUM（匈牙利增值税号）</li>
+<li>IBAN（国际银行账号）</li>
+<li>PPS否（个人公共服务号码，爱尔兰个人号码）</li>
+<li>增值税（爱尔兰税号）</li>
+<li>IMEI（国际移动设备识别码）</li>
+<li>IMO号码（国际海事组织编号）</li>
+<li>IMSI（国际移动用户识别码）</li>
+<li>Aadhaar（印度数字居民个人身份号码）</li>
+<li>PAN（永久帐号，印度所得税标识符）</li>
+<li>Kennitala（冰岛个人和组织身份代码）</li>
+<li>增值税号（增值税税）</li>
+<li>ISAN（国际标准视听号码）</li>
+<li>ISBN（国际标准书号）</li>
+<li>伊黎伊斯兰国（图书馆的国际标准标识符）</li>
+<li>ISIN（国际证券识别号码）</li>
+<li>ISMN（国际标准音乐编号）</li>
+<li>ISO 6346（容器识别的国际标准）</li>
+<li>ISSN（国际标准序列号）</li>
+<li>财政法典（个人意大利税法）</li>
+<li>增值税号（意大利增值税号）</li>
+<li>LEI（法律实体标识符）</li>
+<li>增值税（增值税纳税人代码，立陶宛增值税号）</li>
+<li>增值税（增值税，卢森堡增值税号）</li>
+<li>增值税（增值税，拉脱维亚增值税号）</li>
+<li>增值税号（增值税，Monacan增值税号）</li>
+<li>黑山IBAN（国际银行帐号）</li>
+<li>MEID（移动设备标识符）</li>
+<li>增值税（马耳他增值税号）</li>
+<li>RFC（联邦纳税人登记处，墨西哥税号）</li>
+<li>身份证号码（马来西亚国家登记身份证号码）</li>
+<li>布林号码（学校荷兰语号码）</li>
+<li>BSN（国家公共服务号码，荷兰国家识别号码）</li>
+<li>增值税号（销售税号，荷兰增值税号）</li>
+<li>教育号码（荷兰学生学号）</li>
+<li>邮政编码（荷兰邮政编码）</li>
+<li>增值税（增值税，挪威增值税号）</li>
+<li>Orgnr（组织编号，挪威组织编号）</li>
+<li>NIP（税号，波兰增值税号）</li>
+<li>PESEL（波兰国家身份证号码）</li>
+<li>REGON（国民经济登记册，波兰经济单位登记册）</li>
+<li>NIF（税号，葡萄牙增值税号）</li>
+<li>CF（增值税登记号，罗马尼亚增值税号）</li>
+<li>CNP（Cod Numeric Personal，罗马尼亚数字个人密码）</li>
+<li>PIB（税号，塞尔维亚税号）</li>
+<li>纳税人识别号码，俄罗斯税收识别码</li>
+<li>Orgnr（组织编号，瑞典公司编号）</li>
+<li>增值税（增值税，增值税，瑞典增值税号）</li>
+<li>增值税号（增值税号，斯洛文尼亚增值税号）</li>
+<li>增值税号（增值税增值税，斯洛伐克增值税号）</li>
+<li>RČ（出生人数，斯洛伐克出生人数）</li>
+<li>COE（经济运营商代码，圣马力诺国家税号）</li>
+<li>TC Kimlik No.（土耳其个人识别号码）</li>
+<li>ATIN（美国收养纳税人识别号码）</li>
+<li>EIN（美国雇主识别号码）</li>
+<li>ITIN（美国个人纳税人识别号码）</li>
+<li>PTIN（美国编制者税务识别号码）</li>
+<li>RTN（路由传输号码）</li>
+<li>SSN（美国社会安全号码）</li>
+<li>TIN（美国纳税人识别号码）</li>
+</ul>
+<p>此外，还提供了许多通用校验位算法：</p>
+<ul>
+<li>Verhoeff算法</li>
+<li>达姆算法</li>
+<li>Luhn和Luhn mod N算法</li>
+<li>ISO / IEC 7064中描述的一些算法：Mod 11,2，Mod 37,2，Mod 97,10，Mod 11,10和Mod 37,36</li>
+</ul>
+<p><a href="https://arthurdejong.org/python-stdnum/doc/1.9/index.html" target="_blank" rel="noopener">详细文档</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">扩展包</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/python语言基础//" class="article-tag-list-link color1">python语言基础</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/21/python-stdnum/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+
+<!-- 目录内容 -->
+             
+        <!-- 目录内容结束 -->
+  
+    <article id="post-MySql优化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/18/MySql优化/">MySql优化</a>
+    </h1>
+  
+
+        
+        <a href="/2018/07/18/MySql优化/" class="archive-article-date">
+  	<time datetime="2018-07-18T15:18:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="MySQL优化三大方向"><a href="#MySQL优化三大方向" class="headerlink" title="MySQL优化三大方向"></a>MySQL优化三大方向</h4><ul>
+<li>① 优化MySQL所在服务器内核(此优化一般由运维人员完成)。</li>
+<li>② 对MySQL配置参数进行优化（my.cnf）此优化需要进行压力测试来进行参数调整。</li>
+<li>③ 对SQL语句以及表优化。<h4 id="MySQL参数优化"><a href="#MySQL参数优化" class="headerlink" title="MySQL参数优化"></a>MySQL参数优化</h4></li>
+<li>1:MySQL 默认的最大连接数为 100，可以在 mysql 客户端使用以下命令查看<br>mysql&gt; show variables like ‘max_connections’;</li>
+<li>2:查看当前访问Mysql的线程<br>mysql&gt; show processlist;</li>
+<li>3:设置最大连接数<br>mysql&gt;set globle max_connections = 5000;<br>最大可设置16384,超过没用</li>
+<li>4:查看当前被使用的connections<br>mysql&gt;show globle status like ‘max_user_connections’<h4 id="对MySQL语句性能优化的16条经验"><a href="#对MySQL语句性能优化的16条经验" class="headerlink" title="对MySQL语句性能优化的16条经验"></a>对MySQL语句性能优化的16条经验</h4></li>
+<li>① 为查询缓存优化查询</li>
+<li>② EXPLAIN 我们的SELECT查询(可以查看执行的行数)</li>
+<li>③ 当只要一行数据时使用LIMIT 1</li>
+<li>④ 为搜索字段建立索引</li>
+<li>⑤ 在Join表的时候使用相当类型的列，并将其索引</li>
+<li>⑥ 千万不要 ORDER BY RAND  ()</li>
+<li>⑦ 避免SELECT *</li>
+<li>⑧ 永远为每张表设置一个ID</li>
+<li>⑨ 可以使用ENUM 而不要VARCHAR</li>
+<li>⑩ 尽可能的使用NOT NULL</li>
+<li>⑪ 固定长度的表会更快</li>
+<li>⑫ 垂直分割</li>
+<li>⑬ 拆分打的DELETE或INSERT语句</li>
+<li>⑭ 越小的列会越快</li>
+<li>⑮ 选择正确的存储引擎</li>
+<li>⑯ 小心 “永久链接”</li>
+</ul>
+<p>具体描述如下：</p>
+<h3 id="一-使用查询缓存优化查询"><a href="#一-使用查询缓存优化查询" class="headerlink" title="(一) 使用查询缓存优化查询"></a>(一) 使用查询缓存优化查询</h3><p>大多数的MySQL服务器都开启了查询缓存。这是提高性能最有效的方法之一，而且这是被MySQL引擎处理的。当有很多相同的查询被执行了多次的时候，这些查询结果会被放入一个缓存中，这样后续的相同查询就不用操作而直接访问缓存结果了。<br>这里最主要的问题是，对于我们程序员来说，这个事情是很容易被忽略的。因为我们某些查询语句会让MySQL不使用缓存，示例如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1：<span class="keyword">SELECT</span> username <span class="keyword">FROM</span> <span class="keyword">user</span> <span class="keyword">WHERE</span>    signup_date &gt;= <span class="keyword">CURDATE</span>()</span><br><span class="line"><span class="number">2</span>：<span class="keyword">SELECT</span> username <span class="keyword">FROM</span> <span class="keyword">user</span> <span class="keyword">WHERE</span>    signup_date &gt;= <span class="string">'2014-06-24‘</span></span><br></pre></td></tr></table></figure>
+<p>上面两条SQL语句的差别就是 CURDATE() ，MySQL的查询缓存对这个函数不起作用。所以，像 NOW() 和 RAND() 或是其它的诸如此类的SQL函数都不会开启查询缓存，因为这些函数的返回是会不定的易变的。所以，你所需要的就是用一个变量来代替MySQL的函数，从而开启缓存。</p>
+<h3 id="二-使用EXPLAIN关键字检测查询"><a href="#二-使用EXPLAIN关键字检测查询" class="headerlink" title="(二) 使用EXPLAIN关键字检测查询"></a>(二) 使用EXPLAIN关键字检测查询</h3><p>使用EXPLAIN关键字可以使我们知道MySQL是如何处理SQL语句的，这样可以帮助我们分析我们的查询语句或是表结构的性能瓶颈；EXPLAIN的查询结果还会告诉我们索引主键是如何被利用的，数据表是如何被被搜索或排序的….等等。语法格式是：EXPLAIN +SELECT语句;<br><img src="https://img-blog.csdn.net/20170909001604837?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzA4NzUxMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="image"><br>我们可以看到，前一个结果显示搜索了 7883 行，而后一个只是搜索了两个表的 9 和 16 行。查看rows列可以让我们找到潜在的性能问题。 </p>
+<h3 id="三-当只要一行数据时使用LIMIT-1"><a href="#三-当只要一行数据时使用LIMIT-1" class="headerlink" title="(三)当只要一行数据时使用LIMIT 1"></a>(三)当只要一行数据时使用LIMIT 1</h3><p>加上LIMIT 1可以增加性能。MySQL数据库引擎会在查找到一条数据后停止搜索，而不是继续往后查询下一条符合条件的数据记录。</p>
+<h3 id="四-为搜索字段建立索引"><a href="#四-为搜索字段建立索引" class="headerlink" title="(四)为搜索字段建立索引"></a>(四)为搜索字段建立索引</h3><p>索引不一定就是给主键或者是唯一的字段，如果在表中，有某个字段经常用来做搜索，需要将其建立索引。<br>索引的有关操作如下：</p>
+<ul>
+<li>1.创建索引<br>在执行CREATE TABLE语句时可以创建索引，也可以单独用CREATE INDEX或ALTER TABLE来为表增加索引。<ul>
+<li>1.1&gt; ALTER TABLE<br>ALTER TABLE 用来创建普通索引、唯一索引、主键索引和全文索引</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> table_name <span class="keyword">ADD</span> <span class="keyword">INDEX</span> index_name (column_list);</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> table_name <span class="keyword">ADD</span> <span class="keyword">UNIQUE</span> (column_list);</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> table_name <span class="keyword">ADD</span> PRIMARY <span class="keyword">KEY</span> (column_list);</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> table_name <span class="keyword">ADD</span> FULLTEXT (column_list);</span><br></pre></td></tr></table></figure>
+<p>其中table_name是要增加索引名的表名，column_list指出对哪些列列进行索引，多列时各列之间使用半角逗号隔开。索引名index_name是可选的，如果不指定索引名称，MySQL将根据第一个索引列自动指定索引名称，另外，ALTER TABLE允许在单个语句中更改多个表，因此可以在同时创建多个索引。</p>
+<pre><code>- 1.2&gt; CREATE INDEX
+</code></pre><p>CREATE INDEX可对表增加普通索引或UNIQUE索引以及全文索引，但是不可以对表增加主键索引</p>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">INDEX</span> index_name <span class="keyword">ON</span> table_name (column_list);</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">UNIQUE</span> index_name <span class="keyword">ON</span> table_name (column_list);</span><br><span class="line"><span class="keyword">CREATE</span> FULLTEXT index_name <span class="keyword">ON</span> table_name (column_list);</span><br></pre></td></tr></table></figure>
+<p>table_name、index_name和column_list具有与ALTER TABLE语句中相同的含义，索引名必须指定。另外，不能用CREATE INDEX语句创建PRIMARY KEY索引。</p>
+<ul>
+<li>2.索引类型<ul>
+<li>普通索引INDEX：适用于name、email等一般属性</li>
+<li>唯一索引UNIQUE：与普通索引类似，不同的是唯一索引要求索引字段值在表中是唯一的，这一点和主键索引类似，但是不同的是，唯一索引允许有空值。唯一索引一般适用于身份证号码、用户账号等不允许有重复的属性字段上。</li>
+<li>主键索引：其实就是主键，一般在建表时就指定了，不需要额外添加。</li>
+<li>全文检索：只适用于VARCHAR和Text类型的字段。</li>
+</ul>
+</li>
+</ul>
+<p>注意：全文索引和普通索引是有很大区别的，如果建立的是普通索引，一般会使用like进行模糊查询，只会对查询内容前一部分有效，即只对前面不使用通配符的查询有效，如果前后都有通配符，普通索引将不会起作用。对于全文索引而言在查询时有自己独特的匹配方式，例如我们在对一篇文章的标题和内容进行全文索引时：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> article <span class="keyword">ADD</span> FULLTEXT (<span class="string">'title'</span>, <span class="string">'content'</span>);</span><br></pre></td></tr></table></figure>
+<p> 在进行检索时就需要使用如下的语法进行检索：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> article <span class="keyword">WHERE</span> <span class="keyword">MATCH</span>(<span class="string">'title'</span>, <span class="string">'content'</span>) AGAINST (<span class="string">'查询字符串'</span>);</span><br></pre></td></tr></table></figure>
+<p>在使用全文检索时的注意事项：<br>MySql自带的<font color="#FF0000">   全文索引只能用于数据库引擎为MYISAM的数据表，如果是其他数据引擎</font>，则全文索引不会生效。此外，<font color="#FF0000">MySql自带的全文索引只能对英文进行全文检索，目前无法对中文进行全文检索。如果需要对包含中文在内的文本数据进行全文检索，我们需要采用Sphinx（斯芬克斯）/Coreseek技术来处理中文</font>。另外使用MySql自带的全文索引时，<font color="#FF0000">  如果查询字符串的长度过短将无法得到期望的搜索结果。MySql全文索引所能找到的词默认最小长度为4个字符</font>。另外，如果查询的字符串包含停止词，那么该停止词将会被忽略。</p>
+<ul>
+<li>3.组合索引</li>
+</ul>
+<p>组合索引又称多列索引，就是建立索引时指定多个字段属性。有点类似于字典目录，比如查询 ‘guo’ 这个拼音的字时，首先查找g字母，然后在g的检索范围内查询第二个字母为u的列表，最后在u的范围内查找最后一个字母为o的字。比如组合索引(a,b,c)，abc都是排好序的，在任意一段a的下面b都是排好序的，任何一段b下面c都是排好序的</p>
+<p>组合索引的生效原则是  从前往后依次使用生效，如果中间某个索引没有使用，那么断点前面的索引部分起作用，断点后面的索引没有起作用；</p>
+<p>造成断点的原因：</p>
+<p>前边的任意一个索引没有参与查询，后边的全部不生效。</p>
+<p>前边的任意一个索引字段参与的是范围查询，后面的不会生效。</p>
+<p>断点跟索引字字段在SQL语句中的位置前后无关，只与是否存在有关。在网上找到了很好的示例：<br>比如：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">where <span class="attribute">a</span>=3 <span class="keyword">and</span> <span class="attribute">b</span>=45 <span class="keyword">and</span> <span class="attribute">c</span>=5 <span class="built_in">..</span><span class="built_in">..</span> #这种三个索引顺序使用中间没有断点，全部发挥作用；</span><br><span class="line">where <span class="attribute">a</span>=3 <span class="keyword">and</span> <span class="attribute">c</span>=5... #这种情况下b就是断点，a发挥了效果，c没有效果</span><br><span class="line">where <span class="attribute">b</span>=3 <span class="keyword">and</span> <span class="attribute">c</span>=4... #这种情况下a就是断点，在a后面的索引都没有发挥作用，这种写法联合索引没有发挥任何效果；</span><br><span class="line">where <span class="attribute">b</span>=45 <span class="keyword">and</span> <span class="attribute">a</span>=3 <span class="keyword">and</span> <span class="attribute">c</span>=5 <span class="built_in">..</span><span class="built_in">..</span> #这个跟第一个一样，全部发挥作用，abc只要用上了就行，跟写的顺序无关</span><br></pre></td></tr></table></figure>
+<p>（a,b,c） 三个列上加了联合索引（是联合索引 不是在每个列上单独加索引）而是建立了a,(a,b),(a,b,c)三个索引，另外(a,b,c)多列索引和 (a,c,b)是不一样的。</p>
+<p>具体实例可以说明：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">(0) select * <span class="keyword">from</span> mytable where <span class="attribute">a</span>=3 <span class="keyword">and</span> <span class="attribute">b</span>=5 <span class="keyword">and</span> <span class="attribute">c</span>=4;</span><br><span class="line"><span class="comment">#abc三个索引都在where条件里面用到了，而且都发挥了作用</span></span><br><span class="line">(1) select * <span class="keyword">from</span> mytable where  <span class="attribute">c</span>=4 <span class="keyword">and</span> <span class="attribute">b</span>=6 <span class="keyword">and</span> <span class="attribute">a</span>=3;</span><br><span class="line"><span class="comment">#这条语句为了说明 组合索引与在SQL中的位置先后无关，where里面的条件顺序在查询之前会被mysql自动优化，效果跟上一句一样</span></span><br><span class="line">(2) select * <span class="keyword">from</span> mytable where <span class="attribute">a</span>=3 <span class="keyword">and</span> <span class="attribute">c</span>=7;</span><br><span class="line"><span class="comment">#a用到索引，b没有用，所以c是没有用到索引效果的</span></span><br><span class="line">(3) select * <span class="keyword">from</span> mytable where <span class="attribute">a</span>=3 <span class="keyword">and</span> b&gt;7 <span class="keyword">and</span> <span class="attribute">c</span>=3;</span><br><span class="line"><span class="comment">#a用到了，b也用到了，c没有用到，这个地方b是范围值，也算断点，只不过自身用到了索引</span></span><br><span class="line">(4) select * <span class="keyword">from</span> mytable where <span class="attribute">b</span>=3 <span class="keyword">and</span> <span class="attribute">c</span>=4;</span><br><span class="line"><span class="comment">#因为a索引没有使用，所以这里 bc都没有用上索引效果</span></span><br><span class="line">(5) select * <span class="keyword">from</span> mytable where a&gt;4 <span class="keyword">and</span> <span class="attribute">b</span>=7 <span class="keyword">and</span> <span class="attribute">c</span>=9;</span><br><span class="line"><span class="comment">#a用到了  b没有使用，c没有使用</span></span><br><span class="line">(6) select * <span class="keyword">from</span> mytable where <span class="attribute">a</span>=3 order by b;</span><br><span class="line"><span class="comment">#a用到了索引，b在结果排序中也用到了索引的效果，前面说了，a下面任意一段的b是排好序的</span></span><br><span class="line">(7) select * <span class="keyword">from</span> mytable where <span class="attribute">a</span>=3 order by c;</span><br><span class="line"><span class="comment">#a用到了索引，但是这个地方c没有发挥排序效果，因为中间断点了，使用 explain 可以看到 filesort</span></span><br><span class="line">(8) select * <span class="keyword">from</span> mytable where <span class="attribute">b</span>=3 order by a;</span><br><span class="line"><span class="comment">#b没有用到索引，排序中a也没有发挥索引效果</span></span><br></pre></td></tr></table></figure>
+<p>注意：在查询时，MYSQL只能使用一个索引，如果建立的是多个单列的普通索引，在查询时会根据查询的索引字段，从中选择一个限制最严格的单例索引进行查询。别的索引都不会生效。</p>
+<ul>
+<li>4.查看索引</li>
+</ul>
+<figure class="highlight q"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; <span class="built_in">show</span> index <span class="keyword">from</span> tblname;</span><br><span class="line">mysql&gt; <span class="built_in">show</span> <span class="built_in">keys</span> <span class="keyword">from</span> tblname;</span><br></pre></td></tr></table></figure>
+<p>5.删除索引</p>
+<p>删除索引的mysql格式 :<br><figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DORP <span class="keyword">INDEX</span> IndexName <span class="keyword">ON</span> tab_name；</span><br></pre></td></tr></table></figure></p>
+<font color="#FF0000"> 注意：不能使用索引的情况 </font> 
+
+<p>对于普通索引而言 在使用like进行通配符模糊查询时,如果首尾之间都使用了通配符，索引时无效的。</p>
+<p>假设查询内容的关键词为’abc’</p>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> tab_name <span class="keyword">WHERE</span> index_column <span class="keyword">LIKE</span>  <span class="string">'abc%'</span>;  #索引是有效的</span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> tab_name <span class="keyword">WHERE</span> index_column <span class="keyword">LIKE</span>  <span class="string">'%abc'</span>;  #索引是无效的</span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> tab_name <span class="keyword">WHERE</span> index_column <span class="keyword">LIKE</span>  <span class="string">'%cba'</span>;  #索引是有效的</span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> tab_name <span class="keyword">WHERE</span> index_column <span class="keyword">LIKE</span>  <span class="string">'%abc%'</span>;  #索引是无效的</span><br></pre></td></tr></table></figure>
+<p>当检索的字段内容比较大而且检索内容前后部分都不确定的情况下，可以改为全文索引，并使用特定的检索方式。</p>
+<h3 id="五-在join表的时候使用相当类型的列，并将其索引"><a href="#五-在join表的时候使用相当类型的列，并将其索引" class="headerlink" title="(五)在join表的时候使用相当类型的列，并将其索引"></a>(五)在join表的时候使用相当类型的列，并将其索引</h3><p>如果在程序中有很多JOIN查询，应该保证两个表中join的字段时被建立过索引的。这样MySQL颞部会启动优化JOIN的SQL语句的机制。注意：这些被用来JOIN的字段，应该是相同类型的。例如：如果要把 DECIMAL 字段和一个 INT 字段Join在一起，MySQL就无法使用它们的索引。对于那些STRING类型，还需要有相同的字符集才行。（两个表的字符集有可能不一样）<br>例如：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT company_name <span class="keyword">FROM</span><span class="built_in"> users </span>LEFT JOIN companies ON (users.state = companies.state) WHERE users.id = “user_id”</span><br></pre></td></tr></table></figure>
+<p>两个 state 字段应该是被建过索引的，而且应该是相当的类型，相同的字符集。</p>
+<h3 id="六-切记不要使用ORDER-BY-RAND"><a href="#六-切记不要使用ORDER-BY-RAND" class="headerlink" title="(六)切记不要使用ORDER BY RAND()"></a>(六)切记不要使用ORDER BY RAND()</h3><p>如果你真的想把返回的数据行打乱了，你有N种方法可以达到这个目的。这样使用只让你的数据库的性能呈指数级的下降。这里的问题是：MySQL会不得不去执行RAND()函数（很耗CPU时间），而且这是为了每一行记录去记行，然后再对其排序。就算是你用了Limit 1也无济于事（因为要排序） </p>
+<h3 id="七-避免使用SELECT"><a href="#七-避免使用SELECT" class="headerlink" title="(七)避免使用SELECT *"></a>(七)避免使用SELECT *</h3><p>从数据库里读出越多的数据，那么查询就会变得越慢。并且，如果我们的数据库服务器和WEB服务器是两台独立的服务器的话，这还会增加网络传输的负载。 所以，我们应该养成一个需要什么就取什么的好的习惯。<br>Hibernate性能方面就会差，它不用*，但它将整个表的所有字段全查出来<br>优点：开发速度快</p>
+<h3 id="八-永远为每张表设置一个ID主键"><a href="#八-永远为每张表设置一个ID主键" class="headerlink" title="(八)永远为每张表设置一个ID主键"></a>(八)永远为每张表设置一个ID主键</h3><p>我们应该为数据库里的每张表都设置一个ID做为其主键，而且最好的是一个INT型的（推荐使用UNSIGNED），并设置上自动增加的 AUTO_INCREMENT标志。 就算是我们 users 表有一个主键叫 “email”的字段，我们也别让它成为主键。使用 VARCHAR 类型来当主键会使用得性能下降。另外，在我们的程序中，我们应该使用表的ID来构造我们的数据结构。 而且，在MySQL数据引擎下，还有一些操作需要使用主键，在这些情况下，主键的性能和设置变得非常重要，比如，集群，分区…… 在这里，只有一个情况是例外，那就是“关联表”的“外键”，也就是说，这个表的主键，通过若干个别的表的主键构成。我们把这个情况叫做“外键”。比如：有一个“学生表”有学生的ID，有一个“课程表”有课程ID，那么，“成绩表”就是“关联表”了，其关联了学生表和课程表，在成绩表中，学生ID和课程ID叫“外键”其共同组成主键。 </p>
+<h3 id="九-使用ENUM而不是VARCHAR"><a href="#九-使用ENUM而不是VARCHAR" class="headerlink" title="(九)使用ENUM而不是VARCHAR"></a>(九)使用ENUM而不是VARCHAR</h3><p>ENUM 类型是非常快和紧凑的。在实际上，其保存的是 TINYINT，但其外表上显示为字符串。这样一来，用这个字段来做一些选项列表变得相当的完美。 如果我们有一个字段，比如“性别”，“国家”，“民族”，“状态”或“部门”，我们知道这些字段的取值是有限而且固定的，那么，我们应该使用 ENUM 而不是 VARCHAR。</p>
+<h3 id="十-尽可能的不要赋值为NULL"><a href="#十-尽可能的不要赋值为NULL" class="headerlink" title="(十)尽可能的不要赋值为NULL"></a>(十)尽可能的不要赋值为NULL</h3><p>如果不是特殊情况，尽可能的不要使用NULL。在MYSQL中对于INT类型而言，EMPTY是0，而NULL是空值。而在Oracle中 NULL和EMPTY的字符串是一样的。NULL也需要占用存储空间，并且会使我们的程序判断时更加复杂。现实情况是很复杂的，依然会有些情况下，我们需要使用NULL值。 下面摘自MySQL自己的文档： “NULL columns require additional space in the row to record whether their values are NULL. For MyISAM tables, each NULL column takes one bit extra, rounded up to the nearest byte.” </p>
+<h3 id="十一-固定长度的表会更快"><a href="#十一-固定长度的表会更快" class="headerlink" title="(十一) 固定长度的表会更快"></a>(十一) 固定长度的表会更快</h3><p>如果表中的所有字段都是“固定长度”的，整个表会被认为是 “static” 或 “fixed-length”。 例如，表中没有如下类型的字段： VARCHAR，TEXT，BLOB。只要我们包括了其中一个这些字段，那么这个表就不是“固定长度静态表”了，这样，MySQL 引擎会用另一种方法来处理。 固定长度的表会提高性能，因为MySQL搜寻得会更快一些，因为这些固定的长度是很容易计算下一个数据的偏移量的，所以读取的自然也会很快。而如果字段不是定长的，那么，每一次要找下一条的话，需要程序找到主键。 并且，固定长度的表也更容易被缓存和重建。不过，唯一的副作用是，固定长度的字段会浪费一些空间，因为定长的字段无论我们用不用，他都是要分配那么多的空间。另外在取出值的时候要使用trim去除空格 </p>
+<h3 id="十二-垂直分割"><a href="#十二-垂直分割" class="headerlink" title="(十二)垂直分割"></a>(十二)垂直分割</h3><p>“垂直分割”是一种把数据库中的表按列变成几张表的方法，这样可以降低表的复杂度和字段的数目，从而达到优化的目的。</p>
+<h3 id="十三-拆分大的DELETE或INSERT"><a href="#十三-拆分大的DELETE或INSERT" class="headerlink" title="(十三)拆分大的DELETE或INSERT"></a>(十三)拆分大的DELETE或INSERT</h3><p>如果我们需要在一个在线的网站上去执行一个大的 DELETE 或 INSERT 查询，我们需要非常小心，要避免我们的操作让我们的整个网站停止相应。因为这两个操作是会锁表的，表一锁住了，别的操作都进不来了。Apache 会有很多的子进程或线程。所以，其工作起来相当有效率，而我们的服务器也不希望有太多的子进程，线程和数据库链接，这是极大的占服务器资源的事情，尤其是内存。如果我们把我们的表锁上一段时间，比如30秒钟，那么对于一个有很高访问量的站点来说，这30秒所积累的访问进程/线程，数据库链接，打开的文件数，可能不仅仅会让我们的WEB服务Crash，还可能会让我们的整台服务器马上掛了。所以在使用时使用LIMIT 控制数量操作记录的数量。</p>
+<h3 id="十四-越小的列会越快"><a href="#十四-越小的列会越快" class="headerlink" title="(十四)越小的列会越快"></a>(十四)越小的列会越快</h3><p>对于大多数的数据库引擎来说，硬盘操作可能是最重大的瓶颈。所以，把我们的数据变得紧凑会对这种情况非常有帮助，因为这减少了对硬盘的访问。 参看 MySQL 的文档 Storage Requirements 查看所有的数据类型。 如果一个表只会有几列罢了（比如说字典表，配置表），那么，我们就没有理由使用 INT 来做主键，使用 MEDIUMINT, SMALLINT 或是更小的 TINYINT 会更经济一些。如果我们不需要记录时间，使用 DATE 要比 DATETIME 好得多。 </p>
+<h3 id="十五-选择正确的存储引擎"><a href="#十五-选择正确的存储引擎" class="headerlink" title="(十五)选择正确的存储引擎"></a>(十五)选择正确的存储引擎</h3><p>在MYSQL中有两个存储引擎MyISAM和InnoDB,每个引擎都有利有弊。</p>
+<p>MyISAM适合于一些需要大量查询的应用，但是对于大量写操作的支持不是很好。甚至一个update语句就会进行锁表操作，这时读取这张表的所有进程都无法进行操作直至写操作完成。另外MyISAM对于SELECT  COUNT(*)这类的计算是超快无比的。InnoDB 的趋势会是一个非常复杂的存储引擎，对于一些小的应用，它会比 MyISAM 还慢。它支持“行锁” ，于是在写操作比较多的时候，会更优秀。并且，他还支持更多的高级应用，比如：事务。</p>
+<p>MyISAM是MYSQL5.5版本以前默认的存储引擎，基于传统的ISAM类型，支持B-Tree，全文检索，但是不是事务安全的，而且不支持外键。不具有原子性。支持锁表。</p>
+<p>InnoDB是事务型引擎，支持ACID事务(实现4种事务隔离机制)、回滚、崩溃恢复能力、行锁。以及提供与Oracle一致的不加锁的读取方式。InnoDB存储它的表和索引在一个表空间中，表空间可以包含多个文件。</p>
+<p>MyISAM和InnoDB比较，如下图所示：<br><img src="https://img-blog.csdn.net/20170910135801950?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzA4NzUxMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="image"><br>对于Linux版本的MYSQL  配置文件在 /etc/my.cnf中<br><img src="https://img-blog.csdn.net/20170910140247051?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzA4NzUxMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="image"><br>在5.5之后默认的存储引擎是INNODB</p>
+<p>可以单独进行修改也可以在创建表时修改：</p>
+<p>ALTER TABLE tab_name ENGINE INNODB；</p>
+<h3 id="十六-小心永久链接"><a href="#十六-小心永久链接" class="headerlink" title="(十六)小心永久链接"></a>(十六)小心永久链接</h3><p>“永久链接”的目的是用来减少重新创建MySQL链接的次数。当一个链接被创建了，它会永远处在连接的状态，就算是数据库操作已经结束了。而且，自从我们的Apache开始重用它的子进程后——也就是说，下一次的HTTP请求会重用Apache的子进程，并重用相同的 MySQL 链接。 </p>
+<p>而且，Apache 运行在极端并行的环境中，会创建很多很多的了进程。这就是为什么这种“永久链接”的机制工作地不好的原因。在我们决定要使用“永久链接”之前，我们需要好好地考虑一下我们的整个系统的架构。</p>
+<p>摘自：    <a href="https://blog.csdn.net/u013087513/article/details/77899412" target="_blank" rel="noopener">https://blog.csdn.net/u013087513/article/details/77899412</a><br>看过好多吧，还是感觉这个最好</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MySql</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/数据库//" class="article-tag-list-link color4">数据库</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/07/18/MySql优化/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+
+<!-- 目录内容 -->
+             
+        <!-- 目录内容结束 -->
+  
     <article id="post-jieba分词" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -2080,362 +2524,6 @@
              
         <!-- 目录内容结束 -->
   
-    <article id="post-BeautifulSoup4（BS4）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/13/BeautifulSoup4（BS4）/">BeautifulSoup4（BS4）</a>
-    </h1>
-  
-
-        
-        <a href="/2018/07/13/BeautifulSoup4（BS4）/" class="archive-article-date">
-  	<time datetime="2018-07-13T14:49:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>BeautifulSoup是一种非常优雅的专门用于进行HTML/XML数据解析的一种描述语言，可以很好的分析和筛选HTML/XML这样的标记文档中的指定规则数据<br>在数据筛选过程中其基础技术是通过封装HTML DOM树实现的一种DOM操作，通过加载网页文档对象的形式，从文档对象树模型中获取目标数据</p>
-<p>BeautifulSoup操作简单易于上手，在很多对于数据筛选性能要求并不是特别苛刻的项目中经常使用，目前市场流行的操作版本是BeautifulSoup4，经常称BS4</p>
-<h2 id="Xpath和BeautifulSoup4-废话"><a href="#Xpath和BeautifulSoup4-废话" class="headerlink" title="Xpath和BeautifulSoup4(废话~)"></a>Xpath和BeautifulSoup4(废话~)</h2><p>Xpath和BeautifulSoup都是基于DOM的一种操作模式<br>不同点在于加载文档对象模型DOM时出现的文档节点遍历查询操作过程，Xpath在进行遍历操作时针对描述语言指定的语法结构进行局部DOM对象树的遍历得到具体的数据，但是BS4在操作过程中，会将整个文档树进行加载然后进行查询匹配操作，使用过程中消耗资源较多，处理性能相对Xpath较低</p>
-<p>一般BS4将HTML文档对象会转换成如下四种类型组合的文档树</p>
-<ul>
-<li>Tag：标签对象</li>
-<li>NavigableString：字符内容操作对象</li>
-<li>BeautifulSoup：文档对象</li>
-<li>Comment：特殊类型的NavigableString</li>
-</ul>
-<p>说道这里，其实都是太多的理论性语法，BS4不同于正则和Xpath，没有什么基础语法结构，它封装的对象以及对象的属性操作，才是BS4不同凡响的核心价值<br>let’s 上干货</p>
-<h2 id="python操作BeautifulSoup4"><a href="#python操作BeautifulSoup4" class="headerlink" title="python操作BeautifulSoup4"></a>python操作BeautifulSoup4</h2><p>python中对于BeautifulSoup的支持，通过安装第三方模块来发挥它最好的操作<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> pip install beautifulsoup4</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="1-入门第一弹：了解BeautifulSoup4"><a href="#1-入门第一弹：了解BeautifulSoup4" class="headerlink" title="1.入门第一弹：了解BeautifulSoup4"></a>1.入门第一弹：了解BeautifulSoup4</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"><span class="comment"># 引入解析模块BS4</span></span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 从文件中加载html网页，指定HTML解析器使用lxml</span></span><br><span class="line"><span class="comment"># 默认不指定的情况下，BS4会自动匹配当前系统中最优先的解析器</span></span><br><span class="line">soup = BeautifulSoup(open(<span class="string">"index.html"</span>), <span class="string">"lxml"</span>)</span><br><span class="line"><span class="comment"># 如果是爬虫获取到的字符数据，直接交给BS4就OK拉</span></span><br><span class="line"><span class="comment"># soup = BeatufulSoup(spider_content, "lxml")</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 打印BeautifulSoup文档对象，得到的是文档树内容</span></span><br><span class="line">print(soup)</span><br><span class="line"><span class="comment"># 打印类型：&lt;class 'bs4.BeautifulSoup'&gt;</span></span><br><span class="line">print(type(soup))</span><br></pre></td></tr></table></figure>
-<h4 id="2-入门第二弹-操作标签、属性、内容"><a href="#2-入门第二弹-操作标签、属性、内容" class="headerlink" title="2.入门第二弹:操作标签、属性、内容"></a>2.入门第二弹:操作标签、属性、内容</h4><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 得到构建的文档对象</span></span><br><span class="line">soup = BeautifulSoup(open(<span class="string">"index.html"</span>), <span class="string">"lxml"</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Tag操作</span></span><br><span class="line"><span class="comment"># 1. 获取标签</span></span><br><span class="line"><span class="built_in">print</span>(soup.title) <span class="comment"># &lt;title&gt;文章标题&lt;/title&gt;</span></span><br><span class="line"><span class="built_in">print</span>(soup.p) <span class="comment"># &lt;p&gt;姓名：&lt;span id="name"&gt;大牧&lt;/span&gt;&lt;/p&gt; # 只返回第一个匹配到的标签对象</span></span><br><span class="line"><span class="built_in">print</span>(soup.span) <span class="comment"># &lt;span id="name"&gt;大牧&lt;/span&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2.获取标签的属性</span></span><br><span class="line"><span class="built_in">print</span>(soup.p.attrs) <span class="comment"># &#123;&#125;：得到属性和值的字典</span></span><br><span class="line"><span class="built_in">print</span>(soup.span.attrs) <span class="comment"># &#123;'id': 'name'&#125;：得到属性和值的字典</span></span><br><span class="line"><span class="built_in">print</span>(soup.span[<span class="string">'id'</span>]) <span class="comment"># name：得到指定属性的值</span></span><br><span class="line">soup.span[<span class="string">'id'</span>] = <span class="string">"real_name"</span></span><br><span class="line"><span class="built_in">print</span>(soup.span[<span class="string">'id'</span>]) <span class="comment"># real_name : 可以方便的在BS4中直接对文档进行修改</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 获取标签的内容</span></span><br><span class="line"><span class="built_in">print</span>(soup.head.string) <span class="comment"># 文章标题：如果标签中只有一个子标签~返回子标签中的文本内容</span></span><br><span class="line"><span class="built_in">print</span>(soup.p.string) <span class="comment"># None：如果标签中有多个子标签，返回None</span></span><br><span class="line"><span class="built_in">print</span>(soup.span.string) <span class="comment"># 大牧：直接返回包含的文本内容</span></span><br></pre></td></tr></table></figure>
-<p>3.入门第三弹：操作子节点<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># coding:utf-<span class="number">8</span></span><br><span class="line"># 引入BS4操作模块</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line"># 加载网页文档，构建文档对象</span><br><span class="line">soup = BeautifulSoup(open(<span class="string">"index.html"</span>), <span class="string">"lxml"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span>(dir(soup))</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span>(soup.contents)# 得到文档对象中所有子节点</span><br><span class="line"><span class="keyword">print</span>(soup.<span class="keyword">div</span>.contents)# 得到匹配到的第一个<span class="keyword">div</span>的子节点列表</span><br><span class="line"><span class="keyword">print</span>(soup.<span class="keyword">div</span>.children)# 得到匹配到的第一个<span class="keyword">div</span>的子节点列表迭代器</span><br><span class="line"># <span class="keyword">for</span> e1 in soup.<span class="keyword">div</span>.children:</span><br><span class="line">#     <span class="keyword">print</span>(<span class="string">"--&gt;"</span>, e1)</span><br><span class="line"><span class="keyword">print</span>(soup.<span class="keyword">div</span>.descendants)# 得到匹配到的第一个<span class="keyword">div</span>的子节点迭代器,所有后代节点单独一个一个列出</span><br><span class="line"># <span class="keyword">for</span> e2 in soup.<span class="keyword">div</span>.descendants:</span><br><span class="line">#     <span class="keyword">print</span>(<span class="string">"==&gt;"</span>, e2)</span><br></pre></td></tr></table></figure></p>
-<p>4.入门第四弹: 面向对象的DOM匹配<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"><span class="comment"># 引入BS4模块</span></span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载文档对象</span></span><br><span class="line">soup = BeautifulSoup(open(<span class="string">"../index.html"</span>), <span class="string">"lxml"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># DOM文档树查询</span></span><br><span class="line"><span class="comment"># 核心函数~请对比javasript dom结构了解它的方法</span></span><br><span class="line"><span class="comment"># 如:findAllPrevious()/findAllNext()/findAll()/findPrevious()/findNext()等等</span></span><br><span class="line"><span class="comment"># findAll()为例</span></span><br><span class="line"><span class="comment"># 1. 查询指定的字符串</span></span><br><span class="line">res1 = soup.findAll(<span class="string">"p"</span>)<span class="comment"># 查询所有包含p字符的标签</span></span><br><span class="line">print(res1)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 正则表达式</span></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line">res2 = soup.findAll(re.compile(<span class="string">r"d+"</span>))<span class="comment"># 查询所有包含d字符的标签</span></span><br><span class="line">print(res2)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 列表：选择</span></span><br><span class="line">res3 = soup.findAll([<span class="string">"div"</span>, <span class="string">"h1"</span>])<span class="comment"># 查询所有的div或者h1标签</span></span><br><span class="line">print(res3)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 关键字参数</span></span><br><span class="line">res4 = soup.findAll(id=<span class="string">"name"</span>)<span class="comment"># 查询属性为id="name"的标签</span></span><br><span class="line">print(res4)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 内容匹配</span></span><br><span class="line">res5 = soup.findAll(text=<span class="string">u"男"</span>)<span class="comment"># 直接匹配内容中的字符，必须保证精确匹配</span></span><br><span class="line">print(res5)</span><br><span class="line">res6 = soup.findAll(text=[<span class="string">u"文章标题"</span>, <span class="string">u"大牧"</span>])<span class="comment"># 查询包含精确内容的所有的标签</span></span><br><span class="line">print(res6)</span><br><span class="line">res7 = soup.findAll(text=re.compile(<span class="string">u"大+"</span>))<span class="comment"># 通过正则表达式进行模糊匹配</span></span><br><span class="line">print(res7)</span><br></pre></td></tr></table></figure></p>
-<p>5.入门第五弹: 又见CSS<br><figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># coding:utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="meta"># 引入BS模块</span></span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line"></span><br><span class="line"><span class="meta"># 加载网页构建文档对象</span></span><br><span class="line">soup = BeautifulSoup(<span class="keyword">open</span>(<span class="string">"index.html"</span>), <span class="string">"lxml"</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta"># 1. CSS 标签选择器：根据标签名称查询标签对象</span></span><br><span class="line">res1 = soup.<span class="built_in">select</span>(<span class="string">"span"</span>)</span><br><span class="line"><span class="keyword">print</span>(res1)</span><br><span class="line"></span><br><span class="line"><span class="meta"># 2. CSS ID选择器：根据ID查询标签对象</span></span><br><span class="line">res2 = soup.<span class="built_in">select</span>(<span class="string">"#gender"</span>)</span><br><span class="line"><span class="keyword">print</span>(res2)</span><br><span class="line"></span><br><span class="line"><span class="meta"># 3. CSS 类选择器：根据class属性查询标签对象</span></span><br><span class="line">res3 = soup.<span class="built_in">select</span>(<span class="string">".intro"</span>)</span><br><span class="line"><span class="keyword">print</span>(res3)</span><br><span class="line"></span><br><span class="line"><span class="meta"># 4. CSS 属性选择器</span></span><br><span class="line">res41 = soup.<span class="built_in">select</span>(<span class="string">"span[id]"</span>)</span><br><span class="line"><span class="keyword">print</span>(res41)</span><br><span class="line">res42 = soup.<span class="built_in">select</span>(<span class="string">"span[id='gender']"</span>)</span><br><span class="line"><span class="keyword">print</span>(res42)</span><br><span class="line"></span><br><span class="line"><span class="meta"># 5. CSS 包含选择器</span></span><br><span class="line">res5 = soup.<span class="built_in">select</span>(<span class="string">"p span#name"</span>)</span><br><span class="line"><span class="keyword">print</span>(res5)</span><br><span class="line"></span><br><span class="line"><span class="meta"># 6. 得到标签内容</span></span><br><span class="line">res6 = soup.<span class="built_in">select</span>(<span class="string">"p &gt; span.intro"</span>)</span><br><span class="line"><span class="keyword">print</span>(res6[<span class="number">0</span>].<span class="keyword">string</span>)</span><br><span class="line"><span class="keyword">print</span>(res6[<span class="number">0</span>].getText())</span><br></pre></td></tr></table></figure></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">爬虫</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">BS4</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据提取</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/爬虫//" class="article-tag-list-link color3">爬虫</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/07/13/BeautifulSoup4（BS4）/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-
-<!-- 目录内容 -->
-             
-        <!-- 目录内容结束 -->
-  
-    <article id="post-xpath的使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/13/xpath的使用/">xpath的使用</a>
-    </h1>
-  
-
-        
-        <a href="/2018/07/13/xpath的使用/" class="archive-article-date">
-  	<time datetime="2018-07-13T12:30:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li>pip install lxml</li>
-<li>什么是xpath？<ul>
-<li>xml是用来存储和传输数据使用的</li>
-</ul>
-</li>
-<li><p>和html的不同有两点：</p>
-<ul>
-<li>（1）html用来显示数据，xml是用来传输数据</li>
-<li>（2）html标签是固定的，xml标签是自定义的<ul>
-<li>xpath用来在xml中查找指定的元素，它是一种路径表达式</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>常用的路径表达式<br>  // : 不考虑位置的查找<br>  ./ : 从当前节点开始往下查找<br>  @ : 选取属性</p>
-</li>
-<li><p>实例：</p>
-<ul>
-<li>/bookstore/book<ul>
-<li>选取根节点bookstore下面所有直接子节点book</li>
-</ul>
-</li>
-<li>//book<ul>
-<li>选取所有book</li>
-</ul>
-</li>
-<li>bookstore//book <ul>
-<li>查找bookstore下面所有的book</li>
-</ul>
-</li>
-<li>/bookstore/book[1] <ul>
-<li>bookstore里面的第一个book</li>
-</ul>
-</li>
-<li>/bookstore/book[last()]  <ul>
-<li>bookstore里面的最后一个book</li>
-</ul>
-</li>
-<li>/bookstore/book[position()&lt;3]  <ul>
-<li>前两个book</li>
-</ul>
-</li>
-<li>//title[@lang]<ul>
-<li>所有的带有lang属性的title节点</li>
-</ul>
-</li>
-<li>//title[@lang=’eng’]  <ul>
-<li>所有的lang属性值为eng的title节点</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><p>任何元素节点</p>
-<ul>
-<li>安装xpath插件<ul>
-<li>将xpath插件拖动到谷歌浏览器扩展程序中，安装成功</li>
-</ul>
-</li>
-<li>启动和关闭插件<ul>
-<li>ctrl + shift + x</li>
-</ul>
-</li>
-<li>属性定位<ul>
-<li>//input[@id=”kw”]</li>
-<li>//input[@class=”bg s_btn”]</li>
-</ul>
-</li>
-<li>层级定位</li>
-<li>索引定位<ul>
-<li>//div[@id=”head”]/div/div[2]/a[@class=”toindex”]<ul>
-<li>【注】索引从1开始</li>
-</ul>
-</li>
-<li>//div[@id=”head”]//a[@class=”toindex”]<ul>
-<li>【注】双斜杠代表下面所有的a节点，不管位置</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>逻辑运算<ul>
-<li>//input[@class=”s_ipt” and @name=”wd”]</li>
-</ul>
-</li>
-<li>模糊匹配<ul>
-<li>contains<ul>
-<li>//input[contains(@class, “s_i”)]<ul>
-<li>所有的input，有class属性，并且属性中带有s_i的节点</li>
-</ul>
-</li>
-<li>//input[contains(text(), “爱”)]</li>
-</ul>
-</li>
-<li>starts-with<ul>
-<li>//input[starts-with(@class, “s”)]<ul>
-<li>所有的input，有class属性，并且属性以s开头</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>取文本</p>
-<ul>
-<li>//div[@id=”u1”]/a[5]/text()  获取节点内容</li>
-<li>//div[@id=”u1”]//text()      </li>
-<li><p>获取节点里面不带标签的所有内容</p>
-</li>
-<li><p>直接将所有的内容拼接起来返回给你</p>
-</li>
-<li>ret = tree.xpath(‘//div[@class=”song”]’)</li>
-<li>string = ret[0].xpath(‘string(.)’)</li>
-<li>print(string.replace(‘\n’, ‘’).replace(‘\t’, ‘’))</li>
-</ul>
-</li>
-<li>取属性<ul>
-<li>//div[@id=”u1”]/a[5]/@href</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><p>代码中使用xpath</p>
-<ul>
-<li>from lxml import etree</li>
-<li>两种方式使用：将html文档变成一个对象，然后调用对象的方法去查找指定的节点</li>
-<li>（1）本地文件<ul>
-<li>tree = etree.parse(文件名)</li>
-</ul>
-</li>
-<li><p>（2）网络文件</p>
-<ul>
-<li>tree = etree.HTML(网页字符串)</li>
-</ul>
-</li>
-<li><p>ret = tree.xpath(路径表达式)</p>
-<ul>
-<li>【注】ret是一个列表</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> urllib.request</span><br><span class="line"><span class="keyword">import</span> urllib.parse</span><br><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line">item_list = []</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">handle_request</span><span class="params">(url, page)</span>:</span></span><br><span class="line">	headers = &#123;</span><br><span class="line">		<span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'</span>,</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment"># 将url和page进行拼接</span></span><br><span class="line">	url = url.format(page)</span><br><span class="line">	<span class="comment"># print(url)</span></span><br><span class="line">	request = urllib.request.Request(url=url, headers=headers)</span><br><span class="line">	<span class="keyword">return</span> request</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_content</span><span class="params">(content)</span>:</span></span><br><span class="line">	<span class="comment"># print('haha')</span></span><br><span class="line">	<span class="comment"># 生成对象</span></span><br><span class="line">	tree = etree.HTML(content)</span><br><span class="line">	<span class="comment"># 抓取内容</span></span><br><span class="line">	div_list = tree.xpath(<span class="string">'//div[@class="log cate10 auth1"]'</span>)</span><br><span class="line">	<span class="comment"># 遍历div列表</span></span><br><span class="line">	<span class="keyword">for</span> odiv <span class="keyword">in</span> div_list:</span><br><span class="line">		<span class="comment"># print('lala')</span></span><br><span class="line">		<span class="comment"># 获取标题</span></span><br><span class="line">		title = odiv.xpath(<span class="string">'.//h3/a/text()'</span>)[<span class="number">0</span>]</span><br><span class="line">		<span class="comment"># print(title)</span></span><br><span class="line">		text_lt = odiv.xpath(<span class="string">'.//div[@class="cont"]/p/text()'</span>)</span><br><span class="line">		text = <span class="string">'\n'</span>.join(text_lt)</span><br><span class="line">		<span class="comment"># print(text)</span></span><br><span class="line">		<span class="comment"># print('*' * 50)</span></span><br><span class="line">		item = &#123;</span><br><span class="line">			<span class="string">'标题'</span>: title,</span><br><span class="line">			<span class="string">'内容'</span>: text,</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment"># 将内容添加到列表中</span></span><br><span class="line">		item_list.append(item)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">	start_page = int(input(<span class="string">'请输入起始页码:'</span>))</span><br><span class="line">	end_page = int(input(<span class="string">'请输入结束页码:'</span>))</span><br><span class="line">	url = <span class="string">'http://www.haoduanzi.com/category-10_&#123;&#125;.html'</span></span><br><span class="line">	<span class="keyword">for</span> page <span class="keyword">in</span> range(start_page, end_page + <span class="number">1</span>):</span><br><span class="line">		request = handle_request(url, page)</span><br><span class="line">		content = urllib.request.urlopen(request).read().decode()</span><br><span class="line">		<span class="comment"># 解析内容</span></span><br><span class="line">		parse_content(content)</span><br><span class="line">		time.sleep(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment"># 写入到文件中</span></span><br><span class="line">	<span class="comment"># string = json.dumps(item_list, ensure_ascii=False)</span></span><br><span class="line">	<span class="keyword">with</span> open(<span class="string">'duanzi.txt'</span>, <span class="string">'w'</span>, encoding=<span class="string">'utf8'</span>) <span class="keyword">as</span> fp:</span><br><span class="line">		fp.write(str(item_list))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">	main()</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">爬虫</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据提取</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">xpath</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/爬虫//" class="article-tag-list-link color3">爬虫</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/07/13/xpath的使用/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-
-<!-- 目录内容 -->
-             
-        <!-- 目录内容结束 -->
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -2534,6 +2622,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">服务器</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">定时</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">爬虫</a>
               </li>
              
@@ -2547,18 +2647,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Celery</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">服务器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">定时</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2602,11 +2690,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+                <a href="javascript:void(0)" class="js-tag color5">json</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">json</a>
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">

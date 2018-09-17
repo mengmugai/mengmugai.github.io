@@ -6,15 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Category: 资源网站 | 萌木盖的博客</title>
+  <title>linux文件操作 | 萌木盖的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="萌木盖的博客">
-<meta property="og:url" content="http://yoursite.com/categories/资源网站/index.html">
+  <meta name="description" content="文件操作使用命令 命令格式： 1命令 [选项] [参数]  [] 表示可选的   示例： 1ls -a /etc   常识命令 ls：查看指定目录的内容，不指定目录时查看当前工作目录 | 选项   | 说明               || —- | —————- || -a   | 显示所有文件，包括隐藏文件    || -l   | 列表显示，详细信息        || -h   | 人性化">
+<meta name="keywords" content="linux,服务器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux文件操作">
+<meta property="og:url" content="http://yoursite.com/2018/09/17/linux文件操作/index.html">
 <meta property="og:site_name" content="萌木盖的博客">
+<meta property="og:description" content="文件操作使用命令 命令格式： 1命令 [选项] [参数]  [] 表示可选的   示例： 1ls -a /etc   常识命令 ls：查看指定目录的内容，不指定目录时查看当前工作目录 | 选项   | 说明               || —- | —————- || -a   | 显示所有文件，包括隐藏文件    || -l   | 列表显示，详细信息        || -h   | 人性化">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="https://s3.51cto.com/wyfs02/M01/9C/5C/wKioL1lvUGjQ8TirAAAnGNq3aDs576.png">
+<meta property="og:image" content="https://s5.51cto.com/wyfs02/M01/9C/5C/wKiom1lvUGjTXRJMAAAtjT6GldQ692.png">
+<meta property="og:updated_time" content="2018-09-17T15:42:44.148Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="萌木盖的博客">
+<meta name="twitter:title" content="linux文件操作">
+<meta name="twitter:description" content="文件操作使用命令 命令格式： 1命令 [选项] [参数]  [] 表示可选的   示例： 1ls -a /etc   常识命令 ls：查看指定目录的内容，不指定目录时查看当前工作目录 | 选项   | 说明               || —- | —————- || -a   | 显示所有文件，包括隐藏文件    || -l   | 列表显示，详细信息        || -h   | 人性化">
+<meta name="twitter:image" content="https://s3.51cto.com/wyfs02/M01/9C/5C/wKioL1lvUGjQ8TirAAAnGNq3aDs576.png">
   
     <link rel="alternative" href="/atom.xml" title="萌木盖的博客" type="application/atom+xml">
   
@@ -168,73 +176,394 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-linux文件操作" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/09/17/各个资源链接/" class="archive-article-date">
-  	<time datetime="2018-09-16T17:13:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-17</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/09/17/各个资源链接/">各个资源链接</a>
+    <h1 class="article-title" itemprop="name">
+      linux文件操作
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2018/09/17/linux文件操作/" class="archive-article-date">
+  	<time datetime="2018-09-17T15:42:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h1><h3 id="使用命令"><a href="#使用命令" class="headerlink" title="使用命令"></a>使用命令</h3><ul>
+<li><p>命令格式：</p>
+<figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">命令 <span class="string">[选项]</span> <span class="string">[参数]</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>[] 表示可选的</p>
+</blockquote>
+</li>
+<li><p>示例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -a /etc</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="常识命令"><a href="#常识命令" class="headerlink" title="常识命令"></a>常识命令</h3><ul>
+<li><p>ls：查看指定目录的内容，不指定目录时查看当前工作目录</p>
+<p>| 选项   | 说明               |<br>| —- | —————- |<br>| -a   | 显示所有文件，包括隐藏文件    |<br>| -l   | 列表显示，详细信息        |<br>| -h   | 人性化的显示大小，如：K/M/G |</p>
+<p>-l选项显示的结果：类型及权限 | 引用数 | 用户 | 用户组 | 大小 | 月 | 日| 年/时间 | 名称 </p>
+<p>文件类型：(-l显示结果中的第一部分的第一列)</p>
+<p>| 符号   | 类型     |<br>| —- | —— |<br>| -    | 普通文件   |<br>| d    | 目录文件   |<br>| l    | 链接文件   |<br>| c    | 字符设备文件 |<br>| b    | 块设备文件  |<br>| s    | 套接字文件  |<br>| p    | 管道文件   |</p>
+</li>
+<li><p>cd：切换工作目录</p>
+<p>| 符号   | 说明          |<br>| —- | ———– |<br>| .    | 当前目录        |<br>| ..   | 上一级目录       |<br>| ~    | 当前用户的家目录    |<br>| -    | 表示上次切换之前的目录 |<br>| /    | 表示根目录       |</p>
+<blockquote>
+<ol>
+<li>使用cd时，不指定目标地址，会切换到家目录</li>
+<li>凡是以/开头的目录都是绝对目录</li>
+<li>凡是以.或..开头的目录都是相当目录</li>
+</ol>
+</blockquote>
+</li>
+<li><p>pwd：查看当前工作目录</p>
+</li>
+<li><p>alias：给命令起别名</p>
+<ul>
+<li>l、la、ll等</li>
+</ul>
+</li>
+</ul>
+<h3 id="查看文件"><a href="#查看文件" class="headerlink" title="查看文件"></a>查看文件</h3><ul>
+<li><p>相关命令</p>
+<p>| 命令   | 说明                                       |<br>| —- | —————————————- |<br>| cat  | 从上到下，显示文件全部内容                            |<br>| tac  | 从下到上，显示文件全部内容                            |<br>| head | 查看开头指定行数的内容，不指定时默认10行，如：head -20 filename |<br>| tail | 查看文件末尾指定行数的内容，不指定时默认10行，如：tail -5 filename |<br>| nl   | 功能与cat相同，但是多显示了行号                        |<br>| wc   | 统计显示，内容：行数 单词数 字符数 文件名                   |<br>| more | 一点一点查看内容                                 |<br>| less | 一点一点查看内容                                 |</p>
+</li>
+<li><p>more/less使用说明</p>
+<ul>
+<li>显示一屏就停止</li>
+<li>q退出查看</li>
+<li>enter下翻一行</li>
+<li>空格下翻一屏</li>
+<li>more查看完毕会自动退出，less不会</li>
+<li>less可以使用上下按钮上下翻看，more不可以</li>
+<li>经常结合管道使用：ls /etc | more</li>
+</ul>
+</li>
+</ul>
+<h3 id="文件及目录"><a href="#文件及目录" class="headerlink" title="文件及目录"></a>文件及目录</h3><ul>
+<li><p>相关命令</p>
+<p>| 命令    | 说明                      |<br>| —– | ———————– |<br>| touch | 新建文件，可以是多个              |<br>| rm    | 删除文件或目录(删除目录时要传递’-r’选项) |<br>| cp    | 拷贝文件或目录(拷贝目录是要传递’-r’选项) |<br>| mv    | 移动文件或目录                 |<br>| mkdir | 创建目录，可以是多个              |<br>| rmdir | 删除空目录                   |</p>
+</li>
+<li><p>选项说明</p>
+<ul>
+<li>-r：删除或拷贝目录时需要添加，表示递归操作</li>
+<li>-f：表示强制操作，没有提示信息</li>
+<li><em>：表示模糊匹配，如：`rm </em>.py`，表示删除所有的py文件</li>
+<li>-p：创建目录时若需要创建中间目录，可以添加此选项</li>
+</ul>
+</li>
+</ul>
+<h3 id="用户及用户组"><a href="#用户及用户组" class="headerlink" title="用户及用户组"></a>用户及用户组</h3><ul>
+<li><p>相关命令</p>
+<p>| 命令       | 说明                                       |<br>| ——– | —————————————- |<br>| whoami   | 查看当前登录的用户名                               |<br>| useradd  | 新建用户，-d指定家目录，-m不存在，-s指定shell             |<br>| userdel  | 删除用户，-r会删除用户家目录                          |<br>| passwd   | 设置指定用户的密码，没有指定用户时设置时当前用户的密码              |<br>| su -     | 切换用户，一定要加上’-‘，否则只会切换家目录，但是环境没有切换，不指定用户时默认切换到root用户(记得先给root用户设置密码) |<br>| sudo     | 以指定用户(root)身份执行命令                        |<br>| visudo   | 专门用于编辑/etc/sudoers文件的命令，需要将指定用户添加进去才可以使用sudo命令，如：test ALL=(ALL:ALL) ALL；使用sudo update-alternatives –config editor可以修改系统默认编辑器(nano) |<br>| groupadd | 新建用户组                                    |<br>| groupdel | 删除用户组                                    |<br>| gpasswd  | 向指定组添加/删除指定的用户，如：gpasswd -a/-d  user group |<br>| groups   | 查看指定用户的组信息                               |<br>| chsh     | 修改指定用户的shell解析器，如：sudo chsh test -s /usr/sbin/nologin (禁止登陆) |<br>| chown    | 修改文件所属用户[及用户组]，如： sudo chown test[:test] 1.py，递归操作需要加’-R’选项 |<br>| chgrp    | 修改文件所属用户组，如：sudo chgrp test 1.py         |</p>
+</li>
+<li><p>涉及文件</p>
+<ul>
+<li>/etc/passwd：系统中的用户信息</li>
+<li>/etc/group：系统中的用户组信息</li>
+<li>/etc/shadow：系统中的用户密码信息</li>
+</ul>
+</li>
+<li><p>相关名词</p>
+<ul>
+<li>uid：用户唯一标识</li>
+<li>gid：用户组唯一标识</li>
+</ul>
+</li>
+</ul>
+<h3 id="文件权限"><a href="#文件权限" class="headerlink" title="文件权限"></a>文件权限</h3><ul>
+<li><p>说明：在linux下，所有的文件都涉及权限，分为三组：所有者、所属组、其他</p>
+</li>
+<li><p>权限：所有文件的权限可以分为：可读(r)、可写(w)、可执行(x)，’-‘表示没有改权限</p>
+</li>
+<li><p>原理：ls -l的结果，三位一组，分为三组，刚好对应：所有者、所属组、其他</p>
+</li>
+<li><p>修改权限：chmod，格式：<code>chmod [身份] [操作] [权限] 文件</code></p>
+<p>| 选项   | 说明         |<br>| —- | ———- |<br>| 身份   |            |<br>| u    | 所有者(user)  |<br>| g    | 所属组(group) |<br>| o    | 其他(other)  |<br>| 操作   |            |<br>| +    | 添加         |<br>| -    | 去掉         |<br>| =    | 设置         |<br>| 权限   |            |<br>| r    | 可读         |<br>|      | 可写         |<br>|      | 可执行        |</p>
+<blockquote>
+<p>sudo chmod o+w 1.py，给其他用户添加可写的权限</p>
+</blockquote>
+</li>
+<li><p>本质：使用一组(3位)八进制的数据来表示权限，如：0755，展开如下：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">转换为二进制：<span class="number">0755</span> =&gt; <span class="number">111</span> <span class="number">101</span> <span class="number">101</span></span><br><span class="line">对应三组身份：     所有者 所属组 其他</span><br><span class="line">每一组的权限：都包括 可读、可写、可执行</span><br><span class="line">示例解析：所有者可读可写可执行，所属组可读可执行，其他可读可执行</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>简化操作：sudo chmod 0755 1.py</p>
+<blockquote>
+<p>若要进行递归操作，则需要添加’-R’操作</p>
+</blockquote>
+</li>
+<li><p>umask</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">作用：用来限定新建文件的默认权限，权限与该值相反</span><br><span class="line">命令：umask [value]，查看或设置掩码</span><br><span class="line">分析：</span><br><span class="line">	掩码：<span class="number">0002</span> =&gt; <span class="number">000</span> <span class="number">000</span> <span class="number">010</span></span><br><span class="line">	新建目录：	 <span class="number">111</span> <span class="number">111</span> <span class="number">101</span></span><br><span class="line">	新建文件：	 <span class="number">110</span> <span class="number">110</span> <span class="number">100</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="文件搜索"><a href="#文件搜索" class="headerlink" title="文件搜索"></a>文件搜索</h3><ul>
+<li><p>find</p>
+<ul>
+<li><p>作用：用于任意文件的搜索，功能非常强大</p>
+</li>
+<li><p>格式：find [目录] 条件选项</p>
+</li>
+<li><p>选项：</p>
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-<span class="ruby">name：指定名字    sudo find / -name passwd</span></span><br><span class="line"><span class="ruby">-maxdepth：指定最大层级深度		sudo find / -maxdepth <span class="number">2</span> -name passwd</span></span><br><span class="line"><span class="ruby">-type：指定类型（d/l/s/p/c/b）</span></span><br><span class="line"><span class="ruby">-size：指定大小，单位：k/m/g，+表示大于，-表示小于，如：find -size +<span class="number">5</span>k，查找大于<span class="number">5</span>k的文件</span></span><br><span class="line"><span class="ruby">-mtime/-atime/-ctime：指定修改/访问/创建时间，单位是天，+表示几天前，-表示几天内</span></span><br><span class="line"><span class="ruby">-mmin/-amin/-cmin：功能同上，单位是分</span></span><br><span class="line"><span class="ruby">-user：指定用户</span></span><br><span class="line"><span class="ruby">-group：指定用户组</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>whereis</p>
+<ul>
+<li><p>作用：显示命令的详细信息，如：whereis ls，结果如下：</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">ls:</span> <span class="meta-keyword">/bin/</span>ls <span class="meta-keyword">/usr/</span>share<span class="meta-keyword">/man/</span>man1/ls<span class="number">.1</span>.gz</span><br><span class="line">命令名  命令位置  帮助文档</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>grep</p>
+<ul>
+<li><p>作用：正则表达式搜索(文件内容)</p>
+</li>
+<li><p>选项：</p>
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-<span class="ruby">i：忽略大小写</span></span><br><span class="line"><span class="ruby">-n：显示行号</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>示例：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">grep</span> -n /bin/bash /etc/passwd		查找/etc/passwd文件中包含/bin/bash的行，并显示行号</span><br><span class="line"><span class="keyword">grep</span> -i <span class="keyword">abc</span> <span class="number">2</span>.<span class="keyword">py</span>					在<span class="number">2</span>.<span class="keyword">py</span>中查找包含<span class="keyword">abc</span>的行，不考虑大小写</span><br><span class="line"><span class="keyword">ls</span> /bin | <span class="keyword">grep</span> <span class="string">'^m'</span>					查看/bin下以<span class="string">'m'</span>开头的命令</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="链接文件"><a href="#链接文件" class="headerlink" title="链接文件"></a>链接文件</h3><ul>
+<li><p>命令：ln</p>
+</li>
+<li><p>作用：创建一个文件或目录的链接</p>
+</li>
+<li><p>格式：<code>ln [-s] 原文件 新文件</code></p>
+</li>
+<li><p>查看：ls -l结果集中的第一列就是文件类型，为’l’的就是链接文件</p>
+</li>
+<li><p>软链接与硬链接</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">硬链接：使用ln时不加-s选项创建的链接，相当于一个文件多起了一个名字而已，极少用到</span><br><span class="line">	<span class="number">1.</span>不能给目录创建</span><br><span class="line">	<span class="number">2.</span>不能跨文件系统</span><br><span class="line">软链接：使用ln是添加-s选项创建的链接，相当于windows中的快捷方式，比较常用</span><br><span class="line">	<span class="number">1.</span>可以给目录创建</span><br><span class="line">	<span class="number">2.</span>可以跨文件系统</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>硬链接</p>
+</li>
+</ul>
+<p><img src="https://s3.51cto.com/wyfs02/M01/9C/5C/wKioL1lvUGjQ8TirAAAnGNq3aDs576.png" alt="image"></p>
+<ul>
+<li>软链接</li>
+</ul>
+<p><img src="https://s5.51cto.com/wyfs02/M01/9C/5C/wKiom1lvUGjTXRJMAAAtjT6GldQ692.png" alt="image"></p>
+<p>  ​</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">服务器</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/资源网站//" class="article-tag-list-link color5">资源网站</a>
+        			<a href="/categories/linux//" class="article-tag-list-link color1">linux</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/09/17/linux文件操作/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2018/09/18/00-Flask-基本入门/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          00-Flask-基本入门
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2018/09/17/linux目录结构及VIM/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">linux目录结构及VIM</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#文件操作"><span class="toc-number">1.</span> <span class="toc-text">文件操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用命令"><span class="toc-number">1.0.1.</span> <span class="toc-text">使用命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常识命令"><span class="toc-number">1.0.2.</span> <span class="toc-text">常识命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看文件"><span class="toc-number">1.0.3.</span> <span class="toc-text">查看文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件及目录"><span class="toc-number">1.0.4.</span> <span class="toc-text">文件及目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#用户及用户组"><span class="toc-number">1.0.5.</span> <span class="toc-text">用户及用户组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件权限"><span class="toc-number">1.0.6.</span> <span class="toc-text">文件权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件搜索"><span class="toc-number">1.0.7.</span> <span class="toc-text">文件搜索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#链接文件"><span class="toc-number">1.0.8.</span> <span class="toc-text">链接文件</span></a></li></ol></li></ol></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
+
+<!-- 目录内容 -->
+        
+            <p class="show-toc-btn" id="show-toc-btn" onclick="showToc();" style="display:none">
+            <span class="btn-bg"></span>
+            <span class="btn-text">文章导航</span>
+            </p>
+            <div id="toc-article" class="toc-article">
+                <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
+                <strong class="toc-title">文章目录</strong>
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#文件操作"><span class="toc-number">1.</span> <span class="toc-text">文件操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用命令"><span class="toc-number">1.0.1.</span> <span class="toc-text">使用命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常识命令"><span class="toc-number">1.0.2.</span> <span class="toc-text">常识命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看文件"><span class="toc-number">1.0.3.</span> <span class="toc-text">查看文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件及目录"><span class="toc-number">1.0.4.</span> <span class="toc-text">文件及目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#用户及用户组"><span class="toc-number">1.0.5.</span> <span class="toc-text">用户及用户组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件权限"><span class="toc-number">1.0.6.</span> <span class="toc-text">文件权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件搜索"><span class="toc-number">1.0.7.</span> <span class="toc-text">文件搜索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#链接文件"><span class="toc-number">1.0.8.</span> <span class="toc-text">链接文件</span></a></li></ol></li></ol></li></ol>
+           </div>
+           <script type="text/javascript">
+            function showToc(){
+                var toc_article = document.getElementById("toc-article");
+                var show_toc_btn = document.getElementById("show-toc-btn");
+                toc_article.setAttribute("style","display:block");
+                show_toc_btn.setAttribute("style","display:none");
+                };
+            function showBtn(){
+                var toc_article = document.getElementById("toc-article");
+                var show_toc_btn = document.getElementById("show-toc-btn");
+                toc_article.setAttribute("style","display:none");
+                show_toc_btn.setAttribute("style","display:block");
+                };
+           </script>
+             
+        <!-- 目录内容结束 -->
           </div>
         </div>
       </div>
@@ -256,10 +585,10 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
-		isCategory: true,
+		isCategory: false,
 		open_in_new: true,
 		toc_hide_index: true,
 		root: "/",
