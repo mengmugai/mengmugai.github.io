@@ -198,7 +198,7 @@
 <p>该模块还包括Verhoeff，Luhn和ISO / IEC 7064校验位算法系列的实现。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> stdnum <span class="keyword">import</span> isbn</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>isbn.validate(<span class="string">'978-9024538270'</span>)</span><br><span class="line"><span class="string">'9789024538270'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>isbn.validate(<span class="string">'978-9024538271'</span>)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">    ...</span><br><span class="line">InvalidChecksum: ...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>isbn.format(<span class="string">'9780471117094'</span>)</span><br><span class="line"><span class="string">'978-0-471-11709-4'</span></span><br></pre></td></tr></table></figure>
 <p>简单的代码例子：</p>
-<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> stdnum <span class="keyword">import</span> luhn</span><br><span class="line"><span class="keyword">from</span> stdnum.cn <span class="keyword">import</span> ric</span><br><span class="line"><span class="comment"># 验证银行卡号，号来源百度</span></span><br><span class="line"><span class="built_in">print</span>(luhn.is_valid(<span class="string">"6217995200015424051"</span>))</span><br><span class="line"><span class="comment"># 验证身份证号，号来源百度</span></span><br><span class="line"><span class="built_in">print</span>(ric.is_valid(<span class="string">"360822198112069337"</span>))</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> stdnum <span class="keyword">import</span> luhn</span><br><span class="line"><span class="keyword">from</span> stdnum.cn <span class="keyword">import</span> ric</span><br><span class="line"><span class="comment"># 验证银行卡号，号来源百度</span></span><br><span class="line">print(luhn.is_valid(<span class="string">"6217995200015424051"</span>))</span><br><span class="line"><span class="comment"># 验证身份证号，号来源百度</span></span><br><span class="line">print(ric.is_valid(<span class="string">"360822198112069337"</span>))</span><br></pre></td></tr></table></figure>
 <h3 id="支持的格式"><a href="#支持的格式" class="headerlink" title="支持的格式"></a>支持的格式</h3><p>目前python-stdnum模块支持以下格式：</p>
 <ul>
 <li>NIPT（增值税识别号码，阿尔巴尼亚增值税号码）</li>
@@ -645,6 +645,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">爬虫</a>
               </li>
              
@@ -654,10 +658,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">数据提取</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -673,15 +673,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">GIT</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">MongoDB</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">数据库</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">GIT</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -729,15 +729,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Scrapy</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">信号</a>
+                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySql</a>
+                <a href="javascript:void(0)" class="js-tag color3">信号</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -746,10 +750,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">aiohttp</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
               </li>
              
               <li class="article-tag-list-item">

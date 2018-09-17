@@ -205,7 +205,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding=utf8</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> concurrent</span><br><span class="line"><span class="keyword">from</span> concurrent.futures <span class="keyword">import</span> ThreadPoolExecutor</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span><span class="params">()</span>:</span></span><br><span class="line">    url = <span class="string">"https://www.baidu.com"</span></span><br><span class="line">    res = requests.get(url)</span><br><span class="line">    <span class="keyword">if</span> res.status_code == <span class="number">200</span>:</span><br><span class="line">        <span class="keyword">print</span> <span class="string">"yes!"</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">print</span> <span class="string">"no!"</span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    t1 = threading.Thread(target=task)  <span class="comment"># 用法和Process类很相似</span></span><br><span class="line">    t2 = threading.Thread(target=task)</span><br><span class="line"> </span><br><span class="line">    t1.start()</span><br><span class="line">    t2.start()</span><br><span class="line">    t1.join()</span><br><span class="line">    t2.join()</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
 <h2 id="多线程的同步"><a href="#多线程的同步" class="headerlink" title="多线程的同步"></a>多线程的同步</h2><p>多线程的可以共享主线程的数据，在操作的时候可能会存在数据不同的问题解决办法是，对于一些代码加锁规定某段时间内只能一个线程访问，直到所被释放！</p>
 <p>例子：这个会造成数据不同步</p>
-<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">balance </span>= <span class="number">0</span></span><br><span class="line"> </span><br><span class="line">def data_operator(n):</span><br><span class="line">    global <span class="keyword">balance </span> <span class="comment"># 表明在这个函数中，balance 是使用的全局的</span></span><br><span class="line">    <span class="keyword">balance </span>+= n</span><br><span class="line">    <span class="keyword">balance </span>-= n</span><br><span class="line"> </span><br><span class="line">def change_it(n):</span><br><span class="line">    for item in xrange(<span class="number">0</span>, <span class="number">10</span> ** <span class="number">6</span>):</span><br><span class="line">        data_operator(n)</span><br><span class="line"> </span><br><span class="line">def thread_synchronization():</span><br><span class="line">    <span class="built_in">t1</span> = threading.Thread(target=change_it, args=(<span class="number">5</span>,))</span><br><span class="line">    <span class="built_in">t2</span> = threading.Thread(target=change_it, args=(<span class="number">8</span>,))</span><br><span class="line"> </span><br><span class="line">    <span class="built_in">t1</span>.start()</span><br><span class="line">    <span class="built_in">t2</span>.start()</span><br><span class="line">    <span class="built_in">t1</span>.<span class="keyword">join()</span></span><br><span class="line"><span class="keyword"> </span>   <span class="built_in">t2</span>.<span class="keyword">join()</span></span><br><span class="line"><span class="keyword"> </span>   global <span class="keyword">balance</span></span><br><span class="line"><span class="keyword"> </span>   print <span class="keyword">balance</span></span><br><span class="line"><span class="keyword"> </span>   <span class="comment"># 因为存在变量操作时存在临时变量的使用，在多次执行的时候，操作的数据内容可能存在不同步的情况</span></span><br><span class="line">    <span class="comment"># 所以此处打印出的值，不一定是0</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">balance = <span class="number">0</span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">data_operator</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">global</span> balance  <span class="comment"># 表明在这个函数中，balance 是使用的全局的</span></span><br><span class="line">    balance += n</span><br><span class="line">    balance -= n</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">change_it</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> xrange(<span class="number">0</span>, <span class="number">10</span> ** <span class="number">6</span>):</span><br><span class="line">        data_operator(n)</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">thread_synchronization</span><span class="params">()</span>:</span></span><br><span class="line">    t1 = threading.Thread(target=change_it, args=(<span class="number">5</span>,))</span><br><span class="line">    t2 = threading.Thread(target=change_it, args=(<span class="number">8</span>,))</span><br><span class="line"> </span><br><span class="line">    t1.start()</span><br><span class="line">    t2.start()</span><br><span class="line">    t1.join()</span><br><span class="line">    t2.join()</span><br><span class="line">    <span class="keyword">global</span> balance</span><br><span class="line">    <span class="keyword">print</span> balance</span><br><span class="line">    <span class="comment"># 因为存在变量操作时存在临时变量的使用，在多次执行的时候，操作的数据内容可能存在不同步的情况</span></span><br><span class="line">    <span class="comment"># 所以此处打印出的值，不一定是0</span></span><br></pre></td></tr></table></figure>
 <h3 id="加锁实现数据同步，确保操作关键数据时只有一个线程"><a href="#加锁实现数据同步，确保操作关键数据时只有一个线程" class="headerlink" title="加锁实现数据同步，确保操作关键数据时只有一个线程"></a>加锁实现数据同步，确保操作关键数据时只有一个线程</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">balance = <span class="number">0</span></span><br><span class="line">main_thread_lock = threading.Lock()  <span class="comment"># 这里是在主线程中设置的一把线程锁</span></span><br><span class="line"><span class="comment"># 获得锁 main_thread_lock.acquire() 这个方法或阻塞当前线程，直到获得一把锁。但是不会阻塞主线程</span></span><br><span class="line"><span class="comment"># 释放锁 main_thread_lock.release() 此时其他的方法可以去申请锁的使用</span></span><br><span class="line"><span class="comment"># 一般使用try_catch_finally 来确保锁被释放</span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">data_operator</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">global</span> balance  <span class="comment"># 表明在这个函数中，balance 是使用的全局的</span></span><br><span class="line">    balance += n</span><br><span class="line">    balance -= n</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">change_it</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> xrange(<span class="number">0</span>, <span class="number">10</span> ** <span class="number">6</span>):</span><br><span class="line">        <span class="keyword">with</span> main_thread_lock:  <span class="comment"># 这里是在操作主要数据的时候，获得锁，在执行完操作之后将锁释放，这里使用with 语句更加简洁的实现，一定要注意锁的释放</span></span><br><span class="line">            data_operator(n)</span><br></pre></td></tr></table></figure>
 <h2 id="使用ThreadPoolExecutor"><a href="#使用ThreadPoolExecutor" class="headerlink" title="使用ThreadPoolExecutor"></a>使用ThreadPoolExecutor</h2><p>使用ThreadPoolExecutor的时候，对于python2.x 需要先安装 pip install futures ，这是在python3中自带的包</p>
 <p>基本使用：</p>
@@ -515,6 +515,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">爬虫</a>
               </li>
              
@@ -524,10 +528,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">数据提取</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -543,15 +543,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">GIT</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">MongoDB</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">数据库</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">GIT</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -599,15 +599,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Scrapy</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">信号</a>
+                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySql</a>
+                <a href="javascript:void(0)" class="js-tag color3">信号</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -616,10 +620,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">aiohttp</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
               </li>
              
               <li class="article-tag-list-item">
