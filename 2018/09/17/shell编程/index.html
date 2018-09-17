@@ -6,20 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Redis缓存过期通知 | 萌木盖的博客</title>
+  <title>linux-shell编程 | 萌木盖的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="需求：redis中的缓存数据时间到了，消失的时候，需要发出通知解析： https://redis.io/topics/notifications    利用redis的 Keyspace notifications订阅和发布即可实现。 实现步骤： a)    修改redis的配置文件：  123vi /etc/redis.conf    # 不同系统可能路径不一样# 找到notify-keyspa">
-<meta name="keywords" content="数据库,redis,python操作">
+  <meta name="description" content="shell编程管道及xargs |：将前面命令的输出作为后面命令的参数。如：ls /bin | grep &amp;#39;^m&amp;#39; xargs：有些命令无法接受管道参数，可以通过xargs解决。如：find -name 2.txt | xargs rm -rf  重定向 标准输入(stdin)、标准输出(stdout)、标准错误(stderr)  在linux中，创建任意进程，系统会自动创建上面三">
+<meta name="keywords" content="linux,服务器">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Redis缓存过期通知">
-<meta property="og:url" content="http://yoursite.com/2018/07/14/Redis缓存过期通知/index.html">
+<meta property="og:title" content="linux-shell编程">
+<meta property="og:url" content="http://yoursite.com/2018/09/17/shell编程/index.html">
 <meta property="og:site_name" content="萌木盖的博客">
-<meta property="og:description" content="需求：redis中的缓存数据时间到了，消失的时候，需要发出通知解析： https://redis.io/topics/notifications    利用redis的 Keyspace notifications订阅和发布即可实现。 实现步骤： a)    修改redis的配置文件：  123vi /etc/redis.conf    # 不同系统可能路径不一样# 找到notify-keyspa">
+<meta property="og:description" content="shell编程管道及xargs |：将前面命令的输出作为后面命令的参数。如：ls /bin | grep &amp;#39;^m&amp;#39; xargs：有些命令无法接受管道参数，可以通过xargs解决。如：find -name 2.txt | xargs rm -rf  重定向 标准输入(stdin)、标准输出(stdout)、标准错误(stderr)  在linux中，创建任意进程，系统会自动创建上面三">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-09-16T16:54:39.693Z">
+<meta property="og:updated_time" content="2018-09-17T16:44:02.985Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Redis缓存过期通知">
-<meta name="twitter:description" content="需求：redis中的缓存数据时间到了，消失的时候，需要发出通知解析： https://redis.io/topics/notifications    利用redis的 Keyspace notifications订阅和发布即可实现。 实现步骤： a)    修改redis的配置文件：  123vi /etc/redis.conf    # 不同系统可能路径不一样# 找到notify-keyspa">
+<meta name="twitter:title" content="linux-shell编程">
+<meta name="twitter:description" content="shell编程管道及xargs |：将前面命令的输出作为后面命令的参数。如：ls /bin | grep &amp;#39;^m&amp;#39; xargs：有些命令无法接受管道参数，可以通过xargs解决。如：find -name 2.txt | xargs rm -rf  重定向 标准输入(stdin)、标准输出(stdout)、标准错误(stderr)  在linux中，创建任意进程，系统会自动创建上面三">
   
     <link rel="alternative" href="/atom.xml" title="萌木盖的博客" type="application/atom+xml">
   
@@ -173,47 +173,251 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Redis缓存过期通知" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-shell编程" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Redis缓存过期通知
+      linux-shell编程
     </h1>
   
 
         
-        <a href="/2018/07/14/Redis缓存过期通知/" class="archive-article-date">
-  	<time datetime="2018-07-14T04:13:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-14</time>
+        <a href="/2018/09/17/shell编程/" class="archive-article-date">
+  	<time datetime="2018-09-17T15:44:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-17</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="需求：redis中的缓存数据时间到了，消失的时候，需要发出通知"><a href="#需求：redis中的缓存数据时间到了，消失的时候，需要发出通知" class="headerlink" title="需求：redis中的缓存数据时间到了，消失的时候，需要发出通知"></a>需求：redis中的缓存数据时间到了，消失的时候，需要发出通知</h2><p>解析：</p>
-<p><a href="https://redis.io/topics/notifications" target="_blank" rel="noopener">https://redis.io/topics/notifications</a><br>    利用redis的 Keyspace notifications订阅和发布即可实现。</p>
-<h3 id="实现步骤："><a href="#实现步骤：" class="headerlink" title="实现步骤："></a>实现步骤：</h3><ul>
-<li>a)    修改redis的配置文件：</li>
+        <h1 id="shell编程"><a href="#shell编程" class="headerlink" title="shell编程"></a>shell编程</h1><h3 id="管道及xargs"><a href="#管道及xargs" class="headerlink" title="管道及xargs"></a>管道及xargs</h3><ul>
+<li>|：将前面命令的输出作为后面命令的参数。如：<code>ls /bin | grep &#39;^m&#39;</code></li>
+<li>xargs：有些命令无法接受管道参数，可以通过xargs解决。如：<code>find -name 2.txt | xargs rm -rf</code></li>
 </ul>
-<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vi <span class="meta-keyword">/etc/</span>redis.conf    <span class="meta"># 不同系统可能路径不一样</span></span><br><span class="line"><span class="meta"># 找到notify-keyspace-events 改为<span class="string">"Ex"</span></span></span><br><span class="line">notify-keyspace-events <span class="string">"Ex"</span></span><br></pre></td></tr></table></figure>
+<h3 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h3><ul>
+<li><p>标准输入(stdin)、标准输出(stdout)、标准错误(stderr)</p>
+</li>
+<li><p>在linux中，创建任意进程，系统会自动创建上面三个数据流，其实就是三个文件</p>
+</li>
+<li><p>三个文件的描述符分别是：0、1、2，都指向了终端</p>
+</li>
+<li><p>重定向就是改变原来默认的表现位置。</p>
+</li>
+<li><p>演示：</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">输出重定向：</span><br><span class="line">	<span class="keyword">ls</span> &gt; 1.txt		<span class="comment"># 会新建文件，若文件已存在，会清空</span></span><br><span class="line">	<span class="keyword">ls</span> &gt;&gt; 1.txt		<span class="comment"># 追加到文件末尾，若文件不存在则创建</span></span><br><span class="line">错误重定向：</span><br><span class="line">	<span class="keyword">ls</span> <span class="string">/xxx</span> 2&gt; 1.txt	<span class="comment"># 将标准错误重定向到1.txt</span></span><br><span class="line">同时重定向输出和错误：</span><br><span class="line">	<span class="keyword">ls</span> <span class="string">/xxx</span> <span class="string">/home</span> &amp;&gt; 1.txt 		<span class="comment"># 将标准输出和错误同时重定向到1.txt文件</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="shell简介"><a href="#shell简介" class="headerlink" title="shell简介"></a>shell简介</h3><ul>
+<li><p>什么是shell?</p>
+<p>把在终端下可执行的命令保存到文件中，这个文件就是shell程序。</p>
+</li>
+<li><p>shell的类型？</p>
+<p>ash、bash、ksh、csh等，</p>
+<p>查看默认shell使用<code>echo $SHELL</code></p>
+<p>/etc/shells文件中存放了当前系统中可用的shell</p>
+</li>
+<li><p>shell脚本的执行</p>
 <ul>
-<li>b)    重启redis：    </li>
+<li>使用指定shell执行指定脚本：<code>bash hello.sh</code>，该文件可以没有可执行权限</li>
+<li>将shell脚本文件作为可执行程序执行，必须添加可执行权限<ul>
+<li>添加可执行权限：<code>chmod +x hello.sh</code></li>
+<li>在开头指定shell：<code>#!/bin/bash</code>，其他位置#表示注释</li>
+<li>执行脚本：<ul>
+<li>在本目录：<code>./hello.sh</code></li>
+<li>不再本目录：<code>/home/jerry/shell/hello.sh</code></li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> linux下</span></span><br><span class="line">service redis restart</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> mac下</span></span><br><span class="line">brew services restart redis</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="shell变量"><a href="#shell变量" class="headerlink" title="shell变量"></a>shell变量</h3><ul>
+<li>定义变量：<code>name=&quot;xiaoming&quot;</code></li>
+<li>打印变量：<code>echo $name  或 echo ${name}</code></li>
+<li>销毁变量：<code>unset name</code></li>
+<li>声明常量：<code>readonly name=&quot;xiaoming&quot;</code></li>
+<li>注意事项：使用<code>&#39;=&#39;</code>时，两边不能有空格</li>
+</ul>
+<h3 id="变量类型"><a href="#变量类型" class="headerlink" title="变量类型"></a>变量类型</h3><ul>
+<li>本地变量：只适用于当前<code>shell</code>的变量</li>
+<li>环境变量：适用于整个系统，通常都是全大写的<ul>
+<li>查看环境变量：<code>env</code></li>
+<li>打印指定变量：<code>echo $PATH</code></li>
+<li>PATH：若想让你的脚本哪里都可以使用，需要将脚本路径添加到PATH环境变量中</li>
+<li>修改：<ul>
+<li>一次性：<code>export PATH=$PATH:/home/jerry/shell</code></li>
+<li>永久性：<ul>
+<li>系统：<code>/etc/profile</code></li>
+<li>用户：<code>~/.profile、~/.bashrc、~/.bash_profile</code></li>
+<li>重新加载(立即生效)：<code>source filename</code> 或 <code>. filename</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>位置变量<ul>
+<li><code>$0</code>：表示脚本名</li>
+<li><code>$1 ~ $9</code>：表示传递给脚本的参数</li>
+</ul>
+</li>
+<li>特殊变量<ul>
+<li><code>$#</code>：传递给脚本参数的个数</li>
+<li><code>$*</code>：传递给脚本的所有参数</li>
+<li><code>$?</code>：上次命令执行情况，0表示正确，其他表示错误</li>
+</ul>
+</li>
+</ul>
+<h3 id="单双引号的区别"><a href="#单双引号的区别" class="headerlink" title="单双引号的区别"></a>单双引号的区别</h3><ul>
+<li>双引号：可以是除下面之外的任意字符</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash">、`、\、<span class="string">"</span></span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>c)    redis-cli测试：</li>
+<li>单引号：其中的任意字符都不解析，都会原样输出</li>
+<li>反引号：会将其中的内容作为命令执行</li>
+<li>反斜线：转义特定的字符，如：</li>
 </ul>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># redis-cli</span></span><br><span class="line"><span class="comment"># 语法：@0 代表监听0号数据库</span></span><br><span class="line"><span class="meta">127.0.0.1:6379&gt;</span> psubscribe __keyevent@0__<span class="symbol">:expired</span></span><br><span class="line"><span class="comment"># 执行后会发生阻塞</span></span><br><span class="line"></span><br><span class="line">新开一个redis-cli</span><br><span class="line"><span class="comment"># 新开一个redis-cli</span></span><br><span class="line"><span class="meta">127.0.0.1:6379&gt;</span> setex test <span class="number">5</span> <span class="string">"test_value"</span></span><br></pre></td></tr></table></figure>
-<p>5秒过后，前一个redis-cli会显示出test这个key名称</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&amp;、*、？、|、^、$、`</span></span><br></pre></td></tr></table></figure>
+<h3 id="字符串操作"><a href="#字符串操作" class="headerlink" title="字符串操作"></a>字符串操作</h3><ul>
+<li>计算长度：</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash">&#123;<span class="comment">#name&#125;</span></span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>d)    python代码实现：</li>
+<li>提取字符：</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建redis客户端链接对象：默认localhost，和0号数据库</span></span><br><span class="line">client = redis.StrictRedis()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建发布订阅对象</span></span><br><span class="line">psub = client.pubsub()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 发布监听key失效的订阅</span></span><br><span class="line">psub.psubscribe(<span class="string">"__keyevent@0__:expired"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开始监听：</span></span><br><span class="line"><span class="comment"># psub.listen返回一个迭代器</span></span><br><span class="line"><span class="keyword">for</span> data <span class="keyword">in</span> psub.listen():</span><br><span class="line">    print(data)</span><br></pre></td></tr></table></figure>
-<p>启动刚刚py文件，同样会发生阻塞，另外新开一个redis-cli<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 新开一个redis-<span class="keyword">cli</span></span><br><span class="line"><span class="number">127.0</span><span class="meta">.0</span><span class="meta">.1</span>:<span class="number">6379</span>&gt; setex <span class="keyword">test</span> <span class="number">5</span> <span class="string">"test_value"</span></span><br></pre></td></tr></table></figure></p>
-<p>5秒过后， 也会打印出对应的数据</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash">&#123;name:2:3&#125;</span></span><br></pre></td></tr></table></figure>
+<p>从下表为2的字符开始提取，提取3个字符</p>
+<h3 id="数组操作"><a href="#数组操作" class="headerlink" title="数组操作"></a>数组操作</h3><ul>
+<li>定义：<code>a=(1 2 3)</code></li>
+<li>成员：</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash">&#123;a[0]&#125;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>长度：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash">&#123;<span class="comment">#a[@]&#125;</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>所有元素：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash">&#123;a[*]&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>使用for-in遍历时需要提取元素</p>
+<h3 id="seq"><a href="#seq" class="headerlink" title="seq"></a>seq</h3><ul>
+<li>说明：生成连续的整数</li>
+<li>示例：<code>seq 1 10</code>，生成1-10的连续整数</li>
+</ul>
+<p>###expr</p>
+<ul>
+<li><p>说明：运算一个表达式</p>
+</li>
+<li><p>示例：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">expr <span class="number">1</span> + <span class="number">2</span>			# 结果为<span class="number">3</span></span><br><span class="line">echo `expr <span class="number">1</span> + <span class="number">2</span>`	# 结构为<span class="number">3</span></span><br><span class="line">expr <span class="number">3</span> \* <span class="number">5</span>			# *需要转义</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="各种运算"><a href="#各种运算" class="headerlink" title="各种运算"></a>各种运算</h3><ul>
+<li><p>test命令，成功为真，失败为假；测试结果通过$?检查，0代表真，1代表假。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"></span><br><span class="line">if test 1 -lt 2; then</span><br><span class="line">	echo "OK"</span><br><span class="line">fi</span><br><span class="line"><span class="meta">#</span><span class="bash"> []中，前后都需要空格</span></span><br><span class="line">if [ 1 -lt 2 ]; then</span><br><span class="line">	echo "ok"</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>数值比较</p>
+<ul>
+<li><code>-lt</code>：小于</li>
+<li><code>-le</code>：小于等于</li>
+<li><code>-gt</code>：大于</li>
+<li><code>-ge</code>：大于等于</li>
+<li><code>-eq</code>：相等</li>
+<li><code>-ne</code>：不相等</li>
+</ul>
+</li>
+<li><p>字符串测试</p>
+<ul>
+<li><code>=</code>：相等</li>
+<li><code>!=</code>：不相等</li>
+<li><code>-z</code>：字符串长度是否为0</li>
+<li><code>-n</code>：字符串长度是否不为0</li>
+</ul>
+</li>
+<li><p>文件判断</p>
+<ul>
+<li><code>-f</code>：普通文件</li>
+<li><code>-d</code>：目录文件</li>
+<li><code>-c</code>：字符设备文件</li>
+<li><code>-b</code>：块设备文件</li>
+<li><code>-w</code>：文件存在，且可写</li>
+<li><code>-x</code>：文件存在，且可执行</li>
+<li><code>-s</code>：文件存在，且至少有一个字符</li>
+</ul>
+</li>
+<li><p>逻辑运算</p>
+<ul>
+<li><code>-a</code>：逻辑与<code>(and)</code>，也可以使用 <code>&amp;&amp;</code> 进行转换</li>
+<li><code>-o</code>：逻辑或<code>(or)</code>，可以使用||进行转换</li>
+<li><code>!</code>：逻辑非</li>
+<li>示例：</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">if [ 1 -lt 3 -a 2 -lt 3 ]; then</span><br><span class="line">	echo "ok"</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if [ 1 -lt 3 ] &amp;&amp; [ 2 -lt 3 ]; then</span><br><span class="line">	echo "ok"</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if [ ! 1 -gt 3 ]; then</span><br><span class="line">	echo "ok"</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="分支结构"><a href="#分支结构" class="headerlink" title="分支结构"></a>分支结构</h3><ul>
+<li><p>if-else</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">if [ 1 -lt 3 -a 2 -lt 3 ]; then</span><br><span class="line">	echo "ok"</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if [ 1 -lt 3 ] &amp;&amp; [ 2 -lt 3 ]; then</span><br><span class="line">	echo "ok"</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if [ ! 1 -gt 3 ]; then</span><br><span class="line">	echo "ok"</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>case</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 从终端获取内容，-p后的字符串为提示字符</span></span><br><span class="line">read -p 'press any key:' ch</span><br><span class="line"></span><br><span class="line">case $ch in</span><br><span class="line">	[a-z])</span><br><span class="line">		echo 'alpha'</span><br><span class="line">	;;</span><br><span class="line"></span><br><span class="line">	[0-9])</span><br><span class="line">		echo 'numberic'</span><br><span class="line">	;;</span><br><span class="line"></span><br><span class="line">	*)</span><br><span class="line">		echo 'other'</span><br><span class="line">	;;</span><br><span class="line">esac</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="循环结构"><a href="#循环结构" class="headerlink" title="循环结构"></a>循环结构</h3><ul>
+<li><p>for-in及for</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">for x in a b c</span><br><span class="line">do </span><br><span class="line">	echo $x</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">for x in /etc/*</span><br><span class="line">do </span><br><span class="line">	echo $x</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">for x in `seq 1 10`</span><br><span class="line">do </span><br><span class="line">	echo $x</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">for i in `seq 1 100`</span><br><span class="line">do </span><br><span class="line">	let j+=$i</span><br><span class="line">done</span><br><span class="line">echo $j</span><br><span class="line"></span><br><span class="line">a=(1 2 3)</span><br><span class="line">for x in $&#123;a[*]&#125;</span><br><span class="line">do </span><br><span class="line">	echo $x</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">for ((i=0;i&lt;=$&#123;#a[@]&#125;;i++))</span><br><span class="line">do</span><br><span class="line">	echo $&#123;a[$i]&#125;</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>while</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">i=1</span><br><span class="line">sum=0</span><br><span class="line"></span><br><span class="line">while [ $i -le 10 ]</span><br><span class="line">do</span><br><span class="line"><span class="meta">	#</span><span class="bash">((sum+=<span class="variable">$i</span>))</span></span><br><span class="line"><span class="meta">	#</span><span class="bash"><span class="built_in">let</span> sum+=<span class="variable">$i</span></span></span><br><span class="line">	sum=$[$sum+$i]</span><br><span class="line"></span><br><span class="line"><span class="meta">	#</span><span class="bash"> ((i++))</span></span><br><span class="line"><span class="meta">	#</span><span class="bash"> <span class="built_in">let</span> i++</span></span><br><span class="line"><span class="meta">	#</span><span class="bash"> <span class="built_in">let</span> i+=1</span></span><br><span class="line">	i=$[$i+1]</span><br><span class="line">done</span><br><span class="line">echo $sum</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>until</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">i=1</span><br><span class="line"></span><br><span class="line">until [ $i -gt 10 ]</span><br><span class="line">do</span><br><span class="line">	echo $i</span><br><span class="line">	((i++))</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>break、continue：自行学习</p>
+</li>
+</ul>
+<h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">demo()</span><br><span class="line">&#123;</span><br><span class="line">	echo 'call demo func'</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">demo</span><br><span class="line"></span><br><span class="line">arg()</span><br><span class="line">&#123;</span><br><span class="line">	echo $1</span><br><span class="line">	echo $2</span><br><span class="line">	echo $#</span><br><span class="line">	echo $*</span><br><span class="line">	return 123</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">arg 1 2</span><br><span class="line"><span class="meta">#</span><span class="bash"> $? 表示函数的返回值</span></span><br><span class="line">echo $?</span><br></pre></td></tr></table></figure>
+<h3 id="服务管理"><a href="#服务管理" class="headerlink" title="服务管理"></a>服务管理</h3><ul>
+<li><p>管理操作：</p>
+<ul>
+<li>格式：<code>service</code> 服务 操作</li>
+<li>示例：<code>service ssh start|stop|restart</code></li>
+</ul>
+</li>
+<li><p>配置服务</p>
+<ul>
+<li><p>在<code>/etc/init.d/</code>目录下创建一个脚本文件(test)，添加内容如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">echo "for test"</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>给脚本文件添加可执行权限：<code>sudo chmod +x test</code></p>
+</li>
+<li><p>服务测试：<code>service test</code></p>
+</li>
+<li><p>若这样测试：<code>service test start</code>则会出现服务找不到错误</p>
+<ul>
+<li><code>sudo update-rc.d test defaults</code>能够解决服务不存在的问题</li>
+<li>其实是将<code>/etc/init.d/test</code>脚本在不同的运行模式启动脚本目录创建软链接</li>
+</ul>
+</li>
+<li><p>再次测试不出现打印结果，那是因为所有使用service其他的服务都是后台运行</p>
+<ul>
+<li><code>sudo systemctl status test</code>即可查看服务状态</li>
+</ul>
+</li>
+<li><p>当服务脚本更新是需要使用<code>sudo systemctl daemon-reload</code>进行重新加载</p>
+</li>
+<li><p>移除服务：<code>sudo update-rc.d -f test remove</code></p>
+</li>
+<li><p>说明：每个启动模式下的脚本，K开头表示停止，S开头表示启动，后面数字代表执行顺序</p>
+</li>
+</ul>
+</li>
+</ul>
 
       
 
@@ -248,15 +452,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">python操作</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">服务器</a>
         		</li>
       		
 		</ul>
@@ -268,7 +468,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/数据库//" class="article-tag-list-link color4">数据库</a>
+        			<a href="/categories/linux//" class="article-tag-list-link color1">linux</a>
         		</li>
       		
 		</ul>
@@ -323,7 +523,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/07/14/Redis缓存过期通知/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/09/17/shell编程/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -337,18 +537,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/07/14/Scrapyd爬虫部署（win版/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/09/18/00-Flask-基本入门/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Scrapyd爬虫部署（win版)
+          00-Flask-基本入门
         
       </div>
     </a>
   
   
-    <a href="/2018/07/14/redis-python版/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">redis(python版)</div>
+    <a href="/2018/09/17/linux系统服务/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">linux系统服务</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -375,7 +575,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#需求：redis中的缓存数据时间到了，消失的时候，需要发出通知"><span class="toc-number">1.</span> <span class="toc-text">需求：redis中的缓存数据时间到了，消失的时候，需要发出通知</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#实现步骤："><span class="toc-number">1.1.</span> <span class="toc-text">实现步骤：</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#shell编程"><span class="toc-number">1.</span> <span class="toc-text">shell编程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#管道及xargs"><span class="toc-number">1.0.1.</span> <span class="toc-text">管道及xargs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#重定向"><span class="toc-number">1.0.2.</span> <span class="toc-text">重定向</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shell简介"><span class="toc-number">1.0.3.</span> <span class="toc-text">shell简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shell变量"><span class="toc-number">1.0.4.</span> <span class="toc-text">shell变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#变量类型"><span class="toc-number">1.0.5.</span> <span class="toc-text">变量类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#单双引号的区别"><span class="toc-number">1.0.6.</span> <span class="toc-text">单双引号的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串操作"><span class="toc-number">1.0.7.</span> <span class="toc-text">字符串操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数组操作"><span class="toc-number">1.0.8.</span> <span class="toc-text">数组操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#seq"><span class="toc-number">1.0.9.</span> <span class="toc-text">seq</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#各种运算"><span class="toc-number">1.0.10.</span> <span class="toc-text">各种运算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分支结构"><span class="toc-number">1.0.11.</span> <span class="toc-text">分支结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#循环结构"><span class="toc-number">1.0.12.</span> <span class="toc-text">循环结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#函数"><span class="toc-number">1.0.13.</span> <span class="toc-text">函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#服务管理"><span class="toc-number">1.0.14.</span> <span class="toc-text">服务管理</span></a></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
@@ -407,7 +607,7 @@
             <div id="toc-article" class="toc-article">
                 <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
                 <strong class="toc-title">文章目录</strong>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#需求：redis中的缓存数据时间到了，消失的时候，需要发出通知"><span class="toc-number">1.</span> <span class="toc-text">需求：redis中的缓存数据时间到了，消失的时候，需要发出通知</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#实现步骤："><span class="toc-number">1.1.</span> <span class="toc-text">实现步骤：</span></a></li></ol></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#shell编程"><span class="toc-number">1.</span> <span class="toc-text">shell编程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#管道及xargs"><span class="toc-number">1.0.1.</span> <span class="toc-text">管道及xargs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#重定向"><span class="toc-number">1.0.2.</span> <span class="toc-text">重定向</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shell简介"><span class="toc-number">1.0.3.</span> <span class="toc-text">shell简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shell变量"><span class="toc-number">1.0.4.</span> <span class="toc-text">shell变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#变量类型"><span class="toc-number">1.0.5.</span> <span class="toc-text">变量类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#单双引号的区别"><span class="toc-number">1.0.6.</span> <span class="toc-text">单双引号的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串操作"><span class="toc-number">1.0.7.</span> <span class="toc-text">字符串操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数组操作"><span class="toc-number">1.0.8.</span> <span class="toc-text">数组操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#seq"><span class="toc-number">1.0.9.</span> <span class="toc-text">seq</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#各种运算"><span class="toc-number">1.0.10.</span> <span class="toc-text">各种运算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分支结构"><span class="toc-number">1.0.11.</span> <span class="toc-text">分支结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#循环结构"><span class="toc-number">1.0.12.</span> <span class="toc-text">循环结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#函数"><span class="toc-number">1.0.13.</span> <span class="toc-text">函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#服务管理"><span class="toc-number">1.0.14.</span> <span class="toc-text">服务管理</span></a></li></ol></li></ol></li></ol>
            </div>
            <script type="text/javascript">
             function showToc(){

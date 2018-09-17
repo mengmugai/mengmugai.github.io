@@ -170,6 +170,225 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-aiohttp简易使用教程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/22/aiohttp简易使用教程/">aiohttp简易使用教程</a>
+    </h1>
+  
+
+        
+        <a href="/2018/08/22/aiohttp简易使用教程/" class="archive-article-date">
+  	<time datetime="2018-08-21T16:00:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="0-前言"><a href="#0-前言" class="headerlink" title="0. 前言"></a>0. 前言</h2><p>本文翻译自aiohttp的官方文档，如有纰漏，欢迎指出。</p>
+<p>aiohttp分为服务器端和客户端，本文只介绍客户端。</p>
+<p>另外我已经对 aiohttp 和 asyncio进行了封装，可以参考我的 github 地址：</p>
+<p><a href="https://github.com/web-trump/ahttp" target="_blank" rel="noopener">https://github.com/web-trump/ahttp</a></p>
+<p>由于上下文的缘故，请求代码必须在一个异步的函数中进行：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">fn</span><span class="params">()</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li>aiohttp安装</li>
+</ol>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 <span class="keyword">install</span> aiohttp</span><br></pre></td></tr></table></figure>
+<p>1.1. 基本请求用法</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">with</span> aiohttp.<span class="keyword">get</span>(<span class="string">'https://github.com'</span>) <span class="keyword">as</span> r:</span><br><span class="line">        <span class="keyword">await</span> r.text()</span><br></pre></td></tr></table></figure>
+<p>其中r.text(), 可以在括号中指定解码方式，编码方式，例如</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">await resp.text(<span class="attribute">encoding</span>=<span class="string">'windows-1251'</span>)</span><br></pre></td></tr></table></figure>
+<p>或者也可以选择不编码，适合读取图像等，是无法编码的</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">await resp.<span class="built_in">read</span>()</span><br></pre></td></tr></table></figure>
+<h3 id="2-发起一个session请求"><a href="#2-发起一个session请求" class="headerlink" title="2.发起一个session请求"></a>2.发起一个session请求</h3><p>首先是导入aiohttp模块：</p>
+<figure class="highlight elm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> aiohttp</span><br></pre></td></tr></table></figure>
+<p>然后我们试着获取一个web源码，这里以GitHub的公共Time-line页面为例:</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">with</span> aiohttp.ClientSession() <span class="keyword">as</span> session:</span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> session.<span class="keyword">get</span>(<span class="string">'https://api.github.com/events'</span>) <span class="keyword">as</span> resp:</span><br><span class="line">        <span class="built_in">print</span>(resp.status)</span><br><span class="line">        <span class="built_in">print</span>(<span class="keyword">await</span> resp.text())</span><br></pre></td></tr></table></figure>
+<p>上面的代码中，我们创建了一个 ClientSession 对象命名为session，然后通过session的get方法得到一个 ClientResponse 对象，命名为resp，get方法中传入了一个必须的参数url，就是要获得源码的http url。至此便通过协程完成了一个异步IO的get请求。</p>
+<p>有get请求当然有post请求，并且post请求也是一个协程：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">session</span>.post('http://httpbin.org/post', <span class="class"><span class="keyword">data</span>=b'<span class="keyword">data</span>')</span></span><br></pre></td></tr></table></figure>
+<p>用法和get是一样的，区别是post需要一个额外的参数data，即是需要post的数据。</p>
+<p>除了get和post请求外，其他http的操作方法也是一样的：</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">session</span><span class="selector-class">.put</span>(<span class="string">'http://httpbin.org/put'</span>, data=b<span class="string">'data'</span>)</span><br><span class="line"><span class="selector-tag">session</span><span class="selector-class">.delete</span>(<span class="string">'http://httpbin.org/delete'</span>)</span><br><span class="line"><span class="selector-tag">session</span><span class="selector-class">.head</span>(<span class="string">'http://httpbin.org/get'</span>)</span><br><span class="line"><span class="selector-tag">session</span><span class="selector-class">.options</span>(<span class="string">'http://httpbin.org/get'</span>)</span><br><span class="line"><span class="selector-tag">session</span><span class="selector-class">.patch</span>(<span class="string">'http://httpbin.org/patch'</span>, data=b<span class="string">'data'</span>)</span><br></pre></td></tr></table></figure>
+<p>小记：<br>不要为每次的连接都创建一次session,一般情况下只需要创建一个session，然后使用这个session执行所有的请求。</p>
+<p>每个session对象，内部包含了一个连接池，并且将会保持连接和连接复用（默认开启）可以加快整体的性能。</p>
+<h3 id="3-在URL中传递参数"><a href="#3-在URL中传递参数" class="headerlink" title="3.在URL中传递参数"></a>3.在URL中传递参数</h3><p>我们经常需要通过 get 在url中传递一些参数，参数将会作为url问号后面的一部分发给服务器。在aiohttp的请求中，允许以dict的形式来表示问号后的参数。举个例子，如果你想传递 key1=value1   key2=value2 到 httpbin.org/get 你可以使用下面的代码：</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">params</span> = &#123;<span class="string">'key1'</span>: <span class="string">'value1'</span>, <span class="string">'key2'</span>: <span class="string">'value2'</span>&#125;</span><br><span class="line"><span class="keyword">async</span> with session.<span class="keyword">get</span>(<span class="string">'http://httpbin.org/get'</span>,</span><br><span class="line">                       <span class="keyword">params</span>=<span class="keyword">params</span>) <span class="keyword">as</span> resp:</span><br><span class="line">                       assert resp.url == <span class="string">'http://httpbin.org/get?key2=value2&amp;key1=value1'</span></span><br></pre></td></tr></table></figure>
+<p>可以看到，代码正确的执行了，说明参数被正确的传递了进去。不管是一个参数两个参数，还是更多的参数，都可以通过这种方式来传递。除了这种方式之外，还有另外一个，使用一个 list 来传递（这种方式可以传递一些特殊的参数，例如下面两个key是相等的也可以正确传递）：</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">params</span> = [(<span class="string">'key'</span>, <span class="string">'value1'</span>), (<span class="string">'key'</span>, <span class="string">'value2'</span>)]</span><br><span class="line"><span class="keyword">async</span> with session.<span class="keyword">get</span>(<span class="string">'http://httpbin.org/get'</span>,</span><br><span class="line">                       <span class="keyword">params</span>=<span class="keyword">params</span>) <span class="keyword">as</span> r:</span><br><span class="line">    assert r.url == <span class="string">'http://httpbin.org/get?key=value2&amp;key=value1'</span></span><br></pre></td></tr></table></figure>
+<p>除了上面两种，我们也可以直接通过传递字符串作为参数来传递，但是需要注意，通过字符串传递的特殊字符不会被编码：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">with</span> session.<span class="keyword">get</span>(<span class="string">'http://httpbin.org/get'</span>,</span><br><span class="line">                       params=<span class="string">'key=value+1'</span>) <span class="keyword">as</span> r:</span><br><span class="line">        <span class="keyword">assert</span> r.url == <span class="string">'http://httpbin.org/get?key=value+1'</span></span><br></pre></td></tr></table></figure>
+<h3 id="4-响应的内容"><a href="#4-响应的内容" class="headerlink" title="4.响应的内容"></a>4.响应的内容</h3><p>还是以GitHub的公共Time-line页面为例，我们可以获得页面响应的内容：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">with</span> session.<span class="keyword">get</span>(<span class="string">'https://api.github.com/events'</span>) <span class="keyword">as</span> resp:</span><br><span class="line">    <span class="built_in">print</span>(<span class="keyword">await</span> resp.text())</span><br></pre></td></tr></table></figure>
+<p>运行之后，会打印出类似于如下的内容：</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">'[&#123;<span class="string">"created_at"</span>:<span class="string">"2015-06-12T14:06:22Z"</span>,<span class="string">"public"</span>:<span class="literal">true</span>,<span class="string">"actor"</span>:&#123;...</span><br></pre></td></tr></table></figure>
+<p>resp的text方法，会自动将服务器端返回的内容进行解码–decode，当然我们也可以自定义编码方式：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">await resp.text(<span class="attribute">encoding</span>=<span class="string">'gb2312'</span>)</span><br></pre></td></tr></table></figure>
+<p>除了text方法可以返回解码后的内容外，我们也可以得到类型是字节的内容：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="name">await</span> resp.read())</span><br></pre></td></tr></table></figure>
+<p>运行的结果是：</p>
+<figure class="highlight sml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b'[&#123;<span class="string">"created_at"</span>:<span class="string">"2015-06-12T14:06:22Z"</span>,<span class="string">"public"</span>:<span class="literal">true</span>,<span class="string">"actor"</span>:&#123;...</span><br></pre></td></tr></table></figure>
+<p>gzip和deflate转换编码已经为你自动解码。</p>
+<p>小记：</p>
+<p>text(),read()方法是把整个响应体读入内存，如果你是获取大量的数据，请考虑使用”字节流“（streaming response）</p>
+<h3 id="5-特殊响应内容：json"><a href="#5-特殊响应内容：json" class="headerlink" title="5.特殊响应内容：json"></a>5.特殊响应内容：json</h3><p>如果我们获取的页面的响应内容是json，aiohttp内置了更好的方法来处理json:</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">with</span> session.<span class="keyword">get</span>(<span class="string">'https://api.github.com/events'</span>) <span class="keyword">as</span> resp:</span><br><span class="line">    <span class="built_in">print</span>(<span class="keyword">await</span> resp.json())</span><br></pre></td></tr></table></figure>
+<p>如果因为某种原因而导致resp.json()解析json失败，例如返回不是json字符串等等，那么resp.json()将抛出一个错误，也可以给json()方法指定一个解码方式：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="name">await</span> resp.json(</span><br><span class="line">encoding='gb2312'))</span><br></pre></td></tr></table></figure>
+<p> 或者传递一个函数进去：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="name">await</span> resp.json( <span class="name">lambda</span>(<span class="name">x</span><span class="symbol">:x</span>.replace('a','b')) ))</span><br></pre></td></tr></table></figure>
+<h3 id="6-以字节流的方式读取响应内容"><a href="#6-以字节流的方式读取响应内容" class="headerlink" title="6.以字节流的方式读取响应内容"></a>6.以字节流的方式读取响应内容</h3><p>虽然json(),text(),read()很方便的能把响应的数据读入到内存，但是我们仍然应该谨慎的使用它们，因为它们是把整个的响应体全部读入了内存。即使你只是想下载几个字节大小的文件，但这些方法却将在内存中加载所有的数据。所以我们可以通过控制字节数来控制读入内存的响应内容：</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> with session.<span class="keyword">get</span>(<span class="string">'https://api.github.com/events'</span>) <span class="keyword">as</span> resp:</span><br><span class="line">    <span class="keyword">await</span> resp.content.read(<span class="number">10</span>) <span class="meta">#读取前10个字节</span></span><br></pre></td></tr></table></figure>
+<p>一般地，我们应该使用以下的模式来把读取的字节流保存到文件中：</p>
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> open(filename, <span class="string">'wb'</span>) <span class="keyword">as</span> fd:</span><br><span class="line">    <span class="keyword">while</span> True:</span><br><span class="line">        chunk = await resp.content.<span class="keyword">read</span>(chunk_size)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> chunk:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        fd.<span class="keyword">write</span>(chunk)</span><br></pre></td></tr></table></figure>
+<p>7.自定义请求头</p>
+<p>如果你想添加请求头，可以像get添加参数那样以dict的形式，作为get或者post的参数进行请求：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="title">url</span> = 'https://api.github.com/some/endpoint'</span><br><span class="line"><span class="title">payload</span> = &#123;'some': '<span class="class"><span class="keyword">data</span>'&#125;</span></span><br><span class="line"><span class="title">headers</span> = &#123;'content-<span class="class"><span class="keyword">type</span>': 'application/json'&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="title">await</span> session.post(url,</span><br><span class="line">                   <span class="class"><span class="keyword">data</span>=json.dumps(<span class="title">payload</span>),</span></span><br><span class="line">                   headers=headers)</span><br></pre></td></tr></table></figure>
+<p>8.自定义Cookie</p>
+<p>给服务器发送cookie，可以通过给 ClientSession 传递一个cookie参数：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">url = <span class="string">'http://httpbin.org/cookies'</span></span><br><span class="line">cookies = &#123;<span class="string">'cookies_are'</span>: <span class="string">'working'</span>&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="keyword">with</span> ClientSession(cookies=cookies) <span class="keyword">as</span> session:</span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> session.<span class="keyword">get</span>(url) <span class="keyword">as</span> resp:</span><br><span class="line">        <span class="keyword">assert</span> <span class="keyword">await</span> resp.json() == &#123;</span><br><span class="line">           <span class="string">"cookies"</span>: &#123;<span class="string">"cookies_are"</span>: <span class="string">"working"</span>&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>可直接访问链接 “httpbin.org/cookies”查看当前cookie，访问session中的cookie请见第10节。</p>
+<h3 id="9-post数据的几种方式"><a href="#9-post数据的几种方式" class="headerlink" title="9.post数据的几种方式"></a>9.post数据的几种方式</h3><ul>
+<li>（1）模拟表单post数据</li>
+</ul>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">payload = &#123;<span class="string">'key1'</span>: <span class="string">'value1'</span>, <span class="string">'key2'</span>: <span class="string">'value2'</span>&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="keyword">with</span> session.post(<span class="string">'http://httpbin.org/post'</span>,</span><br><span class="line">                        data=payload) <span class="keyword">as</span> resp:</span><br><span class="line">    <span class="built_in">print</span>(<span class="keyword">await</span> resp.text())</span><br></pre></td></tr></table></figure>
+<p>注意：data=dict的方式post的数据将被转码，和form提交数据是一样的作用，如果你不想被转码，可以直接以字符串的形式 data=str 提交，这样就不会被转码。</p>
+<ul>
+<li>（2）post json</li>
+</ul>
+<figure class="highlight qml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="built_in">url</span> = <span class="string">'https://api.github.com/some/endpoint'</span></span><br><span class="line">payload = &#123;<span class="string">'some'</span>: <span class="string">'data'</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">with</span> session.post(<span class="built_in">url</span>, data=json.dumps(payload)) <span class="keyword">as</span> <span class="attribute">resp</span>:</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p>其实json.dumps(payload)返回的也是一个字符串，只不过这个字符串可以被识别为json格式</p>
+<ul>
+<li>（3）post 小文件</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">url = <span class="string">'http://httpbin.org/post'</span></span><br><span class="line">files = &#123;<span class="string">'file'</span>: <span class="keyword">open</span>(<span class="string">'report.xls'</span>, <span class="string">'rb'</span>)&#125;</span><br><span class="line"></span><br><span class="line">await session.post(url, <span class="keyword">data</span>=files)</span><br><span class="line">可以设置好文件名和content-type:</span><br><span class="line">url = <span class="string">'http://httpbin.org/post'</span></span><br><span class="line"><span class="keyword">data</span> = FormData()</span><br><span class="line"><span class="keyword">data</span>.add_field(<span class="string">'file'</span>,</span><br><span class="line">               <span class="keyword">open</span>(<span class="string">'report.xls'</span>, <span class="string">'rb'</span>),</span><br><span class="line">               filename=<span class="string">'report.xls'</span>,</span><br><span class="line">               content_type=<span class="string">'application/vnd.ms-excel'</span>)</span><br><span class="line"></span><br><span class="line">await session.post(url, <span class="keyword">data</span>=<span class="keyword">data</span>)</span><br></pre></td></tr></table></figure>
+<p>如果将文件对象设置为数据参数，aiohttp将自动以字节流的形式发送给服务器。</p>
+<ul>
+<li>（4）post 大文件</li>
+</ul>
+<p>aiohttp支持多种类型的文件以流媒体的形式上传，所以我们可以在文件未读入内存的情况下发送大文件。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@aiohttp.streamer</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">file_sender</span><span class="params">(writer, file_name=None)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> open(file_name, <span class="string">'rb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        chunk = f.read(<span class="number">2</span>**<span class="number">16</span>)</span><br><span class="line">        <span class="keyword">while</span> chunk:</span><br><span class="line">            <span class="keyword">yield</span> <span class="keyword">from</span> writer.write(chunk)</span><br><span class="line">            chunk = f.read(<span class="number">2</span>**<span class="number">16</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Then you can use `file_sender` as a data provider:</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">with</span> session.post(<span class="string">'http://httpbin.org/post'</span>,</span><br><span class="line">                        data=file_sender(file_name=<span class="string">'huge_file'</span>)) <span class="keyword">as</span> resp:</span><br><span class="line">    print(<span class="keyword">await</span> resp.text())</span><br></pre></td></tr></table></figure>
+<p>同时我们可以从一个url获取文件后，直接post给另一个url，并计算hash值:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">feed_stream</span><span class="params">(resp, stream)</span>:</span></span><br><span class="line">    h = hashlib.sha256()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        chunk = <span class="keyword">await</span> resp.content.readany()</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> chunk:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        h.update(chunk)</span><br><span class="line">        stream.feed_data(chunk)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> h.hexdigest()</span><br><span class="line"></span><br><span class="line">resp = session.get(<span class="string">'http://httpbin.org/post'</span>)</span><br><span class="line">stream = StreamReader()</span><br><span class="line">loop.create_task(session.post(<span class="string">'http://httpbin.org/post'</span>, data=stream))</span><br></pre></td></tr></table></figure>
+<p>file_hash = await feed_stream(resp, stream)<br>因为响应内容类型是StreamReader，所以可以把get和post连接起来，同时进行post和get：</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">r = <span class="keyword">await</span> session.<span class="keyword">get</span>(<span class="string">'http://python.org'</span>)</span><br><span class="line"><span class="keyword">await</span> session.post(<span class="string">'http://httpbin.org/post'</span>,</span><br><span class="line">                   data=r.content)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>（5）post预压缩数据<br>在通过aiohttp发送前就已经压缩的数据, 调用压缩函数的函数名（通常是deflate 或 zlib）作为content-encoding的值：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">my_coroutine</span><span class="params">(session, headers, my_data)</span>:</span></span><br><span class="line">    data = zlib.compress(my_data)</span><br><span class="line">    headers = &#123;<span class="string">'Content-Encoding'</span>: <span class="string">'deflate'</span>&#125;</span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> session.post(<span class="string">'http://httpbin.org/post'</span>,</span><br><span class="line">                            data=data,</span><br><span class="line">                            headers=headers)</span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<h3 id="10-keep-alive-连接池，共享cookie"><a href="#10-keep-alive-连接池，共享cookie" class="headerlink" title="10.keep-alive, 连接池，共享cookie"></a>10.keep-alive, 连接池，共享cookie</h3><p>ClientSession 用于在多个连接之间共享cookie：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">with</span> aiohttp.ClientSession() <span class="keyword">as</span> session:</span><br><span class="line">    <span class="keyword">await</span> session.<span class="keyword">get</span>(</span><br><span class="line">        <span class="string">'http://httpbin.org/cookies/set?my_cookie=my_value'</span>)</span><br><span class="line">    filtered = session.cookie_jar.filter_cookies(<span class="string">'http://httpbin.org'</span>)</span><br><span class="line">    <span class="keyword">assert</span> filtered[<span class="string">'my_cookie'</span>].value == <span class="string">'my_value'</span></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> session.<span class="keyword">get</span>(<span class="string">'http://httpbin.org/cookies'</span>) <span class="keyword">as</span> r:</span><br><span class="line">        json_body = <span class="keyword">await</span> r.json()</span><br><span class="line">        <span class="keyword">assert</span> json_body[<span class="string">'cookies'</span>][<span class="string">'my_cookie'</span>] == <span class="string">'my_value'</span></span><br></pre></td></tr></table></figure>
+<p>也可以为所有的连接设置共同的请求头：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">with</span> aiohttp.ClientSession(</span><br><span class="line">    headers=&#123;<span class="string">"Authorization"</span>: <span class="string">"Basic bG9naW46cGFzcw=="</span>&#125;) <span class="keyword">as</span> session:</span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> session.<span class="keyword">get</span>(<span class="string">"http://httpbin.org/headers"</span>) <span class="keyword">as</span> r:</span><br><span class="line">        json_body = <span class="keyword">await</span> r.json()</span><br><span class="line">        <span class="keyword">assert</span> json_body[<span class="string">'headers'</span>][<span class="string">'Authorization'</span>] == \</span><br><span class="line">            <span class="string">'Basic bG9naW46cGFzcw=='</span></span><br></pre></td></tr></table></figure>
+<p>ClientSession 还支持 keep-alive连接和连接池(connection pooling)</p>
+<h3 id="11-cookie安全性"><a href="#11-cookie安全性" class="headerlink" title="11.cookie安全性"></a>11.cookie安全性</h3><p>默认ClientSession使用的是严格模式的 aiohttp.CookieJar. RFC 2109，明确的禁止接受url和ip地址产生的cookie，只能接受 DNS 解析IP产生的cookie。可以通过设置aiohttp.CookieJar 的 unsafe=True 来配置：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">jar</span> = aiohttp.CookieJar(unsafe=<span class="literal">True</span>)</span><br><span class="line"><span class="attr">session</span> = aiohttp.ClientSession(cookie_jar=jar)</span><br></pre></td></tr></table></figure>
+<h3 id="12-控制同时连接的数量（连接池）"><a href="#12-控制同时连接的数量（连接池）" class="headerlink" title="12.控制同时连接的数量（连接池）"></a>12.控制同时连接的数量（连接池）</h3><p>也可以理解为同时请求的数量，为了限制同时打开的连接数量，我们可以将限制参数传递给连接器：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conn = aiohttp.TCPConnector(limit=<span class="number">30</span>)#同时最大进行连接的连接数为<span class="number">30</span>，默认是<span class="number">100</span>，limit=<span class="number">0</span>的时候是无限制</span><br></pre></td></tr></table></figure>
+<p>限制同时打开限制同时打开连接到同一端点的数量（(host, port, is_ssl) 三的倍数），可以通过设置 limit_per_host 参数：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conn = aiohttp.TCPConnector(limit_per_host=30)<span class="comment">#默认是0</span></span><br></pre></td></tr></table></figure>
+<h3 id="13-自定义域名解析"><a href="#13-自定义域名解析" class="headerlink" title="13.自定义域名解析"></a>13.自定义域名解析</h3><p>我们可以指定域名服务器的 IP 对我们提供的get或post的url进行解析：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from aiohttp.resolver import AsyncResolver</span><br><span class="line"></span><br><span class="line">resolver = AsyncResolver(nameservers=[<span class="string">"8.8.8.8"</span>, <span class="string">"8.8.4.4"</span>])</span><br><span class="line">conn = aiohttp.TCPConnector(resolver=resolver)</span><br></pre></td></tr></table></figure>
+<h3 id="14-设置代理"><a href="#14-设置代理" class="headerlink" title="14.设置代理"></a>14.设置代理</h3><p>aiohttp支持使用代理来访问网页：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">with</span> aiohttp.ClientSession() <span class="keyword">as</span> session:</span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> session.<span class="keyword">get</span>(<span class="string">"http://python.org"</span>,</span><br><span class="line">                           proxy=<span class="string">"http://some.proxy.com"</span>) <span class="keyword">as</span> resp:</span><br><span class="line">        <span class="built_in">print</span>(resp.status)</span><br></pre></td></tr></table></figure>
+<p>当然也支持需要授权的页面：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">with</span> aiohttp.ClientSession() <span class="keyword">as</span> session:</span><br><span class="line">    proxy_auth = aiohttp.BasicAuth(<span class="string">'user'</span>, <span class="string">'pass'</span>)</span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> session.<span class="keyword">get</span>(<span class="string">"http://python.org"</span>,</span><br><span class="line">                           proxy=<span class="string">"http://some.proxy.com"</span>,</span><br><span class="line">                           proxy_auth=proxy_auth) <span class="keyword">as</span> resp:</span><br><span class="line">        <span class="built_in">print</span>(resp.status)</span><br></pre></td></tr></table></figure>
+<p>或者通过这种方式来验证授权：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">session.<span class="builtin-name">get</span>(<span class="string">"http://python.org"</span>,</span><br><span class="line">            <span class="attribute">proxy</span>=<span class="string">"http://user:pass@some.proxy.com"</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="15-响应状态码-response-status-code"><a href="#15-响应状态码-response-status-code" class="headerlink" title="15.响应状态码 response status code"></a>15.响应状态码 response status code</h3><p>可以通过 resp.status来检查状态码是不是200：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">with</span> session.<span class="keyword">get</span>(<span class="string">'http://httpbin.org/get'</span>) <span class="keyword">as</span> resp:</span><br><span class="line">    <span class="keyword">assert</span> resp.status == <span class="number">200</span></span><br></pre></td></tr></table></figure>
+<h3 id="16-响应头"><a href="#16-响应头" class="headerlink" title="16.响应头"></a>16.响应头</h3><p>我们可以直接使用　resp.headers 来查看响应头，得到的值类型是一个dict：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;</span>&gt; resp.headers</span><br><span class="line">&#123;<span class="string">'ACCESS-CONTROL-ALLOW-ORIGIN'</span>: <span class="string">'*'</span>,</span><br><span class="line"> <span class="string">'CONTENT-TYPE'</span>: <span class="string">'application/json'</span>,</span><br><span class="line"> <span class="string">'DATE'</span>: <span class="string">'Tue, 15 Jul 2014 16:49:51 GMT'</span>,</span><br><span class="line"> <span class="string">'SERVER'</span>: <span class="string">'gunicorn/18.0'</span>,</span><br><span class="line"> <span class="string">'CONTENT-LENGTH'</span>: <span class="string">'331'</span>,</span><br><span class="line"> <span class="string">'CONNECTION'</span>: <span class="string">'keep-alive'</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>或者我们可以查看原生的响应头：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; resp.raw_headers</span><br><span class="line">((b'SERVER', b'nginx'),</span><br><span class="line"> (b'DATE', b'Sat, <span class="number">09</span> Jan <span class="number">2016</span> <span class="number">20</span>:<span class="number">28</span>:<span class="number">40</span> GMT'),</span><br><span class="line"> (b'CONTENT-TYPE', b'text/html; charset=utf<span class="number">-8</span><span class="string">'),</span></span><br><span class="line"><span class="string"> (b'</span>CONTENT-LENGTH', b'<span class="number">12150</span><span class="string">'),</span></span><br><span class="line"><span class="string"> (b'</span>CONNECTION', b'keep-alive'))</span><br></pre></td></tr></table></figure>
+<h3 id="17-查看cookie"><a href="#17-查看cookie" class="headerlink" title="17.查看cookie"></a>17.查看cookie</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">url = <span class="string">'http://example.com/some/cookie/setting/url'</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">with</span> session.<span class="keyword">get</span>(url) <span class="keyword">as</span> resp:</span><br><span class="line">    <span class="built_in">print</span>(resp.cookies)</span><br></pre></td></tr></table></figure>
+<h3 id="18-重定向的响应头"><a href="#18-重定向的响应头" class="headerlink" title="18.重定向的响应头"></a>18.重定向的响应头</h3><p>如果一个请求被重定向了，我们依然可以查看被重定向之前的响应头信息：</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; resp = await session.<span class="built_in">get</span>('http://<span class="built_in">example</span>.com/<span class="built_in">some</span>/redirect/')</span><br><span class="line">&gt;&gt;&gt; resp</span><br><span class="line">&lt;ClientResponse(http://<span class="built_in">example</span>.com/<span class="built_in">some</span>/other/url/) [<span class="number">200</span>]&gt;</span><br><span class="line">&gt;&gt;&gt; resp.history</span><br><span class="line">(&lt;ClientResponse(http://<span class="built_in">example</span>.com/<span class="built_in">some</span>/redirect/) [<span class="number">301</span>]&gt;,)</span><br></pre></td></tr></table></figure>
+<h3 id="19-超时处理"><a href="#19-超时处理" class="headerlink" title="19.超时处理"></a>19.超时处理</h3><p>默认的IO操作都有5分钟的响应时间 我们可以通过 timeout 进行重写：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">with</span> session.<span class="keyword">get</span>(<span class="string">'https://github.com'</span>, timeout=<span class="number">60</span>) <span class="keyword">as</span> r:</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p>如果 timeout=None 或者 timeout=0 将不进行超时检查，也就是不限时长。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">协程</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">aiohttp</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/爬虫//" class="article-tag-list-link color3">爬虫</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/22/aiohttp简易使用教程/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+
+<!-- 目录内容 -->
+             
+        <!-- 目录内容结束 -->
+  
     <article id="post-多线程，详细教程，线程同步，线程加锁，ThreadPoolExecutor" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -2333,123 +2552,6 @@
              
         <!-- 目录内容结束 -->
   
-    <article id="post-Redis缓存过期通知" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/14/Redis缓存过期通知/">Redis缓存过期通知</a>
-    </h1>
-  
-
-        
-        <a href="/2018/07/14/Redis缓存过期通知/" class="archive-article-date">
-  	<time datetime="2018-07-14T04:13:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="需求：redis中的缓存数据时间到了，消失的时候，需要发出通知"><a href="#需求：redis中的缓存数据时间到了，消失的时候，需要发出通知" class="headerlink" title="需求：redis中的缓存数据时间到了，消失的时候，需要发出通知"></a>需求：redis中的缓存数据时间到了，消失的时候，需要发出通知</h2><p>解析：</p>
-<p><a href="https://redis.io/topics/notifications" target="_blank" rel="noopener">https://redis.io/topics/notifications</a><br>    利用redis的 Keyspace notifications订阅和发布即可实现。</p>
-<h3 id="实现步骤："><a href="#实现步骤：" class="headerlink" title="实现步骤："></a>实现步骤：</h3><ul>
-<li>a)    修改redis的配置文件：</li>
-</ul>
-<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vi <span class="meta-keyword">/etc/</span>redis.conf    <span class="meta"># 不同系统可能路径不一样</span></span><br><span class="line"><span class="meta"># 找到notify-keyspace-events 改为<span class="string">"Ex"</span></span></span><br><span class="line">notify-keyspace-events <span class="string">"Ex"</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>b)    重启redis：    </li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> linux下</span></span><br><span class="line">service redis restart</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> mac下</span></span><br><span class="line">brew services restart redis</span><br></pre></td></tr></table></figure>
-<ul>
-<li>c)    redis-cli测试：</li>
-</ul>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># redis-cli</span></span><br><span class="line"><span class="comment"># 语法：@0 代表监听0号数据库</span></span><br><span class="line"><span class="meta">127.0.0.1:6379&gt;</span> psubscribe __keyevent@0__<span class="symbol">:expired</span></span><br><span class="line"><span class="comment"># 执行后会发生阻塞</span></span><br><span class="line"></span><br><span class="line">新开一个redis-cli</span><br><span class="line"><span class="comment"># 新开一个redis-cli</span></span><br><span class="line"><span class="meta">127.0.0.1:6379&gt;</span> setex test <span class="number">5</span> <span class="string">"test_value"</span></span><br></pre></td></tr></table></figure>
-<p>5秒过后，前一个redis-cli会显示出test这个key名称</p>
-<ul>
-<li>d)    python代码实现：</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建redis客户端链接对象：默认localhost，和0号数据库</span></span><br><span class="line">client = redis.StrictRedis()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建发布订阅对象</span></span><br><span class="line">psub = client.pubsub()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 发布监听key失效的订阅</span></span><br><span class="line">psub.psubscribe(<span class="string">"__keyevent@0__:expired"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开始监听：</span></span><br><span class="line"><span class="comment"># psub.listen返回一个迭代器</span></span><br><span class="line"><span class="keyword">for</span> data <span class="keyword">in</span> psub.listen():</span><br><span class="line">    print(data)</span><br></pre></td></tr></table></figure>
-<p>启动刚刚py文件，同样会发生阻塞，另外新开一个redis-cli<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 新开一个redis-<span class="keyword">cli</span></span><br><span class="line"><span class="number">127.0</span><span class="meta">.0</span><span class="meta">.1</span>:<span class="number">6379</span>&gt; setex <span class="keyword">test</span> <span class="number">5</span> <span class="string">"test_value"</span></span><br></pre></td></tr></table></figure></p>
-<p>5秒过后， 也会打印出对应的数据</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">python操作</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/数据库//" class="article-tag-list-link color4">数据库</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/07/14/Redis缓存过期通知/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-
-<!-- 目录内容 -->
-             
-        <!-- 目录内容结束 -->
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -2636,6 +2738,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">协程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">aiohttp</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Scrapy</a>
               </li>
              
@@ -2645,14 +2755,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">协程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">aiohttp</a>
               </li>
              
               <li class="article-tag-list-item">
