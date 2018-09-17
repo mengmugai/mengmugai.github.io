@@ -1727,7 +1727,7 @@
 <li>json.dumps()<br>实现python类型转化为json字符串，返回一个str对象。把一个Python对象编码转换成Json字符串，从python原始类型向json类型转化对照表如下：</li>
 </ul>
 <p><img src="https://i.loli.net/2018/09/14/5b9b4de50489b.png" alt="python向json转化"></p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#json_dumps.py</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#-*- coding:utf-8 -*-</span></span><br><span class="line"></span><br><span class="line">import json</span><br><span class="line">import chardet</span><br><span class="line"></span><br><span class="line">listStr = [1, 2, 3, 4]</span><br><span class="line">tupleStr = (1, 2, 3, 4)</span><br><span class="line">dictStr  = &#123;<span class="string">"city"</span>:<span class="string">"北京"</span>, <span class="string">"name"</span>:<span class="string">"大猫"</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="builtin-name">print</span>(type(json.dumps(listStr)))</span><br><span class="line"><span class="comment"># '[1, 2, 3, 4]'</span></span><br><span class="line"></span><br><span class="line"><span class="builtin-name">print</span>(type(json.dumps(tupleStr)))</span><br><span class="line"><span class="comment"># '[1, 2, 3, 4]'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#注意，json.dumps()序列化时默认使用ascii编码</span></span><br><span class="line"><span class="comment">#添加参数 ensure_ascii = False,禁用ascii编码，按utf-8编码</span></span><br><span class="line"><span class="comment">#chardet.detect()返回字典，其中confidence是检测精确度。</span></span><br><span class="line"></span><br><span class="line"><span class="builtin-name">print</span>(json.dumps(dictStr))</span><br><span class="line"><span class="comment">#'&#123;"city":"\\u5317\\u4eac", "name":"\\u5927\\u5218"&#125;'</span></span><br><span class="line"></span><br><span class="line"><span class="builtin-name">print</span>(chardet.detect(json.dumps(dictStr)))</span><br><span class="line"></span><br><span class="line"><span class="builtin-name">print</span>(json.dumps(dictStr, <span class="attribute">ensure_ascii</span>=<span class="literal">False</span>))</span><br><span class="line"></span><br><span class="line"><span class="builtin-name">print</span>(chardet.detect(json.dumps(dictStr, <span class="attribute">ensure_ascii</span>=<span class="literal">False</span>)))</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#json_dumps.py</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#-*- coding:utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> chardet</span><br><span class="line"></span><br><span class="line">listStr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line">tupleStr = (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line">dictStr  = &#123;<span class="string">"city"</span>:<span class="string">"北京"</span>, <span class="string">"name"</span>:<span class="string">"大猫"</span>&#125;</span><br><span class="line"></span><br><span class="line">print(type(json.dumps(listStr)))</span><br><span class="line"><span class="comment"># '[1, 2, 3, 4]'</span></span><br><span class="line"></span><br><span class="line">print(type(json.dumps(tupleStr)))</span><br><span class="line"><span class="comment"># '[1, 2, 3, 4]'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#注意，json.dumps()序列化时默认使用ascii编码</span></span><br><span class="line"><span class="comment">#添加参数 ensure_ascii = False,禁用ascii编码，按utf-8编码</span></span><br><span class="line"><span class="comment">#chardet.detect()返回字典，其中confidence是检测精确度。</span></span><br><span class="line"></span><br><span class="line">print(json.dumps(dictStr))</span><br><span class="line"><span class="comment">#'&#123;"city":"\\u5317\\u4eac", "name":"\\u5927\\u5218"&#125;'</span></span><br><span class="line"></span><br><span class="line">print(chardet.detect(json.dumps(dictStr)))</span><br><span class="line"></span><br><span class="line">print(json.dumps(dictStr, ensure_ascii=<span class="keyword">False</span>))</span><br><span class="line"></span><br><span class="line">print(chardet.detect(json.dumps(dictStr, ensure_ascii=<span class="keyword">False</span>)))</span><br></pre></td></tr></table></figure>
 <p><code>chardet</code>是一个非常优秀的编码识别模块，可通过pip安装</p>
 <ul>
 <li>json.dump()<br>将Python内置类型序列化为json对象后写入文件</li>
@@ -2137,6 +2137,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
              
@@ -2158,10 +2162,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">数据提取</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2213,6 +2213,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Flask</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">web后端</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">MySql</a>
               </li>
              
@@ -2225,15 +2233,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">协程</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">aiohttp</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -212,7 +212,7 @@
 <figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">celery</span> -A tasks worker -l <span class="literal">info</span></span><br></pre></td></tr></table></figure>
 <p>worker便启动了</p>
 <p>此时在文件目录下打开新窗口进入python或者ipython都可以：</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;</span>&gt; from tasks import add</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; add.delay(<span class="number">2</span>,<span class="number">34</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> tasks <span class="keyword">import</span> add</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>add.delay(<span class="number">2</span>,<span class="number">34</span>)</span><br></pre></td></tr></table></figure>
 <p>这时你在第一个窗口就能看到效果了。</p>
 <h2 id="flower监控"><a href="#flower监控" class="headerlink" title="flower监控"></a>flower监控</h2><p>这玩意是干啥的呢？</p>
 <p>就是消息队列啥的都让他在浏览器上显示</p>
@@ -609,6 +609,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
              
@@ -630,10 +634,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">数据提取</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Celery</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -685,6 +685,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Flask</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">web后端</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">MySql</a>
               </li>
              
@@ -697,15 +705,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">协程</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">aiohttp</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Selenium</a>
               </li>
              
               <li class="article-tag-list-item">
